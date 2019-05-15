@@ -3,7 +3,7 @@
 
 # Step by step for Build and Run
 ### `Database config`
-Copy `db.env.js` to `db.js` in `models` folder. Change connect string.
+Copy `db.env.js` to `db.js` in `server/models` folder. Change connect string.
 
 ### `npm install`
 Install all package for client and server
