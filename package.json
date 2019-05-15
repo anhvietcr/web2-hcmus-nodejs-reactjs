@@ -1,0 +1,26 @@
+{
+  "name": "doancuoiky",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "client-install": "cd client && npm install",
+    "server-install": "cd server && npm install",
+    "install": "concurrently \"npm run client-install\" \"npm run server-install\"",
+    "client": "cd client && npm start",
+    "server": "cd server && npm start",
+    "start": "concurrently \"npm run client\" \"npm run server\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nguyenkha/LTW2_01.git"
+  },
+  "author": "F5--\u001b[D\u001b[D\u001b[D\u001b",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nguyenkha/LTW2_01/issues"
+  },
+  "homepage": "https://github.com/nguyenkha/LTW2_01#readme",
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  }
+}
