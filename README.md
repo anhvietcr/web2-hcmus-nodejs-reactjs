@@ -2,7 +2,7 @@
 `Đồ án cuối kỳ. Website đặt vé xem phim. NodeJs + ReactJs`
 
 # Step by step for Build and Run
-### `Database config`
+### Database config
 Copy `db.env.js` to `db.js` in `server/models` folder. Change connect string.
 
 ### `npm install`
