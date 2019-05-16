@@ -12,19 +12,18 @@ const Theater = db.define("Theater", {
     allowNull: false,
     unique: false
   },
-  image: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: false
+  type: {
+    type:   Sequelize.ENUM,
+    values: ['2d', '3d', '4dx']
   },
-  release_date: {
-    type: Sequelize.DATE,
-    allowNull: true
-  },
-  minute_time: {
+  number_rows: {
     type: Sequelize.INTEGER,
-    allowNull: true
-  }
+    allowNull: false
+  },
+  number_column: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
 });
 
 module.exports = Theater;
