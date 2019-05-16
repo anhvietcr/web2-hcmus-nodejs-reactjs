@@ -19,3 +19,31 @@ https://courses.fit.hcmus.edu.vn/pluginfile.php/115177/mod_resource/content/1/DA
 + `1660637` - Phan Thị Như Trang
 + `1660732` - Lê Quang Vinh
 + `1660321` - Nguyễn Phúc Lợi
+
+# Team
+### Backend
+* `1660637` - Phan Thị Như Trang
++ Đăng Ký (xác nhận email)
++ Đăng Nhập
++ Đăng Xuất
++ Quên mật khẩu
++ Trang cá nhân
++ Lịch sử đặt vé của user
+
+* `1660321` - Nguyễn Phúc Lợi
++ Quản lý cụm rạp
++ Quản lý Rạp
++ Quản lý Phim
++ Tìm kiếm phim
+
+
+* `1660732` - Lê Quang Vinh
++ Thống kê doanh thu theo phim
++ Thống kê doanh thu theo cụm rạp
++ Đặt vé
++ Quản lý suất chiếu
+
+### Fronted
+* `1660765` - Phan Anh Việt
+
+
