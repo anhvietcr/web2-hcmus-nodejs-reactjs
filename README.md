@@ -21,7 +21,7 @@ https://courses.fit.hcmus.edu.vn/pluginfile.php/115177/mod_resource/content/1/DA
 + `1660321` - Nguyễn Phúc Lợi
 
 # Team
-### Backend
+### Back-end
 * `1660637` - Phan Thị Như Trang
 + Đăng Ký (xác nhận email)
 + Đăng Nhập
@@ -36,14 +36,13 @@ https://courses.fit.hcmus.edu.vn/pluginfile.php/115177/mod_resource/content/1/DA
 + Quản lý Phim
 + Tìm kiếm phim
 
-
 * `1660732` - Lê Quang Vinh
 + Thống kê doanh thu theo phim
 + Thống kê doanh thu theo cụm rạp
 + Đặt vé
 + Quản lý suất chiếu
 
-### Fronted
+### Front-end
 * `1660765` - Phan Anh Việt
 
 
