@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import actions from '../actions'
 import * as TYPE from '../constants/actionTypes'
 import Home from '../components/Home'
 
