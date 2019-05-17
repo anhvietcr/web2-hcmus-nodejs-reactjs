@@ -10,7 +10,6 @@ const Movie = db.define("Movie", {
   image: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: false
   },
   trailer: {
     type: Sequelize.STRING,
@@ -20,18 +19,27 @@ const Movie = db.define("Movie", {
     type: Sequelize.STRING,
     allowNull: true,
   },
-  release_date: {
+  opening_day: {
     type: Sequelize.DATE,
     allowNull: true
   },
   minute_time: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: true
   },
   view: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: true,
   },
 });
+
+Movie.associate = function(models) {
+  Movie.belongsToMany(models.Theater, {
+    through: 'Showtime',
+    as: 'showtimes',
+    foreignKey: 'movie_id'
+  });
+};
+
 
 module.exports = Movie;

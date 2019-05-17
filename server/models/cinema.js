@@ -5,7 +5,6 @@ const Cinema = db.define("Cinema", {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true
   },
   address: {
     type: Sequelize.STRING,
@@ -16,5 +15,12 @@ const Cinema = db.define("Cinema", {
     allowNull: true
   },
 });
+
+Cinema.associate = function (models) {
+  Cinema.hasMany(models.Theater, {
+    foreignKey: 'theater_id',
+    sourceKey: 'id'
+  });
+};
 
 module.exports = Cinema;
