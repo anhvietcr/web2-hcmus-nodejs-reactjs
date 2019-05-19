@@ -1,7 +1,6 @@
 const User = require('../models/user')
 const Cinema = require('../models/cinema')
 const Movie = require('../models/movie')
-const theater = require('../models/theater')
 const showtime = require('../models/showtime')
 
 const Router = require('express-promise-router')
