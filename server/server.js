@@ -22,5 +22,6 @@ app.options('*', cors());
 app.use('/', require('./routes/home'));
 app.use('/auth', require('./routes/auth'));
 app.use('/theater', require('./routes/theater'));
+app.use('/cinema', require('./routes/cinema'));
 
 

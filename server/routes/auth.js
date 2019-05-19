@@ -1,5 +1,4 @@
 const User = require('../models/user')
-const Cinema = require('../models/cinema')
 const Movie = require('../models/movie')
 const showtime = require('../models/showtime')
 

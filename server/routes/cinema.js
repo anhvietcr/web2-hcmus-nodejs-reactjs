@@ -1,14 +1,14 @@
-const Theater = require('../models/theater')
+const Cinema = require('../models/cinema')
 const Router = require('express-promise-router')
 let router = new Router();
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    return await Theater.findAll().then((result) => res.json(result));
+    return await Cinema.findAll().then((result) => res.json(result));
 });
 
 router.get('/:id', async (req, res, next) => {
-    return await Theater.findOne({
+    return await Cinema.findAll({
         where: {
             id: req.params.id
         }
@@ -17,38 +17,33 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
     const created_at = new Date();
-    const newTheater = req.body.theater;
-    return await Theater.create({
-        name: newTheater.name,
-        cinema_id: newPost.cinema_id,
-        type: newTheater.type,
-        number_rows: newTheater.number_rows,
-        number_columns: newTheater.number_columns,
+    const newCinema = req.body.cinema;
+    return await Cinema.create({
+        name: newCinema.name,
+        image: newPost.image,
+        trailer: newCinema.trailer,
+        introduce: newCinema.introduce,
+        opening_day: newCinema.opening_day,
+        minute_time: newCinema.minute_time,
+        view: newCinema.view,
         created_at: created_at
     })
         .then(post => {
-                if (!post) {
-      return res.render("error", {
-        message: "Page not found.",
-        error: {
-          status: 404,
-        }
-      });
-    }
             res.json(post);
         });
 });
 
 router.put('/:id', async (req, res, next) => {
     const updated_at = new Date();
-    const updateTheater = req.body.theater;
-
-    return await Theater.update({
-        name: updateTheater.name,
-        cinema_id: updateTheater.cinema_id,
-        type: updateTheater.type,
-        number_rows: updateTheater.number_rows,
-        number_columns: updateTheater.number_columns,
+    const updateCinema = req.body.cinema;
+    return await Cinema.update({
+        name: updateCinema.name,
+        image: updateCinema.image,
+        trailer: updateCinema.trailer,
+        introduce: updateCinema.introduce,
+        opening_day: updateCinema.opening_day,
+        minute_time: updateCinema.minute_time,
+        view: updateCinema.view,
         updated_at: updated_at
     },
         {
@@ -59,7 +54,7 @@ router.put('/:id', async (req, res, next) => {
 });
 
 router.delete('/:id', async (req, res, next) => {
-    return await Theater.destroy({
+    return await Cinema.destroy({
         where: {
             id: req.params.id
         }
