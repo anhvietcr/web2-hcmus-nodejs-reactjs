@@ -21,5 +21,6 @@ app.options('*', cors());
 // Routes as API
 app.use('/', require('./routes/home'));
 app.use('/auth', require('./routes/auth'));
+app.use('/theater', require('./routes/theater'));
 
 
