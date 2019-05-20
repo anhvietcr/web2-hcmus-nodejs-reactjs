@@ -1,2 +1,6 @@
 export const DAT_VE = 'DAT_VE'
 export const DAT_VE_ASYNC = 'DAT_VE_ASYNC'
+export const SIGN_IN = 'SIGN_IN'
+export const SIGN_IN_ASYNC = 'SIGN_IN_ASYNC'
+export const SIGN_UP = 'SIGN_UP'
+export const SIGN_UP_ASYNC = 'SIGN_UP_ASYNC'
