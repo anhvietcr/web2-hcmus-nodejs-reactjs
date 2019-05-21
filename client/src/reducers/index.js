@@ -37,9 +37,22 @@ function Auth(state = initialStateAuth, action) {
     }
 }
 
+function User(state = initialStateAuth, action) {
+    switch (action.type) {
+        case TYPE.USER_UPDATE_INFO_ASYNC:
+        return {
+            ...state,
+            payload: action.payload
+        }
+    default:
+        return state;
+    }
+}
+
 const rootReducer = combineReducers({
     QuanLyVe,
-    Auth
+    Auth,
+    User
 });
 
 export default rootReducer

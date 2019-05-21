@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Home from '../containers/Home'
-import User from './User';
+import User from '../containers/User';
 import HomeCpanel from './cpanel/Home';
 import Login from '../containers/auth/Login';
 import Register from '../containers/auth/Register';

@@ -31,7 +31,7 @@ function asyncSignUp(payload) {
     .catch((e) => console.log(e));
 }
 function* actionSignUp(payload) {
-  console.log("post sign ip data: ", payload);
+  console.log("post sign up data: ", payload);
   
   // const response = yield call(asyncSignUp, payload);
   const response = {
@@ -39,6 +39,27 @@ function* actionSignUp(payload) {
   }
   yield put(actions.SignUpAsync(response))
 }
+
+
+/****************User*****************/
+// Update information
+function asyncUserUpdateInfo(payload) {
+  return axios.post(END_POINT + 'user/update', {
+    payload 
+  }).then(response => response.data)
+    .catch((e) => console.log(e));
+}
+function* actionUserUpdateInfo(payload) {
+  console.log("post update information data: ", payload);
+  
+  // const response = yield call(asyncUserUpdateInfo, payload);
+  const response = {
+    status: 200
+  }
+  yield put(actions.UserUpdateInfoAsync(response))
+}
+
+
 /****************Ticker*****************/
 function asyncDatveApi() {
 
@@ -61,5 +82,6 @@ function* CustomSaga() {
   yield takeLatest(TYPE.DAT_VE, actionDatve);
   yield takeLatest(TYPE.SIGN_IN, actionSignIn);
   yield takeLatest(TYPE.SIGN_UP, actionSignUp);
+  yield takeLatest(TYPE.USER_UPDATE_INFO, actionUserUpdateInfo);
 }
 export default CustomSaga
