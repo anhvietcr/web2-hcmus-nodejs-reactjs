@@ -1,5 +1,7 @@
 const Movie = require('../models/movie')
 const Router = require('express-promise-router')
+const { Op } = require('sequelize');
+
 let router = new Router();
 
 /***************HOME API ******************/
@@ -45,6 +47,31 @@ router.get('/:id', async (req, res, next) => {
         }
     });
 });
+
+router.get('/search/:keyword', async (req, res, next) => {
+    const movies = await Movie.findAll({
+        where: {
+            name: { [Op.like]:  '%' + req.params.keyword + '%' }
+        }
+    });
+
+    var status = 200;
+    var message = '';
+
+    if (!movies) {
+        status = 404;
+        message = 'Not found';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: {
+            movies: movies
+        }
+    });
+});
+
 
 router.post('/', async (req, res, next) => {
     const created_at = new Date();
