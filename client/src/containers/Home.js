@@ -6,8 +6,6 @@ import Home from '../components/Home'
 class HomeContainer extends Component {
 
     render() {
-        console.log("current data: ", this.props.QuanLyVe)
-
         return (
             <Home actions={this.props} />
         )

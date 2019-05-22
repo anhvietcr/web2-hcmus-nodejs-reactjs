@@ -35,7 +35,7 @@ const styles = theme => ({
         backgroundColor: "#FFFFFF",
         width: '420px',
         margin: '0 auto',
-        padding: "5px 10px"
+        padding: "0px 10px"
     },
     container: {
         display: 'block',
@@ -208,6 +208,7 @@ const Register = (props) => {
                             autoComplete="email"
                             margin="normal"
                             variant="outlined"
+                            value={values.email}
                             onChange={handleChange}
                             />
                             {onChangeValues.email && !values.email &&
@@ -227,6 +228,7 @@ const Register = (props) => {
                             name="fullname"
                             margin="normal"
                             variant="outlined"
+                            value={values.fullname}
                             onChange={handleChange}
                             />
                             {onChangeValues.fullname && !values.fullname &&
@@ -247,6 +249,7 @@ const Register = (props) => {
                             autoComplete="current-password"
                             margin="normal"
                             variant="outlined"
+                            value={values.password}
                             onChange={handleChange}
                             />
                             {onChangeValues.password && !values.password &&
@@ -267,6 +270,7 @@ const Register = (props) => {
                             autoComplete="current-password"
                             margin="normal"
                             variant="outlined"
+                            value={values.repassword}
                             onChange={handleChange}
                             />
                             {onChangeValues.repassword && !values.repassword &&

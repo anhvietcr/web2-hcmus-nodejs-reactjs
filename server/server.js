@@ -24,5 +24,5 @@ app.use('/auth', require('./routes/auth'));
 app.use('/theater', require('./routes/theater'));
 app.use('/cinema', require('./routes/cinema'));
 app.use('/user', require('./routes/user'));
-
-
+app.use('/movie', require('./routes/movie'));
+app.use('/showtime', require('./routes/showtime'));

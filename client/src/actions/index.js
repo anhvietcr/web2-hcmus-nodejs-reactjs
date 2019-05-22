@@ -21,8 +21,16 @@ const SignUpAsync = (payload) => {
     }
 }
 
+const UserUpdateInfoAsync = (payload) => {
+    return {
+        type: TYPE.USER_UPDATE_INFO_ASYNC,
+        payload
+    }
+}
+
 export default {
     DatveAsync,
     SignInAsync,
     SignUpAsync,
+    UserUpdateInfoAsync,
 }

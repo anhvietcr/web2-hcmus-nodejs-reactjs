@@ -1,14 +1,14 @@
-const Theater = require('../models/theater')
+const Movie = require('../models/movie')
 const Router = require('express-promise-router')
 let router = new Router();
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    return await Theater.findAll().then((result) => res.json(result));
+    return await Movie.findAll().then((result) => res.json(result));
 });
 
 router.get('/:id', async (req, res, next) => {
-    return await Theater.findOne({
+    return await Movie.findOne({
         where: {
             id: req.params.id
         }
@@ -17,13 +17,14 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
     const created_at = new Date();
-    const newTheater = req.body.theater;
-    return await Theater.create({
-        name: newTheater.name,
-        cinema_id: newTheater.cinema_id,
-        type: newTheater.type,
-        number_rows: newTheater.number_rows,
-        number_columns: newTheater.number_columns,
+    const newMovie = req.body.movie;
+    return await Movie.create({
+        name: newMovie.name,
+        image: newMovie.image,
+        trailer: newMovie.trailer,
+        introduce: newMovie.introduce,
+        opening_day: newMovie.opening_day,
+        view: newMovie.view,
         created_at: created_at
     })
         .then(post => {
@@ -41,14 +42,15 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
     const updated_at = new Date();
-    const updateTheater = req.body.theater;
+    const updateMovie = req.body.movie;
 
-    return await Theater.update({
-        name: updateTheater.name,
-        cinema_id: updateTheater.cinema_id,
-        type: updateTheater.type,
-        number_rows: updateTheater.number_rows,
-        number_columns: updateTheater.number_columns,
+    return await Movie.update({
+        name: updateMovie.name,
+        image: updateMovie.image,
+        trailer: updateMovie.trailer,
+        introduce: updateMovie.introduce,
+        opening_day: updateMovie.opening_day,
+        view: updateMovie.view,
         updated_at: updated_at
     },
         {
@@ -59,7 +61,7 @@ router.put('/:id', async (req, res, next) => {
 });
 
 router.delete('/:id', async (req, res, next) => {
-    return await Theater.destroy({
+    return await Movie.destroy({
         where: {
             id: req.params.id
         }
