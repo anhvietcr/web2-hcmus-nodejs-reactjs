@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles'
+import Requirement from '../helper/Requirement'
+import * as TYPE from '../../constants/actionTypes'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import Grid from '@material-ui/core/Grid'
@@ -69,7 +71,16 @@ const styles = theme => ({
         marginTop: "-10px"
     },
     caption: {
-        marginTop: '16px'
+        marginTop: '5px',
+        padding: "0px 10px" 
+    },
+    link: {
+        color: "#0767DB",
+        fontWeight: "bold",
+        "&:hover": {
+            color: 'red',
+            cursor: 'pointer'
+        }
     }
 })
 
@@ -89,15 +100,16 @@ const Register = (props) => {
         repassword: false,
     });
     const [messageFrom, setMessageFrom] = useState({
-        email: "Email không được để trống", 
-        fullname: "Họ tên không được để trống", 
-        password: "Mật khẩu không được để trống",
-        repassword: "Nhập lại mật khẩu",
+        email: TYPE.REQUIRE_EMAIL, 
+        fullname: TYPE.REQUIRE_NAME, 
+        password: TYPE.REQUIRE_PASSW, 
+        repassword: TYPE.REQUIRE_REPASSW, 
     });
     
     useEffect(() => {
         if (submitted) {
-            if (actions.Auth.payload.status === 200) {
+            console.log("response: ", actions.Auth)
+            if (actions.Auth.status === 200) {
                 actions.history.push('/')
             }
         }
@@ -122,10 +134,10 @@ const Register = (props) => {
                 repassword: true,
             });
             setMessageFrom({
-                email: "Email không được để trống", 
-                fullname: "Họ tên không được để trống", 
-                password: "Mật khẩu không được để trống",
-                repassword: "Nhập lại mật khẩu",
+                email: TYPE.REQUIRE_EMAIL, 
+                fullname: TYPE.REQUIRE_NAME, 
+                password: TYPE.REQUIRE_PASSW, 
+                repassword: TYPE.REQUIRE_REPASSW, 
             });
             return false;
         }
@@ -138,7 +150,7 @@ const Register = (props) => {
             })
             setMessageFrom({
                 ...messageFrom,
-                email: "Email không đúng định dạng"
+                email: TYPE.REQUIRE_TYPE_EMAIL
             });
             return false;
         }
@@ -151,7 +163,7 @@ const Register = (props) => {
             })
             setMessageFrom({
                 ...messageFrom,
-                repassword: "Nhập lại mật khẩu không chính xác"
+                repassword: TYPE.REQUIRE_PASS_CONFIRM
             });
             return false;
         }
@@ -212,13 +224,7 @@ const Register = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.email && !values.email &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.email}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.email} />}
                         <TextField
                             required
                             id="outlined-input"
@@ -232,13 +238,7 @@ const Register = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.fullname && !values.fullname &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.fullname}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.fullname} />}
                         <TextField
                             required
                             id="outlined-password-input"
@@ -253,13 +253,7 @@ const Register = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.password && !values.password &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.password}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.password} />}
                         <TextField
                             required
                             id="outlined-repassword-input"
@@ -274,13 +268,7 @@ const Register = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.repassword && !values.repassword &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.repassword}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.repassword} />}
                         <Button 
                             variant="contained" 
                             color="inherit" 
@@ -290,7 +278,18 @@ const Register = (props) => {
                             Đăng ký
                             <NearMe className={classes.rightIcon} />
                         </Button>
+                        <Typography 
+                        variant="caption" 
+                        gutterBottom 
+                        align="left"
+                        className={classNames(classes.caption, classes.link)}
+                        onClick={() => {
+                            actions.history.push("/auth/login")
+                        }}>
+                        Đăng nhập
+                    </Typography>
                     </form>
+
                 </Paper>
             </Grid>
         </Grid>        

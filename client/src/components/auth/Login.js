@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles'
+import Requirement from '../helper/Requirement'
+import * as TYPE from '../../constants/actionTypes'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import Grid from '@material-ui/core/Grid'
@@ -70,7 +73,16 @@ const styles = theme => ({
         marginTop: "-10px"
     },
     caption: {
-        marginTop: '16px'
+        marginTop: '5px',
+        padding: "0px 10px" 
+    },
+    link: {
+        color: "#0767DB",
+        fontWeight: "bold",
+        "&:hover": {
+            color: 'red',
+            cursor: 'pointer'
+        }
     }
 })
 
@@ -86,13 +98,14 @@ const Login = (props) => {
         password: false
     });
     const [messageFrom, setMessageFrom] = useState({
-        email: "Email không được để trống", 
-        password: "Mật khẩu không được để trống"
+        email: TYPE.REQUIRE_EMAIL, 
+        password: TYPE.REQUIRE_PASSW, 
     });
     
     useEffect(() => {
         if (submitted) {
-            if (actions.Auth.payload.status === 200) {
+            console.log("response: ", actions.Auth)
+            if (actions.Auth.status === 200) {
                 if (actions.Auth.payload.role === 'admin') {
                     actions.history.push('/cpanel')
                 } else {
@@ -119,8 +132,8 @@ const Login = (props) => {
                 password: true
             });
             setMessageFrom({
-                email: "Email không được trống", 
-                password: "Mật khẩu không được trống"
+                email: TYPE.REQUIRE_EMAIL, 
+                password: TYPE.REQUIRE_PASSW, 
             });
             return false;
         }
@@ -133,7 +146,7 @@ const Login = (props) => {
             })
             setMessageFrom({
                 ...messageFrom,
-                email: "Email không đúng định dạng"
+                email: TYPE.REQUIRE_TYPE_EMAIL
             });
             return false;
         }
@@ -193,13 +206,7 @@ const Login = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.email && !values.email &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.email}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.email} />}
                         <TextField
                             required
                             id="outlined-password-input"
@@ -213,13 +220,7 @@ const Login = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.password && !values.password &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.password}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.password} />}
                         <Button 
                             variant="contained" 
                             color="inherit" 
@@ -230,6 +231,37 @@ const Login = (props) => {
                             <NearMe className={classes.rightIcon} />
                         </Button>
                     </form>
+
+                    <Grid
+                        justify="space-between"
+                        container 
+                        spacing={24}
+                        >
+                        <Grid item>
+                            <Typography 
+                                variant="caption" 
+                                gutterBottom 
+                                align="left"
+                                className={classNames(classes.caption, classes.link)}
+                                onClick={() => {
+                                    actions.history.push("/user/forgotpassword")
+                                }}>
+                                Quên mật khẩu? 
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            <Typography 
+                                variant="caption" 
+                                gutterBottom 
+                                align="right"
+                                className={classNames(classes.caption, classes.link)}
+                                onClick={() => {
+                                    actions.history.push("/auth/register")
+                                }}>
+                                Đăng ký
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </Paper>
             </Grid>
         </Grid>        
