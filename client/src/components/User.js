@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import Alert from './helper/Alert'
 import CardHistory from './helper/CardHistory'
+import * as TYPE from '../constants/actionTypes'
+import Requirement from './helper/Requirement'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
@@ -77,12 +79,6 @@ const styles = theme => ({
             marginTop: "5px"
         }
     },
-    helper: {
-        color: 'red',
-        fontSize: '12px',
-        margin: "15px",
-        marginTop: "-10px"
-    },
 })
 
 const User = (props) => {
@@ -108,25 +104,26 @@ const User = (props) => {
         repassword: false, 
     });
     const [messageFrom, setMessageFrom] = useState({
-        email: "Email không được để trống", 
-        fullname: "Họ tên không được để trống", 
-        phone: "Số điện thoại không được để trống", 
-        password: "Mật khẩu không được để trống", 
-        repassword: "Nhập lại mật khẩu !", 
+        email: TYPE.REQUIRE_EMAIL,
+        fullname: TYPE.REQUIRE_NAME,
+        phone: TYPE.REQUIRE_PHONE,
+        password: TYPE.REQUIRE_PASSW,
+        repassword: TYPE.REQUIRE_REPASSW, 
     });
 
     useEffect(() => {
         if (submitted) {
-            if (actions.User.payload.status === 200) {
+            console.log("response: ", actions.User)
+            if (actions.User.status === 200) {
                 setAlert({
                     open: true,
-                    message: 'Cập nhật thành công',
+                    message: TYPE.MESSAGE_SUCCESS,
                     variant: 'success'
                 });
             } else {
                 setAlert({
                     open: true,
-                    message: 'Cập nhật thất bại',
+                    message: TYPE.MESSAGE_ERROR,
                     variant: 'error'
                 });
             }
@@ -154,11 +151,11 @@ const User = (props) => {
                 repassword: true
             });
             setMessageFrom({
-                email: "Email không được để trống",
-                fullname: "Họ tên không được để trống",
-                phone: "Số điện thoại không được để trống", 
-                password: "Mật khẩu không được để trống", 
-                repassword: "Nhập lại mật khẩu !", 
+                email: TYPE.REQUIRE_EMAIL, 
+                fullname: TYPE.REQUIRE_NAME, 
+                phone: TYPE.REQUIRE_PHONE, 
+                password: TYPE.REQUIRE_PASSW, 
+                repassword: TYPE.REQUIRE_REPASSW, 
             });
             return false;
         }
@@ -171,7 +168,7 @@ const User = (props) => {
             })
             setMessageFrom({
                 ...messageFrom,
-                repassword: "Nhập lại mật khẩu không chính xác"
+                repassword: TYPE.REQUIRE_PASS_CONFIRM
             });
             return false;
         }
@@ -184,7 +181,7 @@ const User = (props) => {
             })
             setMessageFrom({
                 ...messageFrom,
-                email: "Email không đúng định dạng"
+                email: TYPE.REQUIRE_TYPE_EMAIL
             });
             return false;
         }
@@ -254,13 +251,7 @@ const User = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.email && !values.email &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.email}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.email} />}
                         <TextField
                             required
                             id="outlined-fullname-input"
@@ -274,13 +265,7 @@ const User = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.fullname && !values.fullname &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.fullname}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.fullname} />}
                         <TextField
                             required
                             id="outlined-phone-input"
@@ -294,13 +279,7 @@ const User = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.phone && !values.phone &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.phone}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.phone} />}
                         <TextField
                             required
                             id="outlined-password-input"
@@ -315,13 +294,7 @@ const User = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.password && !values.password &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.password}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.password} />}
                         <TextField
                             required
                             id="outlined-repassword-input"
@@ -335,13 +308,7 @@ const User = (props) => {
                             onChange={handleChange}
                             />
                             {onChangeValues.repassword && !values.repassword &&
-                                <Typography 
-                                    variant="caption" 
-                                    gutterBottom 
-                                    align="left"
-                                    className={classes.helper}>{messageFrom.repassword}
-                                </Typography>
-                            }
+                                <Requirement message={messageFrom.repassword} />}
                         <Button 
                             variant="contained" 
                             color="inherit" 

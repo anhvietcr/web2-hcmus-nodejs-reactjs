@@ -4,7 +4,6 @@ import * as TYPE from '../constants/actionTypes'
 function QuanLyVe(state = [], action) {
     switch (action.type) {
         case TYPE.DAT_VE_ASYNC: 
-            console.log("async data: ", action.data)
             return {
                 ...state,
                 data: action.data
@@ -15,23 +14,17 @@ function QuanLyVe(state = [], action) {
 }
 
 let initialStateAuth = {
+    status: 500,
     payload: {
-        status: 500,
         role: 'guest'
     }
 }
 function Auth(state = initialStateAuth, action) {
     switch(action.type) {
         case TYPE.SIGN_IN_ASYNC:
-            return {
-                ...state,
-                payload: action.payload
-            }
+            return action.payload
         case TYPE.SIGN_UP_ASYNC:
-            return {
-                ...state,
-                payload: action.payload
-            }
+            return action.payload
         default:
             return state;
     }
@@ -40,10 +33,7 @@ function Auth(state = initialStateAuth, action) {
 function User(state = initialStateAuth, action) {
     switch (action.type) {
         case TYPE.USER_UPDATE_INFO_ASYNC:
-        return {
-            ...state,
-            payload: action.payload
-        }
+        return action.payload
     default:
         return state;
     }

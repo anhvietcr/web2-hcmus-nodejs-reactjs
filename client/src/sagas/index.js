@@ -18,7 +18,9 @@ function* actionSignIn(payload) {
   // const response = yield call(asyncSignIn, payload);
   const response = {
     status: 200,
-    role: 'admin'
+    payload: {
+      role: 'admin'
+    }
   }
   yield put(actions.SignInAsync(response))
 }
@@ -35,7 +37,10 @@ function* actionSignUp(payload) {
   
   // const response = yield call(asyncSignUp, payload);
   const response = {
-    status: 200
+    status: 200,
+    payload: {
+
+    }
   }
   yield put(actions.SignUpAsync(response))
 }
@@ -54,7 +59,10 @@ function* actionUserUpdateInfo(payload) {
   
   // const response = yield call(asyncUserUpdateInfo, payload);
   const response = {
-    status: 200
+    status: 200,
+    payload: {
+      
+    }
   }
   yield put(actions.UserUpdateInfoAsync(response))
 }

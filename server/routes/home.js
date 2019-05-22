@@ -13,6 +13,7 @@ var models = {
     Theater,
     Cinema
 }
+
 Theater.associate(models);
 Movie.associate(models);
 Cinema.associate(models);

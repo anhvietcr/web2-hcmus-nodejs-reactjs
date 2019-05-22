@@ -4,46 +4,80 @@ let router = new Router();
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    return await Theater.findAll().then((result) => res.json(result));
+    const theaters = await Theater.findAll();
+    var status = 200;
+    var message = '';
+
+    if (!theaters) {
+        status = 404;
+        message = 'Not found';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: {
+            theaters: theaters
+        }
+    });
 });
 
 router.get('/:id', async (req, res, next) => {
-    return await Theater.findOne({
+    const theaters = await Theater.findOne({
         where: {
             id: req.params.id
         }
-    }).then((result) => res.json(result));
+    });
+    var status = 200;
+    var message = '';
+
+    if (!theaters) {
+        status = 404;
+        message = 'Not found';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: {
+            theaters: theaters
+        }
+    });
 });
 
 router.post('/', async (req, res, next) => {
     const created_at = new Date();
     const newTheater = req.body.theater;
-    return await Theater.create({
+    const theater = await Theater.create({
         name: newTheater.name,
         cinema_id: newTheater.cinema_id,
         type: newTheater.type,
         number_rows: newTheater.number_rows,
         number_columns: newTheater.number_columns,
         created_at: created_at
-    })
-        .then(post => {
-            if (!post) {
-                return res.render("error", {
-                    message: "Page not found.",
-                    error: {
-                        status: 404,
-                    }
-                });
-            }
-            res.json(post);
-        });
+    });
+    var status = 200;
+    var message = '';
+
+    if (!theater) {
+        status = 503;
+        message = 'Create theater failed';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: {
+            theater: theater
+        }
+    });
 });
 
 router.put('/:id', async (req, res, next) => {
     const updated_at = new Date();
     const updateTheater = req.body.theater;
 
-    return await Theater.update({
+    const numAffectedRows = await Theater.update({
         name: updateTheater.name,
         cinema_id: updateTheater.cinema_id,
         type: updateTheater.type,
@@ -55,15 +89,40 @@ router.put('/:id', async (req, res, next) => {
             where: {
                 id: req.params.id
             }
-        }).then((result) => res.json(result));
+        });
+    var status = 200;
+    var message = '';
+
+    if (numAffectedRows <= 0) {
+        status = 503;
+        message = 'Update theater failed';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+    });
 });
 
 router.delete('/:id', async (req, res, next) => {
-    return await Theater.destroy({
+    const numAffectedRows = await Theater.destroy({
         where: {
             id: req.params.id
         }
-    }).then((result) => res.json(result));
+    });
+
+    var status = 200;
+    var message = '';
+
+    if (numAffectedRows <= 0) {
+        status = 503;
+        message = 'Delete theater failed';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+    });
 });
 
 module.exports = router
