@@ -1,4 +1,6 @@
 const Showtime = require('../models/showtime')
+const Theater = require('../models/theater')
+const Movie = require('../models/movie')
 const Router = require('express-promise-router')
 let router = new Router();
 
@@ -12,6 +14,43 @@ router.get('/:id', async (req, res, next) => {
         where: {
             id: req.params.id
         }
+    }).then((result) => res.json(result));
+});
+
+router.get('/:movie_id/:cinema_id', async (req, res, next) => {
+    return await Theater.findAll({
+        where: {
+            cinema_id: req.params.cinema_id
+        },
+        include: [{
+            model: Movie,
+            as: 'movies',
+            required: false,
+            attributes: ['id', 'name', 'image', 'trailer', 'introduce', 'opening_day', 'view'],
+            where: {
+                id: req.params.movie_id,
+            },
+            through: {
+                attributes: ['start_time', 'end_time', 'price'],
+            }
+        }]
+    }).then((result) => res.json(result));
+});
+
+router.get('/theater/:theater_id', async (req, res, next) => {
+    return await Theater.findAll({
+        where: {
+            id: req.params.theater_id
+        },
+        include: [{
+            model: Movie,
+            as: 'movies',
+            required: false,
+            attributes: ['id', 'name', 'image', 'trailer', 'introduce', 'opening_day', 'view'],
+            through: {
+                attributes: ['start_time', 'end_time', 'price'],
+            }
+        }]
     }).then((result) => res.json(result));
 });
 

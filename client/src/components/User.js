@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react'
+import Alert from './helper/Alert'
+import CardHistory from './helper/CardHistory'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
@@ -10,10 +12,6 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import NearMe from '@material-ui/icons/NearMe'
 import Divider from '@material-ui/core/Divider'
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import CardHeader from '@material-ui/core/CardHeader'
 
 const styles = theme => ({
     root: {
@@ -79,18 +77,6 @@ const styles = theme => ({
             marginTop: "5px"
         }
     },
-    card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        margin: '5px 0px'
-    },
-    cardContent: {
-        flexGrow: 1,
-    },
-    cardHeaderLeft: {
-        textAlign: 'left'
-    },
     helper: {
         color: 'red',
         fontSize: '12px',
@@ -101,6 +87,11 @@ const styles = theme => ({
 
 const User = (props) => {
     const {actions, classes} = props;
+    const [alert, setAlert] = useState({
+        open: false,
+        message: "",
+        variant: "success"
+    });
     const [submitted, setSubmit] = useState(false);
     const [values, setValues] = useState({
         email: '', 
@@ -127,18 +118,27 @@ const User = (props) => {
     useEffect(() => {
         if (submitted) {
             if (actions.User.payload.status === 200) {
-                actions.history.push('/user')
+                setAlert({
+                    open: true,
+                    message: 'Cập nhật thành công',
+                    variant: 'success'
+                });
             } else {
-                actions.history.push('/')
+                setAlert({
+                    open: true,
+                    message: 'Cập nhật thất bại',
+                    variant: 'error'
+                });
             }
         }
-    })
+    }, [submitted, actions])
 
     const handleChange = (e) => {
         const {value, name} = e.target;
+        setSubmit(false)
         setValues((values) => ({...values, [name]: value}));
         setOnChangeValues((values) => ({...values, [name]: true}));
-        setSubmit(false)
+        setAlert({...alert, open: false});
     }
 
     const handleSubmit = (e) => {
@@ -191,48 +191,30 @@ const User = (props) => {
 
         // Data is valid, dispatch to action
         setSubmit(true);
-        actions.ChangeInfoUser(values)
-    }
-
-    const createCard = (info) => {
-        return (
-            <Card className={classes.card} key={info}>
-               <CardHeader
-                    avatar={
-                        <Avatar aria-label="Recipe" className={classes.avatar}>
-                        A{info}
-                        </Avatar>
-                    }
-                    title="Rạp: Lotte Q7"
-                    subheader="Cụm Sài Gòn"
-                    className={classes.cardHeaderLeft}
-                />
-                <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        Tên phim
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Typography>
-                        1/1/2019 00:00
-                    </Typography>
-                </CardActions>
-            </Card>
-        )
+        actions.UserUpdateInfo(values)
     }
 
     const loadHistory = () => {
-        return [1,2,3,4,5].map((data) => createCard(data))
+        return [1,2,3,4,5].map((data) => {
+            return (
+                <CardHistory info={data} key={data}/>
+            )
+        })
     }
 
     return (
         <Grid container className={classes.root} spacing={16}>
+            <Alert 
+                open={alert.open}
+                message={alert.message}
+                variant={alert.variant}
+            />
             <Grid item xs={12} md={6} lg={4} xl={4}>
                 <Paper className={classes.paper}>
                     <ul className={classes.information}>
                         <li className={classes.leftInformation}>
                             <Typography component="h3" variant="headline" align="left">
-                                Phan Anh Viet
+                            Phan Anh Viet
                             </Typography>
                             <Divider/>
                             <Typography component="h6" variant="subtitle1" gutterBottom align="left">
@@ -379,7 +361,7 @@ const User = (props) => {
                             Lịch sử
                         </Typography>
                         <Typography  variant="subtitle2" align="right">
-                            Xem danh sách đã đặt
+                            Xem danh sách vé đã đặt
                         </Typography>
                     </div>
                     <Divider />

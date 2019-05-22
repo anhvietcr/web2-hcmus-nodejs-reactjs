@@ -1,11 +1,9 @@
 const Sequelize = require('sequelize');
 const db = require('./db')
-
 const Movie = db.define("Movie", {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true
   },
   image: {
     type: Sequelize.STRING,
@@ -33,11 +31,11 @@ const Movie = db.define("Movie", {
   },
 });
 
-Movie.associate = function(models) {
+Movie.associate = function (models) {
   Movie.belongsToMany(models.Theater, {
-    through: 'Showtime',
-    as: 'showtimes',
-    foreignKey: 'movie_id'
+    through: models.Showtime,
+    as: 'theaters',
+    foreignKey: 'movie_id',
   });
 };
 

@@ -1,4 +1,7 @@
 node_modules
 /server/models/db.js
 
-postgres.pgsql
+postgres.pgsq
+.DS_store
+.idea
+

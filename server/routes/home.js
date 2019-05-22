@@ -1,5 +1,22 @@
 const User = require('../models/user')
 const Router = require('express-promise-router')
+const Movie = require('../models/movie')
+const Showtime = require('../models/showtime')
+const Theater = require('../models/theater')
+const Cinema = require('../models/cinema')
+
+
+var models = {
+    Router,
+    Movie,
+    Showtime,
+    Theater,
+    Cinema
+}
+Theater.associate(models);
+Movie.associate(models);
+Cinema.associate(models);
+
 let router = new Router();
 
 /***************HOME API ******************/
