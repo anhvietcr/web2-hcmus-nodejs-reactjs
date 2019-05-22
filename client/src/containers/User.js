@@ -18,7 +18,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    ChangeInfoUser: (payload) => {dispatch({type: TYPE.USER_UPDATE_INFO, payload})}
+    UserUpdateInfo: (payload) => {dispatch({type: TYPE.USER_UPDATE_INFO, payload})}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer)
