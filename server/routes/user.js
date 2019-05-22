@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const Router = require('express-promise-router');
 let router = new Router();
 
-/***************Auth API ******************/
+/*************** Auth API ******************/
 router.get('/', async (req, res, next) => {
     next();
 });
@@ -207,9 +207,13 @@ router.put('/profile',async function(req,res) {
     const phone = req.body.payload.phone;
     const fullname = req.body.payload.fullname;
 
-    // const newpassword = "123";
-    // const renewpassword = "123";
-    if(newpassword!==renewpassword)
+
+    // const password = "123456";
+    // const repassword = "123456";
+    // const fullname = "Nhu Trang";
+    // const phone = "09876543";
+
+    if(password!==repassword)
     {
         let response = {
             status: 403,
