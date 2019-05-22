@@ -65,7 +65,7 @@ router.post('/', async (req, res, next) => {
 
     if (!cinema) {
         status = 503;
-        message = 'Service Unavailable';
+        message = 'Create cinema failed';
     }
 
     return res.json({

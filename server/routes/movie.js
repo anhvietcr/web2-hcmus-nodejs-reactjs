@@ -4,21 +4,52 @@ let router = new Router();
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    return await Movie.findAll().then((result) => res.json(result));
+    const movies = await Movie.findAll();
+    var status = 200;
+    var message = '';
+
+    if (!movies) {
+        status = 404;
+        message = 'Not found';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: {
+            movies: movies
+        }
+    });
 });
 
 router.get('/:id', async (req, res, next) => {
-    return await Movie.findOne({
+    const movies = await Movie.findOne({
         where: {
             id: req.params.id
         }
-    }).then((result) => res.json(result));
+    });
+
+    var status = 200;
+    var message = '';
+
+    if (!movies) {
+        status = 404;
+        message = 'Not found';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: {
+            movies: movies
+        }
+    });
 });
 
 router.post('/', async (req, res, next) => {
     const created_at = new Date();
     const newMovie = req.body.movie;
-    return await Movie.create({
+    const movie = await Movie.create({
         name: newMovie.name,
         image: newMovie.image,
         trailer: newMovie.trailer,
@@ -26,25 +57,30 @@ router.post('/', async (req, res, next) => {
         opening_day: newMovie.opening_day,
         view: newMovie.view,
         created_at: created_at
-    })
-        .then(post => {
-            if (!post) {
-                return res.render("error", {
-                    message: "Page not found.",
-                    error: {
-                        status: 404,
-                    }
-                });
-            }
-            res.json(post);
-        });
+    });
+
+    var status = 200;
+    var message = '';
+
+    if (!movie) {
+        status = 503;
+        message = 'Create movie failed';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: {
+            movie: movie
+        }
+    });
 });
 
 router.put('/:id', async (req, res, next) => {
     const updated_at = new Date();
     const updateMovie = req.body.movie;
 
-    return await Movie.update({
+    const numAffectedRows = await Movie.update({
         name: updateMovie.name,
         image: updateMovie.image,
         trailer: updateMovie.trailer,
@@ -57,15 +93,41 @@ router.put('/:id', async (req, res, next) => {
             where: {
                 id: req.params.id
             }
-        }).then((result) => res.json(result));
+        });
+
+    var status = 200;
+    var message = '';
+
+    if (numAffectedRows <= 0) {
+        status = 503;
+        message = 'Update movie failed';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+    });
 });
 
 router.delete('/:id', async (req, res, next) => {
-    return await Movie.destroy({
+    const numAffectedRows = await Movie.destroy({
         where: {
             id: req.params.id
         }
-    }).then((result) => res.json(result));
+    });
+
+    var status = 200;
+    var message = '';
+
+    if (numAffectedRows <= 0) {
+        status = 503;
+        message = 'Update movie failed';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+    });
 });
 
 module.exports = router
