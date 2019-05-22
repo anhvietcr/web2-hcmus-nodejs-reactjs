@@ -1,0 +1,1 @@
+CREATE DATABASE web2_cuoiky;

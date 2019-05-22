@@ -5,35 +5,34 @@ const Theater = db.define("Theater", {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true
   },
   cinema_id: {
     type: Sequelize.STRING,
     allowNull: false,
   },
   type: {
-    type:   Sequelize.ENUM,
+    type: Sequelize.ENUM,
     values: ['2d', '3d', '4dx']
   },
   number_rows: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   number_column: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
 });
 
-Theater.associate = function(models) {
-  Role.belongsToMany(models.Movie, {
-    through: 'Showtime',
-    as: 'showtimes',
+Theater.associate = function (models) {
+  Theater.belongsToMany(models.Movie, {
+    through: models.Showtime,
+    as: 'movies',
     foreignKey: 'theater_id'
   });
   Theater.belongsTo(models.Cinema, {
-    foreignKey : 'id',
-    targetKey: 'cinema_id'
+    foreignKey: 'cinema_id',
+    targetKey: 'id'
   });
 };
 
