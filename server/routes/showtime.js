@@ -19,11 +19,11 @@ router.post('/', async (req, res, next) => {
     const created_at = new Date();
     const newShowtime = req.body.Showtime;
     return await Showtime.create({
-        movie_id: newShowtime.name,
-        theater_id: newShowtime.image,
-        start_time: newShowtime.trailer,
-        end_time: newShowtime.introduce,
-        price: newShowtime.opening_day,
+        movie_id: newShowtime.movie_id,
+        theater_id: newShowtime.theater_id,
+        start_time: newShowtime.start_time,
+        end_time: newShowtime.end_time,
+        price: newShowtime.price,
         created_at: created_at
     })
         .then(post => {
@@ -44,16 +44,16 @@ router.put('/:id', async (req, res, next) => {
     const updateShowtime = req.body.Showtime;
 
     return await Showtime.update({
-        movie_id: updateShowtime.name,
-        theater_id: updateShowtime.image,
-        start_time: updateShowtime.trailer,
-        end_time: updateShowtime.introduce,
-        price: updateShowtime.opening_day,
+        start_time: updateShowtime.start_time,
+        end_time: updateShowtime.end_time,
+        price: updateShowtime.price,
         updated_at: updated_at
     },
         {
             where: {
-                id: req.params.id
+                id: req.params.id,
+                movie_id: updateShowtime.movie_id,
+                theater_id: updateShowtime.theater_id,
             }
         }).then((result) => res.json(result));
 });
