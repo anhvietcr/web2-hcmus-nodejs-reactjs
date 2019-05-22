@@ -72,8 +72,6 @@ router.post('/register',async function(req,res) {
             }
         };
         res.json(response);
-
-
     });
 });
 
@@ -107,7 +105,7 @@ router.post('/login', async function(req,res) {
 });
 
 router.post('/logout', function (req,res) {
-    if(req.body.userId)
+    if(req.body.payload.userId)
     {
         let response = {
             payload: {
@@ -119,7 +117,7 @@ router.post('/logout', function (req,res) {
 });
 
 router.put('/forgot',async function(req,res) {
-    const email = req.body.email;
+    const email = req.body.payload.email;
     //const email = "phannhutrang@gmail.com";
     const temp = await User.findOne({
         where:{email},
@@ -127,25 +125,21 @@ router.put('/forgot',async function(req,res) {
     if(!temp)
     {
         let response = {
-            payload: {
-                status: 403,
-                temp:temp
-            }
+            status: 403,
+            message: "Không tồn tại email"
         };
         res.json(response);
     }
 
-    const newpassword = req.body.newpassword;
-    const renewpassword = req.body.renewpassword;
+    const newpassword = req.body.payload.newpassword;
+    const renewpassword = req.body.payload.renewpassword;
     // const newpassword = "123";
     // const renewpassword = "123";
     if(newpassword!==renewpassword)
     {
         let response = {
-            payload: {
-                status: 403,
-                temp:temp
-            }
+            status: 403,
+            message:"Mật khẩu không khớp nhau"
         };
         res.json(response);
     }
@@ -161,8 +155,8 @@ router.put('/forgot',async function(req,res) {
     }).then(function(user){
         //res.json(user)
         let response = {
+            status:200,
             payload: {
-                status: 200,
                 user:user
             }
         };
@@ -170,4 +164,78 @@ router.put('/forgot',async function(req,res) {
     });
 });
 
+router.get('/profile',async  function f(req,res) {
+    const id = req.body.payload.userId;
+    //const id = 1;
+    const user = await User.findOne({
+        where:{id},
+    });
+    if(!user)
+    {
+        let response = {
+            status: 403,
+            message:"Không tồn tại ID User"
+        };
+        res.json(response);
+    }
+    else{
+        let response = {
+            status:200,
+            payload:{
+                user:user
+            }
+        }
+        res.json(response);
+    }
+});
+router.put('/profile',async function(req,res) {
+    const email = req.body.payload.email;
+    //const email = "phannhutrang@gmail.com";
+    const temp = await User.findOne({
+        where:{email},
+    });
+    if(!temp)
+    {
+        let response = {
+            status: 403,
+            message:"Không tồn tại email"
+        };
+        res.json(response);
+    }
+    const password = req.body.payload.password;
+    const repassword = req.body.payload.repassword;
+    const phone = req.body.payload.phone;
+    const fullname = req.body.payload.fullname;
+
+    // const newpassword = "123";
+    // const renewpassword = "123";
+    if(newpassword!==renewpassword)
+    {
+        let response = {
+            status: 403,
+            message:"Password không khớp nhau"
+        };
+        res.json(response);
+    }
+
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const user = await User.update({
+        password:hashedPassword,
+        phone:phone,
+        fullname:fullname
+    }, {
+        where:{
+            email:email
+        }
+    }).then(function(user){
+        //res.json(user)
+        let response = {
+            status: 200,
+            payload: {
+                user:user
+            }
+        };
+        res.json(response);
+    });
+});
 module.exports = router;
