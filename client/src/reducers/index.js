@@ -14,8 +14,45 @@ function QuanLyVe(state = [], action) {
     }
 }
 
+let initialStateAuth = {
+    payload: {
+        status: 500,
+        role: 'guest'
+    }
+}
+function Auth(state = initialStateAuth, action) {
+    switch(action.type) {
+        case TYPE.SIGN_IN_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            }
+        case TYPE.SIGN_UP_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            }
+        default:
+            return state;
+    }
+}
+
+function User(state = initialStateAuth, action) {
+    switch (action.type) {
+        case TYPE.USER_UPDATE_INFO_ASYNC:
+        return {
+            ...state,
+            payload: action.payload
+        }
+    default:
+        return state;
+    }
+}
+
 const rootReducer = combineReducers({
-    QuanLyVe
+    QuanLyVe,
+    Auth,
+    User
 });
 
 export default rootReducer

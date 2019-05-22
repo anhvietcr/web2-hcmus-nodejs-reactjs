@@ -7,6 +7,30 @@ const DatveAsync = (data) => {
     }
 }
 
+const SignInAsync = (payload) => {
+    return {
+        type: TYPE.SIGN_IN_ASYNC,
+        payload
+    }
+} 
+
+const SignUpAsync = (payload) => {
+    return {
+        type: TYPE.SIGN_UP_ASYNC,
+        payload
+    }
+}
+
+const UserUpdateInfoAsync = (payload) => {
+    return {
+        type: TYPE.USER_UPDATE_INFO_ASYNC,
+        payload
+    }
+}
+
 export default {
-    DatveAsync
+    DatveAsync,
+    SignInAsync,
+    SignUpAsync,
+    UserUpdateInfoAsync,
 }
