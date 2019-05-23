@@ -120,11 +120,11 @@ const getActiveFlagByPath = (path) => {
             active.at = [0, 1, 0, 0, 0];
             active.text = "Phim";
             break;
-        case '/cpanel/cinemas':
+        case '/cpanel/theaters':
             active.at =  [0, 0, 1, 0, 0];
             active.text = "Rạp";
             break;
-        case '/cpanel/theaters':
+        case '/cpanel/cinemas':
             active.at = [0, 0, 0, 1, 0];
             active.text = "Cụm Rạp";
             break;
@@ -204,17 +204,17 @@ const HomeCpanel = (props) => {
                         <ListItemText primary="Phim" />
                     </ListItem>
                 </Link>
-                <Link to="/cpanel/cinemas" className={classes.link}>
+                <Link to="/cpanel/theaters" className={classes.link}>
                     <ListItem
-                        button key="cinemas"
+                        button key="theaters"
                         className={activeFlag.at[2] ? classes.active : ''}>
                         <ListItemIcon><InboxIcon /></ListItemIcon>
                         <ListItemText primary="Rạp" />
                     </ListItem>
                 </Link>
-                <Link to="/cpanel/theaters" className={classes.link}>
+                <Link to="/cpanel/cinemas" className={classes.link}>
                     <ListItem 
-                        button key="theaters"
+                        button key="cinemas"
                         className={activeFlag.at[3] ? classes.active : ''}>
                         <ListItemIcon><InboxIcon /></ListItemIcon>
                         <ListItemText primary="Cụm Rạp" />
@@ -251,5 +251,5 @@ HomeCpanel.propTypes = {
     theme: PropTypes.object.isRequired,
 };
   
-  export default withStyles(styles, { withTheme: true })(HomeCpanel);
+export default withStyles(styles, { withTheme: true })(HomeCpanel);
   

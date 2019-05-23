@@ -1,5 +1,5 @@
-export const MESSAGE_SUCCESS = 'Cập nhật thành công'
-export const MESSAGE_ERROR = 'Cập nhật thất bại'
+export const MESSAGE_SUCCESS = 'Xử lý thành công'
+export const MESSAGE_ERROR = 'Xử lý thất bại'
 export const REQUIRE_EMAIL = 'Email không được trống'
 export const REQUIRE_PASSW = 'Mật khẩu không được trống'
 export const REQUIRE_REPASSW = 'Nhập lại mật khẩu'
@@ -7,6 +7,9 @@ export const REQUIRE_PASS_CONFIRM = 'Nhập lại mật khẩu không chính xá
 export const REQUIRE_NAME = 'Họ tên không được để trống'
 export const REQUIRE_PHONE = 'Số điện thoại không được để trống'
 export const REQUIRE_TYPE_EMAIL = 'Email không đúng định dạng'
+export const ADD_CINEMA = 'Thêm cụm rạp'
+export const BTN_ADD = 'Thêm'
+export const BTN_ADD_NEW = 'Thêm mới'
 
 export const DAT_VE = 'DAT_VE'
 export const DAT_VE_ASYNC = 'DAT_VE_ASYNC'

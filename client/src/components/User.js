@@ -84,6 +84,7 @@ const styles = theme => ({
 const User = (props) => {
     const {actions, classes} = props;
     const [alert, setAlert] = useState({
+        count: 0,
         open: false,
         message: "",
         variant: "success"
@@ -111,6 +112,7 @@ const User = (props) => {
         repassword: TYPE.REQUIRE_REPASSW, 
     });
 
+
     useEffect(() => {
         if (submitted) {
             console.log("response: ", actions.User)
@@ -130,14 +132,15 @@ const User = (props) => {
         }
     }, [submitted, actions])
 
+
     const handleChange = (e) => {
         const {value, name} = e.target;
         setSubmit(false)
         setValues((values) => ({...values, [name]: value}));
         setOnChangeValues((values) => ({...values, [name]: true}));
-        setAlert({...alert, open: false});
+        setAlert((values) => ({...values, open: false}))
     }
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         
@@ -202,6 +205,7 @@ const User = (props) => {
     return (
         <Grid container className={classes.root} spacing={16}>
             <Alert 
+                count={alert.count}
                 open={alert.open}
                 message={alert.message}
                 variant={alert.variant}
@@ -211,7 +215,7 @@ const User = (props) => {
                     <ul className={classes.information}>
                         <li className={classes.leftInformation}>
                             <Typography component="h3" variant="headline" align="left">
-                            Phan Anh Viet
+                                Phan Anh Viet
                             </Typography>
                             <Divider/>
                             <Typography component="h6" variant="subtitle1" gutterBottom align="left">
