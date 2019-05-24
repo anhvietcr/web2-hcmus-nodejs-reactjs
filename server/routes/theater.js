@@ -2,6 +2,7 @@ const Theater = require('../models/theater')
 const Cinema = require('../models/cinema')
 const Router = require('express-promise-router')
 const bodyParser = require('body-parser')
+const Movie = require('../models/movie')
 
 let router = new Router();
 
@@ -33,12 +34,46 @@ router.get('/', async (req, res, next) => {
     });
 });
 
-router.get('/:id', async (req, res, next) => {
-    const theaters = await Theater.findOne({
+router.get('/', async (req, res, next) => {
+    const theaters = await Theater.findAll({
         where: {
-            id: req.params.id
+            id: req.query.id
+        },
+    });
+
+    var status = 200;
+    var message = '';
+
+    if (!theaters || theaters.length <= 0) {
+        status = 404;
+        message = 'Not found';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: {
+            theaters: theaters
         }
     });
+});
+
+
+
+router.get('/showtime', async (req, res, next) => {
+    const theaters = await Theater.findAll({
+        where: {
+            id: req.query.theater_id
+        },
+        include: [{
+            model: Movie,
+            as: 'movies',
+            required: false,
+            through: {
+            }
+        }]
+    });
+
     var status = 200;
     var message = '';
 
