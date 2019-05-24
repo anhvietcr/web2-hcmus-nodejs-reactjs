@@ -16,15 +16,25 @@ const Theater = db.define("Theater", {
   },
   type: {
     type: Sequelize.ENUM,
-    values: ['2d', '3d', '4dx']
+    values: ['2d', '3d', '4dx'],
+    allowNull: false,
+    validate: {
+      notNull: { args: true, msg: "type cannot be null" }
+    },
   },
-  number_rows: {
+  number_row: {
     type: Sequelize.INTEGER,
     allowNull: false,
+    validate: {
+      notNull: { args: true, msg: "number_row cannot be null" }
+    },
   },
   number_column: {
     type: Sequelize.INTEGER,
     allowNull: false,
+    validate: {
+      notNull: { args: true, msg: "number_column cannot be null" }
+    },
   },
 });
 

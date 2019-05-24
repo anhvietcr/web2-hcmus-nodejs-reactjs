@@ -1,14 +1,23 @@
 const Cinema = require('../models/cinema')
 const Router = require('express-promise-router')
+const bodyParser = require('body-parser')
+
+var jsonParser = bodyParser.json()
 let router = new Router();
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    const cinemas = await Cinema.findAll();
+    const cinemas = await Cinema.findAll(
+        {
+            order: [
+                ['id', 'ASC'],
+            ],
+        }
+    );
     var status = 200;
     var message = '';
 
-    if (!cinemas) {
+    if (!cinemas || cinemas.length <= 0) {
         status = 404;
         message = 'Not found';
     }
@@ -32,7 +41,7 @@ router.get('/:id', async (req, res, next) => {
     var status = 200;
     var message = '';
 
-    if (!cinemas) {
+    if (!cinemas || cinemas.length <= 0) {
         status = 404;
         message = 'Not found';
     }
@@ -46,13 +55,21 @@ router.get('/:id', async (req, res, next) => {
     });
 });
 
-router.post('/', async (req, res, next) => {
+// {
+// 	"cinema": {
+// 		"name": "KHTN2",
+// 		"address": "2d",
+// 		"image": ""
+// 	}
+// }
+
+router.post('/', jsonParser, async (req, res) => {
     const created_at = new Date();
     const newCinema = req.body.cinema;
     const cinema = await Cinema.create({
         name: newCinema.name,
-        image: newPost.address,
-        image: newPost.image,
+        address: newCinema.address,
+        image: newCinema.image,
         created_at: created_at
     });
 
@@ -73,28 +90,42 @@ router.post('/', async (req, res, next) => {
     });
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/', jsonParser, async (req, res, next) => {
     const updated_at = new Date();
-    const updateCinema = req.body.cinema;
-    const numAffectedRows = await Cinema.update({
-        name: updateCinema.name,
-        image: updateCinema.address,
-        image: updateCinema.image,
-        updated_at: updated_at
-    },
-        {
-            where: {
-                id: req.params.id
-            }
-        });
+    const cinema = req.body.cinema;
+    
+    const cinemas = await Cinema.findAll({
+        where: {
+            id: cinema.id
+        }
+    });
 
-    var status = 204;
+    var status = 200;
     var message = '';
 
-    if (numAffectedRows <= 0) {
-        status = 503;
-        message = 'Service Unavailable';
+    if (!cinemas || cinemas.length <= 0) {
+        status = 404;
+        message = 'Not found cinema';
+    } else {
+        const numAffectedRows = await Cinema.update({
+            name: cinema.name,
+            address: cinema.address,
+            image: cinema.image,
+            updated_at: updated_at
+        },
+            {
+                where: {
+                    id: cinema.id
+                }
+            });
+
+        if (numAffectedRows <= 0) {
+            status = 503;
+            message = 'Update cinema failed';
+        }
+
     }
+
 
     return res.json({
         status: status,
@@ -109,7 +140,7 @@ router.delete('/:id', async (req, res, next) => {
         }
     });
 
-    var status = 204;
+    var status = 200;
     var message = '';
 
     if (numAffectedRows <= 0) {
