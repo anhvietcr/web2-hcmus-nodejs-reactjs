@@ -1,6 +1,5 @@
 const Showtime = require('../models/showtime')
 const Theater = require('../models/theater')
-const Movie = require('../models/movie')
 const Router = require('express-promise-router')
 const bodyParser = require('body-parser')
 
@@ -56,75 +55,6 @@ router.get('/:id', async (req, res, next) => {
         }
     });
 
-});
-
-router.get('/:movie_id/:cinema_id', async (req, res, next) => {
-    const theater = await Theater.findAll({
-        where: {
-            cinema_id: req.params.cinema_id
-        },
-        include: [{
-            model: Movie,
-            as: 'movies',
-            required: false,
-            attributes: ['id', 'name', 'image', 'trailer', 'introduce', 'opening_day', 'view'],
-            where: {
-                id: req.params.movie_id,
-            },
-            through: {
-                attributes: ['start_time', 'end_time', 'price'],
-            }
-        }]
-    });
-
-    var status = 200;
-    var message = '';
-
-    if (!theater) {
-        status = 404;
-        message = 'Not found';
-    }
-
-    return res.json({
-        status: status,
-        message: message,
-        payload: {
-            theater: theater
-        }
-    });
-});
-
-router.get('/theater/:theater_id', async (req, res, next) => {
-    const theater = await Theater.findAll({
-        where: {
-            id: req.params.theater_id
-        },
-        include: [{
-            model: Movie,
-            as: 'movies',
-            required: false,
-            attributes: ['id', 'name', 'image', 'trailer', 'introduce', 'opening_day', 'view'],
-            through: {
-                attributes: ['start_time', 'end_time', 'price'],
-            }
-        }]
-    });
-
-    var status = 200;
-    var message = '';
-
-    if (!theater) {
-        status = 404;
-        message = 'Not found';
-    }
-
-    return res.json({
-        status: status,
-        message: message,
-        payload: {
-            theater: theater
-        }
-    });
 });
 
 router.post('/', jsonParser, async (req, res, next) => {
