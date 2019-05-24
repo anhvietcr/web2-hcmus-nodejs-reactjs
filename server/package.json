@@ -13,6 +13,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-promise-router": "^3.0.3",
+    "nodemailer": "^6.1.1",
     "nodemon": "^1.19.0",
     "pg": "^7.11.0",
     "sequelize": "^5.8.6"

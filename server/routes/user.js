@@ -5,7 +5,7 @@ const showtime = require('../models/showtime');
 const bcrypt = require('bcrypt');
 const Router = require('express-promise-router');
 let router = new Router();
-
+const sendEmail = require('../models/email');
 /*************** Auth API ******************/
 router.get('/', async (req, res, next) => {
     next();
@@ -242,4 +242,12 @@ router.put('/profile',async function(req,res) {
         res.json(response);
     });
 });
+
+router.get('/forget-password', async function (req, res) {
+    const info = await sendEmail("phanthinhutranghahl@gmail.com", 'Quên mật khẩu', 'Bạn có quên mật khẩu', '<h1>Bạn có quên mật khẩu</h1>');
+    res.send(info);
+    //res.send("Hello");
+});
+
+
 module.exports = router;

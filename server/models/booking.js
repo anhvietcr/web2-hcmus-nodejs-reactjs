@@ -20,4 +20,4 @@ const Booking = db.define("Booking", {
   },
 });
 
-module.exports = User;
+module.exports = Booking;
