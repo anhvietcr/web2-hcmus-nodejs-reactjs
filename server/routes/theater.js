@@ -70,13 +70,13 @@ router.post('/', jsonParser, async (req, res) => {
     });
     var status = 200;
     var message = '';
-    var theater = new Theater()
-    if (cinemas.length <= 0) {
+    var theater = null
+    if (!cinemas || cinemas.length <= 0) {
         status = 404;
         message = 'Not found cinema';
     } else {
         const created_at = new Date();
-        const theater = await Theater.create({
+        theater = await Theater.create({
             name: newTheater.name,
             cinema_id: newTheater.cinema_id,
             type: newTheater.type,
@@ -84,8 +84,6 @@ router.post('/', jsonParser, async (req, res) => {
             number_column: newTheater.number_column,
             created_at: created_at
         });
-        var status = 200;
-        var message = '';
 
         if (!theater) {
             status = 503;
@@ -102,23 +100,22 @@ router.post('/', jsonParser, async (req, res) => {
 });
 
 router.put('/', jsonParser, async (req, res) => {
+    const updateTheater = req.body.theater;
     const cinemas = await Cinema.findAll({
         where: {
-            id: req.params.id
+            id: updateTheater.cinema_id
         }
     });
     var status = 200;
     var message = '';
 
-    if (!cinemas) {
+    if (!cinemas || cinemas.length <= 0) {
         status = 404;
         message = 'Not found cinema';
     } else {
         const updated_at = new Date();
-        const updateTheater = req.body.theater;
         const numAffectedRows = await Theater.update({
             name: updateTheater.name,
-            cinema_id: updateTheater.cinema_id,
             type: updateTheater.type,
             number_row: updateTheater.number_row,
             number_column: updateTheater.number_column,
@@ -129,8 +126,6 @@ router.put('/', jsonParser, async (req, res) => {
                     id: updateTheater.id
                 }
             });
-        var status = 200;
-        var message = '';
 
         if (numAffectedRows <= 0) {
             status = 503;
