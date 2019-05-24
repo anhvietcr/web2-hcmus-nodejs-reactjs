@@ -1,10 +1,12 @@
 const nodemailer = require('nodemailer');
 
 async function sendEmail(to, subject, text, html) {
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
+
+     // Create a SMTP transporter object
+     let transporter = nodemailer.createTransport({
+        sendmail: true,
+        newline: 'windows',
+        logger: false,
         auth: {
             user: 'lethinghinh1966@gmail.com',
             pass: 'lethinghinh',
@@ -18,6 +20,8 @@ async function sendEmail(to, subject, text, html) {
         text,
         html,
     });
+
+    console.log('Message sent successfully as %s', info.messageId);
 
     return info;
 }

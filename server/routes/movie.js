@@ -12,7 +12,7 @@ router.get('/', async (req, res, next) => {
     const movies = await Movie.findAll(
         {
             order: [
-                ['id', 'ASC'],
+                ['id', 'DESC'],
             ],
         }
     );

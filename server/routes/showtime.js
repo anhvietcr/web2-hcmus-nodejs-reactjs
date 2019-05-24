@@ -11,7 +11,7 @@ router.get('/', async (req, res, next) => {
     const showtimes = await Showtime.findAll(
         {
             order: [
-                ['id', 'ASC'],
+                ['id', 'DESC'],
             ],
         }
     );
