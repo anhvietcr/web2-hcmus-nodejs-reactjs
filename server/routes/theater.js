@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
     const theaters = await Theater.findAll(
         {
             order: [
-                ['id', 'ASC'],
+                ['id', 'DESC'],
             ],
         }
     );
