@@ -51,12 +51,8 @@ router.post('/', async (req, res, next) => {
     const newCinema = req.body.cinema;
     const cinema = await Cinema.create({
         name: newCinema.name,
+        image: newPost.address,
         image: newPost.image,
-        trailer: newCinema.trailer,
-        introduce: newCinema.introduce,
-        opening_day: newCinema.opening_day,
-        minute_time: newCinema.minute_time,
-        view: newCinema.view,
         created_at: created_at
     });
 
@@ -82,12 +78,8 @@ router.put('/:id', async (req, res, next) => {
     const updateCinema = req.body.cinema;
     const numAffectedRows = await Cinema.update({
         name: updateCinema.name,
+        image: updateCinema.address,
         image: updateCinema.image,
-        trailer: updateCinema.trailer,
-        introduce: updateCinema.introduce,
-        opening_day: updateCinema.opening_day,
-        minute_time: updateCinema.minute_time,
-        view: updateCinema.view,
         updated_at: updated_at
     },
         {
