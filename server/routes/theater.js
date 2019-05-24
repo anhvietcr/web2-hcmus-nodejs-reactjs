@@ -9,7 +9,13 @@ var jsonParser = bodyParser.json()
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    const theaters = await Theater.findAll();
+    const theaters = await Theater.findAll(
+        {
+            order: [
+                ['id', 'ASC'],
+            ],
+        }
+    );
     var status = 200;
     var message = '';
 

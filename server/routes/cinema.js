@@ -7,7 +7,13 @@ let router = new Router();
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    const cinemas = await Cinema.findAll();
+    const cinemas = await Cinema.findAll(
+        {
+            order: [
+                ['id', 'ASC'],
+            ],
+        }
+    );
     var status = 200;
     var message = '';
 

@@ -9,7 +9,13 @@ let router = new Router();
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    const movies = await Movie.findAll();
+    const movies = await Movie.findAll(
+        {
+            order: [
+                ['id', 'ASC'],
+            ],
+        }
+    );
     var status = 200;
     var message = '';
 
@@ -54,7 +60,7 @@ router.get('/:id', async (req, res, next) => {
 router.get('/search/:keyword', async (req, res, next) => {
     const movies = await Movie.findAll({
         where: {
-            name: { [Op.like]:  '%' + req.params.keyword + '%' }
+            name: { [Op.like]: '%' + req.params.keyword + '%' }
         }
     });
 
@@ -150,7 +156,7 @@ router.put('/', jsonParser, async (req, res, next) => {
                     id: updateMovie.id
                 }
             });
-    
+
         if (numAffectedRows <= 0) {
             status = 503;
             message = 'Update movie failed';
