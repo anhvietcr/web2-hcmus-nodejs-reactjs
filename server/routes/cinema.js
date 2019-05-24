@@ -1,4 +1,6 @@
 const Cinema = require('../models/cinema')
+const Theater = require('../models/theater')
+const Movie = require('../models/movie')
 const Router = require('express-promise-router')
 const bodyParser = require('body-parser')
 
@@ -31,10 +33,10 @@ router.get('/', async (req, res, next) => {
     });
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     const cinemas = await Cinema.findAll({
         where: {
-            id: req.params.id
+            id: req.query.id
         }
     });
 
@@ -55,12 +57,87 @@ router.get('/:id', async (req, res, next) => {
     });
 });
 
+
+router.get('/theater', async (req, res) => {
+    const cinemas = await Cinema.findAll({
+        where: {
+            id: req.query.cinema_id
+        },
+        include: [{
+            model: Theater,
+            as: 'theaters',
+            required: false,
+            include: [{
+                model: Movie,
+                as: 'movies',
+                required: false,
+                attributes: ['id', 'name', 'image', 'trailer', 'introduce', 'opening_day', 'view'],
+                through: {
+                    attributes: ['start_time', 'end_time', 'price'],
+                }
+            }]
+        }]
+    });
+
+    var status = 200;
+    var message = '';
+
+    if (!cinemas || cinemas.length <= 0) {
+        status = 404;
+        message = 'Not found';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: {
+            cinemas: cinemas
+        }
+    });
+});
+
+router.get('/movie/showtime', async (req, res, next) => {
+
+    const movies = await Movie.findAll({
+        where: {
+            id: req.query.movie_id,
+        },
+        include: [{
+            model: Theater,
+            as: 'theaters',
+            required: false,
+            where: {
+                cinema_id: req.query.cinema_id
+            },
+            through: {
+            }
+        }]
+    });
+
+    var status = 200;
+    var message = '';
+
+    if (!movies || movies.length <= 0) {
+        status = 404;
+        message = 'Not found';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: {
+            movies: movies
+        }
+    });
+});
+
+
 // {
-// 	"cinema": {
-// 		"name": "KHTN2",
-// 		"address": "2d",
-// 		"image": ""
-// 	}
+//     "cinema": {
+//         "name": "KHTN2",
+//             "address": "2d",
+//                 "image": ""
+//     }
 // }
 
 router.post('/', jsonParser, async (req, res) => {
@@ -93,7 +170,7 @@ router.post('/', jsonParser, async (req, res) => {
 router.put('/', jsonParser, async (req, res, next) => {
     const updated_at = new Date();
     const cinema = req.body.cinema;
-    
+
     const cinemas = await Cinema.findAll({
         where: {
             id: cinema.id
