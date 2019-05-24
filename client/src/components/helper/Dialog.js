@@ -29,58 +29,53 @@ const styles = theme => ({
 })
 
 const CustomDialog = (props) => {
-  const { classes, text, values, handleAdd, setAddValue, openDialog, handleOpenDialog} = props
+  const { classes, textTitle, textAction, values, handleSubmit, setValues, openDialog, handleOpenDialog, labels } = props
 
   const handleChange = (e) => {
-    const {name, value} = e.target
-    setAddValue((values) => ({...values, [name]: value}))
+    const { name, value } = e.target
+    setValues((values) => ({ ...values, [name]: value }))
   }
 
   return (
-    <Dialog 
-      open={openDialog} 
-      onClose={handleOpenDialog} 
+    <Dialog
+      open={openDialog}
+      onClose={handleOpenDialog}
       aria-labelledby="custom-dialog"
       maxWidth={'xs'}
       fullWidth={true}
     >
-      <DialogTitle id="custom-dialog">{text.ADD_CINEMA}</DialogTitle>
+      <DialogTitle id="custom-dialog">{textTitle}</DialogTitle>
       <Divider />
       <div className={classes.dialogFrom}>
-        <TextField
-          required
-          id="outlined-name-input"
-          label="Tên"
-          className={classes.textField}
-          type="text"
-          name="name"
-          margin="normal"
-          variant="outlined"
-          value={values.name}
-          onChange={handleChange}
-        />
-        <TextField
-          required
-          id="outlined-address-input"
-          label="Địa chỉ"
-          className={classes.textField}
-          type="text"
-          name="address"
-          margin="normal"
-          variant="outlined"
-          value={values.address}
-          onChange={handleChange}
-        />
+        {labels.map((label) => {
+          if (label.name != 'actions') {
+            return (
+              <TextField
+                required
+                key={label.id}
+                id={`outlined-${label.name}-input`}
+                label={label.label}
+                className={classes.textField}
+                type="text"
+                name={label.name}
+                margin="normal"
+                variant="outlined"
+                value={values[label.name]}
+                onChange={handleChange}
+              />
+            )
+          }
+        })}
         <Divider />
         <Button
           variant="contained"
           color="inherit"
           fullWidth={true}
           className={classes.button}
-          onClick={handleAdd}
+          onClick={handleSubmit}
         >
-          {text.BTN_ADD}
-         <NearMe className={classes.rightIcon} />
+          {textAction}
+          <NearMe className={classes.rightIcon} />
         </Button>
       </div>
     </Dialog>
@@ -88,8 +83,7 @@ const CustomDialog = (props) => {
 }
 
 CustomDialog.propTypes = {
-  classes: PropTypes.object.isRequired,
-  text: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 }
 
 export default withStyles(styles)(CustomDialog)

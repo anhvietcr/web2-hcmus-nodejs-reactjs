@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import * as TYPE from '../../constants/actionTypes'
 import CustomDialog from '../helper/Dialog'
@@ -43,33 +43,11 @@ const styles = theme => ({
   },
 })
 
-const lables = [
-  { id: 0, label: 'Tên' },
-  { id: 1, label: 'Địa chỉ' },
-  { id: 2, label: 'Thao tác' },
+const lableDatas = [
+  { id: 0, label: 'Tên', name: 'name' },
+  { id: 1, label: 'Địa chỉ', name: 'address' },
+  { id: 2, label: 'Thao tác', name: 'actions' },
 ]
-
-const dataTables = [
-  { id: 0, name: 'name 1', description: 'test,test des,test des des 1', disablePadding: false },
-  { id: 1, name: 'name 2', description: 'test des 2', disablePadding: false },
-  { id: 2, name: 'name 3', description: 'test,test des,test des des 3', disablePadding: false },
-  { id: 3, name: 'name 4', description: 'test,test des,test des des test,test des,test des des 4', disablePadding: false },
-  { id: 4, name: 'name 5', description: 'test des 5', disablePadding: false },
-  { id: 5, name: 'name 6', description: 'test,test des,test des des 1', disablePadding: false },
-  { id: 6, name: 'name 7', description: 'test des 2', disablePadding: false },
-  { id: 7, name: 'name 8', description: 'test,test des,test des des 3', disablePadding: false },
-  { id: 8, name: 'name 9', description: 'test,test des,test des des test,test des,test des des 4', disablePadding: false },
-  { id: 9, name: 'name 10', description: 'test des 5', disablePadding: false },
-  { id: 10, name: 'name 11', description: 'test,test des,test des des 1', disablePadding: false },
-  { id: 11, name: 'name 12', description: 'test des 2', disablePadding: false },
-  { id: 12, name: 'name 13', description: 'test,test des,test des des 3', disablePadding: false },
-  { id: 13, name: 'name 14', description: 'test,test des,test des des test,test des,test des des 4', disablePadding: false },
-  { id: 14, name: 'name 15', description: 'test des 5', disablePadding: false },
-  { id: 15, name: 'name 16', description: 'test,test des,test des des 1', disablePadding: false },
-  { id: 16, name: 'name 17', description: 'test des 2', disablePadding: false },
-  { id: 18, name: 'name 18', description: 'test,test des,test des des test,test des,test des des 4', disablePadding: false },
-  { id: 19, name: 'name 19', description: 'test des 5', disablePadding: false },
-];
 
 const ToolbarTable = (props) => {
   const { classes, handleSearchName, handleOpenDialog } = props
@@ -96,7 +74,8 @@ const ToolbarTable = (props) => {
           variant="outlined"
           color="primary"
           className={classes.button}
-          onClick={handleOpenDialog}>
+          onClick={(e) => handleOpenDialog(e, 'ADD')}
+        >
           {TYPE.BTN_ADD_NEW}
         </Button>
       </Grid>
@@ -108,10 +87,10 @@ const HeadTable = (props) => {
   return (
     <TableHead >
       <TableRow>
-        {lables.map(label => (
+        {lableDatas.map(label => (
           <TableCell
             key={label.id}
-            align={label.id < lables.length - 1 ? 'left' : 'right'}
+            align={label.id < lableDatas.length - 1 ? 'left' : 'right'}
             padding={'default'}
           >{label.label}
           </TableCell>
@@ -123,11 +102,11 @@ const HeadTable = (props) => {
 }
 
 const BodyTable = (props) => {
-  const { classes, page, rowsPerPage, dataFilter, handleEdit } = props
+  const { classes, page, rowsPerPage, dataFilter, handleOpenDialog } = props
 
   return (
     <TableBody>
-      {dataFilter.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+      {dataFilter && dataFilter.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
         return (
           <TableRow
             hover
@@ -135,7 +114,7 @@ const BodyTable = (props) => {
             key={row.id}
           >
             <TableCell align="left">{row.name}</TableCell>
-            <TableCell align="left">{row.description}</TableCell>
+            <TableCell align="left">{row.address}</TableCell>
             <TableCell align="right">
               <Tooltip
                 title="Edit"
@@ -145,9 +124,7 @@ const BodyTable = (props) => {
                 <IconButton
                   className={classes.iconButton}
                   aria-label="Edit"
-                  onClick={(e) => { handleEdit(e, row.id) }}
-                  id={row.id}
-                  key={row.id}
+                  onClick={(e) => { handleOpenDialog(e, 'EDIT', row) }}
                 >
                   <Edit />
                 </IconButton>
@@ -157,7 +134,11 @@ const BodyTable = (props) => {
                 placement={'bottom-start'}
                 enterDelay={300}
               >
-                <IconButton className={classes.iconButton} aria-label="Delete">
+                <IconButton 
+                  className={classes.iconButton} 
+                  aria-label="Delete"
+                  onClick={(e) => { handleOpenDialog(e, 'DELETE', row) }}
+                  >
                   <Delete />
                 </IconButton>
               </Tooltip>
@@ -176,7 +157,7 @@ const PaginationTable = (props) => {
     <TablePagination
       rowsPerPageOptions={[5, 10, 25]}
       component="div"
-      count={dataFilter.length}
+      count={dataFilter && dataFilter.length || 0}
       rowsPerPage={rowsPerPage}
       page={page}
       backIconButtonProps={{
@@ -192,21 +173,33 @@ const PaginationTable = (props) => {
 }
 
 const CinemaCpanel = (props) => {
-  const { classes } = props
+  const { classes, actions } = props
+  const { CinemaCpanel } = actions
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
+  const [dataTables, setDataTables] = useState([]);
   const [dataFilter, setDataFilter] = useState(dataTables);
-  const [openDialog, setOpenDialog] = useState(false)
-  const [addValue, setAddValue] = useState({
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false)
+  
+  const [isChoose, setChoose] = useState({
+    add: false,
+    update: false,
+    delete: false
+  });
+  const [values, setValues] = useState({
+    id: 0,
     name: '',
-    address: ''
+    address: '',
+    image: ''
   })
   const [alert, setAlert] = useState({
     count: 0,
     open: false,
     message: "",
-    variant: "error"
-  });
+    variant: "success"
+  })
 
   const handleChangeRowsPerPage = (e) => {
     setRowsPerPage(e.target.value);
@@ -219,6 +212,8 @@ const CinemaCpanel = (props) => {
   const handleSearchName = (e) => {
     const { value } = e.target
 
+    if (!dataTables) return [];
+    
     let filter = dataTables.filter((item) => {
       return (item.name).indexOf(value) >= 0;
     });
@@ -230,12 +225,58 @@ const CinemaCpanel = (props) => {
     }
   }
 
-  const handleOpenDialog = () => {
-    setOpenDialog(!openDialog)
-  }
+  const handleOpenDialog = (e, type, item) => {
+    const {id, name, address} = item || '';
 
-  const handleAdd = (e) => {
-    if (!addValue.name || !addValue.address) {
+    if (type === 'ADD') {
+      setChoose({
+        add: true,
+        update: false,
+        delete: false
+      })
+      setValues({
+        id: 0,
+        name: '',
+        address: '',
+        image: ''
+      })
+    }
+    
+    if (type === 'EDIT') {
+      setChoose({
+        add: false,
+        update: true,
+        delete: false
+      })
+      setValues({
+        id,
+        name, 
+        address,
+      })
+    }
+
+    if (type === 'DELETE') {
+      setChoose({
+        add: false,
+        update: false,
+        delete: true
+      })
+      setValues({
+        id,
+        name, 
+        address,
+      })
+    }
+
+    setSubmitted(false);
+    setOpenDialog(!openDialog)
+    actions.List();
+  }
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!values.name || !values.address) {
       setAlert({
         count: alert.count + 1,
         open: true,
@@ -244,27 +285,80 @@ const CinemaCpanel = (props) => {
       })
       return false;
     }
-    console.log(addValue);
 
-    // okay's, reset
-    setAddValue({
-      name: '',
-      address: ''
-    });
-
-    setAlert({
-      count: alert.count + 1,
-      open: true,
-      message: TYPE.MESSAGE_SUCCESS,
-      variant: "success"
-    })
-
+    setSubmitted(true);
+    
     // action here
+    if (isChoose.delete) {
+      let payload = {
+        id: values.id,
+      }
+      actions.Delete(payload);
+    } else if (isChoose.update) {
+
+      let payload = {
+        id: values.id,
+        name: values.name,
+        address: values.address,
+        image: ''
+      }
+      actions.Update(payload);
+    } else {
+
+      let payload = {
+          name: values.name,
+          address: values.address,
+          image: ''
+      }
+      console.log(payload)
+      actions.Add(payload);
+
+      setValues({
+        id: 0,
+        name: '',
+        address: '',
+        image: ''
+      })
+    }
+
+    setDataLoaded(false);
   }
 
-  const handleEdit = (e, id) => {
-    console.log(id);
-  }
+  useEffect(() => {
+
+    if (!CinemaCpanel.list) {
+      // first load 
+      actions.List()
+
+    } else {
+      if (!submitted) {
+        // close dialog, update data
+        setDataFilter(CinemaCpanel.list.payload.cinemas);
+        setDataTables(CinemaCpanel.list.payload.cinemas);
+      } 
+      
+      if (submitted && CinemaCpanel.payload.status) {
+
+        // alert
+        if (CinemaCpanel.payload.status === 200) {
+          setAlert({
+            count: alert.count + 1,
+            open: true,
+            message: TYPE.MESSAGE_SUCCESS,
+            variant: "success"
+          });
+        } else {
+          setAlert({
+            count: alert.count + 1,
+            open: true,
+            message: actions.CinemaCpanel.message,
+            variant: "error"
+          })
+        }
+      }
+    }
+  }, [submitted, actions, CinemaCpanel.list])
+
 
   return (
     <React.Fragment>
@@ -287,7 +381,7 @@ const CinemaCpanel = (props) => {
               page={page}
               rowsPerPage={rowsPerPage}
               dataFilter={dataFilter}
-              handleEdit={handleEdit}
+              handleOpenDialog={handleOpenDialog}
             />
           </Table>
         </div>
@@ -299,12 +393,22 @@ const CinemaCpanel = (props) => {
           handleChangePage={handleChangePage}
         />
         <CustomDialog
-          text={TYPE}
+          textTitle={
+            isChoose.add ? TYPE.ADD_CINEMA :
+            isChoose.update ? TYPE.UPDATE_CINEMA :
+            TYPE.DELETE_CINEMA
+          }
+          textAction={
+            isChoose.add ? TYPE.BTN_ADD :
+            isChoose.update ? TYPE.BTN_UPDATE :
+            TYPE.BTN_DELETE
+          }
+          labels={lableDatas}
           handleOpenDialog={handleOpenDialog}
           openDialog={openDialog}
-          values={addValue}
-          setAddValue={setAddValue}
-          handleAdd={handleAdd}
+          values={values}
+          setValues={setValues}
+          handleSubmit={handleSubmit}
         />
       </Paper>
     </React.Fragment>
@@ -312,7 +416,8 @@ const CinemaCpanel = (props) => {
 }
 
 CinemaCpanel.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired
 }
 
 export default withStyles(styles)(CinemaCpanel)

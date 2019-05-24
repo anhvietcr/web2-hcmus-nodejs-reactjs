@@ -13,13 +13,13 @@ function QuanLyVe(state = [], action) {
     }
 }
 
-let initialStateAuth = {
-    status: 500,
+let initialState = {
+    status: 0,
     payload: {
         role: 'guest'
     }
 }
-function Auth(state = initialStateAuth, action) {
+function Auth(state = initialState, action) {
     switch(action.type) {
         case TYPE.SIGN_IN_ASYNC:
             return action.payload
@@ -30,7 +30,7 @@ function Auth(state = initialStateAuth, action) {
     }
 }
 
-function User(state = initialStateAuth, action) {
+function User(state = initialState, action) {
     switch (action.type) {
         case TYPE.USER_UPDATE_INFO_ASYNC:
         return action.payload
@@ -39,10 +39,74 @@ function User(state = initialStateAuth, action) {
     }
 }
 
+function CinemaCpanel(state = initialState, action) {
+    switch (action.type) {
+        case TYPE.CINEMA_LIST_ASYNC:
+            return {
+                ...state,
+                list: action.payload
+            }
+        case TYPE.CINEMA_ADD_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            }
+
+        case TYPE.CINEMA_UPDATE_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            }
+
+        case TYPE.CINEMA_DELETE_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            } 
+        default:
+            return state;
+    }
+}
+
+function TheaterCpanel(state = initialState, action) {
+    switch (action.type) {
+        case TYPE.THEATER_LIST_ASYNC:
+        console.log("list:", action)
+        
+            return {
+                ...state,
+                list: action.payload
+            }
+        case TYPE.THEATER_ADD_ASYNC:
+            console.log("add: ", action)
+            return {
+                ...state,
+                payload: action.payload
+            }
+
+        case TYPE.THEATER_UPDATE_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            }
+
+        case TYPE.THEATER_DELETE_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            } 
+        default:
+            return state;
+    }
+}
+
+
 const rootReducer = combineReducers({
     QuanLyVe,
     Auth,
-    User
+    User,
+    CinemaCpanel,
+    TheaterCpanel
 });
 
 export default rootReducer

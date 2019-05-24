@@ -3,16 +3,14 @@ const nodemailer = require('nodemailer');
 async function sendEmail(to, subject, text, html) {
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
         auth: {
-            user: 'lethinghinh1966@gmail.com',
-            pass: 'lethinghinh',
+            user: 'tlweb2f5@gmail.com',
+            pass: 'trangkhunghaha',
         },
     });
 
     const info = await transporter.sendMail({
-        from: 'lethinghinh1966@gmail.com',
+        from: 'tlweb2f5@gmail.com',
         to,
         subject,
         text,

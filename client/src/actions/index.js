@@ -28,9 +28,72 @@ const UserUpdateInfoAsync = (payload) => {
     }
 }
 
+// Cinema Cpanel
+const CinemaListAsync = (payload) => {
+    return {
+        type: TYPE.CINEMA_LIST_ASYNC,
+        payload
+    }
+}
+const CinemaAddAsync = (payload) => {
+    return {
+        type: TYPE.CINEMA_ADD_ASYNC,
+        payload
+    }
+}
+const CinemaUpdateAsync = (payload) => {
+    return {
+        type: TYPE.CINEMA_UPDATE_ASYNC,
+        payload
+    }
+}
+const CinemaDeleteAsync = (payload) => {
+    return {
+        type: TYPE.CINEMA_DELETE_ASYNC,
+        payload
+    }
+}
+
+// Theater Cpanel
+const TheaterListAsync = (payload) => {
+    return {
+        type: TYPE.THEATER_LIST_ASYNC,
+        payload
+    }
+}
+const TheaterAddAsync = (payload) => {
+    return {
+        type: TYPE.THEATER_ADD_ASYNC,
+        payload
+    }
+}
+const TheaterUpdateAsync = (payload) => {
+    return {
+        type: TYPE.THEATER_UPDATE_ASYNC,
+        payload
+    }
+}
+const TheaterDeleteAsync = (payload) => {
+    return {
+        type: TYPE.THEATER_DELETE_ASYNC,
+        payload
+    }
+}
+
 export default {
     DatveAsync,
     SignInAsync,
     SignUpAsync,
+    
     UserUpdateInfoAsync,
+
+    CinemaListAsync,
+    CinemaAddAsync,
+    CinemaUpdateAsync,
+    CinemaDeleteAsync,
+
+    TheaterListAsync,
+    TheaterAddAsync,
+    TheaterUpdateAsync,
+    TheaterDeleteAsync,
 }

@@ -9,13 +9,23 @@ let router = new Router();
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    const cinemas = await Cinema.findAll(
-        {
-            order: [
-                ['id', 'ASC'],
-            ],
-        }
-    );
+    var cinemas = null
+    if (typeof req.query.id !== 'undefined') {
+        cinemas = await Cinema.findAll({
+            where: {
+                id: req.query.id
+            }
+        });
+    } else {
+        cinemas = await Cinema.findAll(
+            {
+                order: [
+                    ['id', 'DESC'],
+                ],
+            }
+        );
+    }
+
     var status = 200;
     var message = '';
 
@@ -32,31 +42,6 @@ router.get('/', async (req, res, next) => {
         }
     });
 });
-
-router.get('/', async (req, res, next) => {
-    const cinemas = await Cinema.findAll({
-        where: {
-            id: req.query.id
-        }
-    });
-
-    var status = 200;
-    var message = '';
-
-    if (!cinemas || cinemas.length <= 0) {
-        status = 404;
-        message = 'Not found';
-    }
-
-    return res.json({
-        status: status,
-        message: message,
-        payload: {
-            cinemas: cinemas
-        }
-    });
-});
-
 
 router.get('/theater', async (req, res) => {
     const cinemas = await Cinema.findAll({
