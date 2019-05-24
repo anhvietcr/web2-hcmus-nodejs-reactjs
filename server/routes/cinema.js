@@ -51,10 +51,11 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', jsonParser, async (req, res) => {
     const created_at = new Date();
+    const newCinema = req.body.cinema;
     const cinema = await Cinema.create({
-        name: req.body.name,
-        address: req.body.address,
-        image: req.body.image,
+        name: newCinema.name,
+        address: newCinema.address,
+        image: newCinema.image,
         created_at: created_at
     });
 
@@ -77,15 +78,16 @@ router.post('/', jsonParser, async (req, res) => {
 
 router.put('/', jsonParser, async (req, res, next) => {
     const updated_at = new Date();
+    const cinema = req.body.cinema;
     const numAffectedRows = await Cinema.update({
-        name: req.body.name,
-        address: req.body.address,
-        image: req.body.image,
+        name: cinema.name,
+        address: cinema.address,
+        image: cinema.image,
         updated_at: updated_at
     },
         {
             where: {
-                id: req.body.id
+                id: cinema.id
             }
         });
 

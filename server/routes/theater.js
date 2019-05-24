@@ -1,6 +1,9 @@
 const Theater = require('../models/theater')
 const Router = require('express-promise-router')
 let router = new Router();
+const bodyParser = require('body-parser')
+
+var jsonParser = bodyParser.json()
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
@@ -45,7 +48,7 @@ router.get('/:id', async (req, res, next) => {
     });
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', jsonParser, async (req, res, next) => {
     const created_at = new Date();
     const newTheater = req.body.theater;
     const theater = await Theater.create({
