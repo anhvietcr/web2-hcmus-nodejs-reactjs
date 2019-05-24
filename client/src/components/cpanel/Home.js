@@ -21,7 +21,7 @@ import { Link } from 'react-router-dom';
 
 import MovieCpanel from './Movie';
 import CinemaCpanel from '../../containers/cpanel/Cinema';
-import TheaterCpanel from './Theater';
+import TheaterCpanel from '../../containers/cpanel/Theater';
 import ShowtimeCpanel from './Showtime';
 import IncomeCpanel from './Income';
 

@@ -43,33 +43,11 @@ const styles = theme => ({
   },
 })
 
-const lables = [
-  { id: 0, label: 'Tên' },
-  { id: 1, label: 'Địa chỉ' },
-  { id: 2, label: 'Thao tác' },
+const lableDatas = [
+  { id: 0, label: 'Tên', name: 'name' },
+  { id: 1, label: 'Địa chỉ', name: 'address' },
+  { id: 2, label: 'Thao tác', name: 'actions' },
 ]
-
-// const dataTables = [
-//   { id: 0, name: 'name 1', address: 'test,test des,test des des 1', disablePadding: false },
-//   { id: 1, name: 'name 2', address: 'test des 2', disablePadding: false },
-//   { id: 2, name: 'name 3', address: 'test,test des,test des des 3', disablePadding: false },
-//   { id: 3, name: 'name 4', address: 'test,test des,test des des test,test des,test des des 4', disablePadding: false },
-//   { id: 4, name: 'name 5', address: 'test des 5', disablePadding: false },
-//   { id: 5, name: 'name 6', address: 'test,test des,test des des 1', disablePadding: false },
-//   { id: 6, name: 'name 7', address: 'test des 2', disablePadding: false },
-//   { id: 7, name: 'name 8', address: 'test,test des,test des des 3', disablePadding: false },
-//   { id: 8, name: 'name 9', address: 'test,test des,test des des test,test des,test des des 4', disablePadding: false },
-//   { id: 9, name: 'name 10', address: 'test des 5', disablePadding: false },
-//   { id: 10, name: 'name 11', address: 'test,test des,test des des 1', disablePadding: false },
-//   { id: 11, name: 'name 12', address: 'test des 2', disablePadding: false },
-//   { id: 12, name: 'name 13', address: 'test,test des,test des des 3', disablePadding: false },
-//   { id: 13, name: 'name 14', address: 'test,test des,test des des test,test des,test des des 4', disablePadding: false },
-//   { id: 14, name: 'name 15', address: 'test des 5', disablePadding: false },
-//   { id: 15, name: 'name 16', address: 'test,test des,test des des 1', disablePadding: false },
-//   { id: 16, name: 'name 17', address: 'test des 2', disablePadding: false },
-//   { id: 18, name: 'name 18', address: 'test,test des,test des des test,test des,test des des 4', disablePadding: false },
-//   { id: 19, name: 'name 19', address: 'test des 5', disablePadding: false },
-// ];
 
 const ToolbarTable = (props) => {
   const { classes, handleSearchName, handleOpenDialog } = props
@@ -109,10 +87,10 @@ const HeadTable = (props) => {
   return (
     <TableHead >
       <TableRow>
-        {lables.map(label => (
+        {lableDatas.map(label => (
           <TableCell
             key={label.id}
-            align={label.id < lables.length - 1 ? 'left' : 'right'}
+            align={label.id < lableDatas.length - 1 ? 'left' : 'right'}
             padding={'default'}
           >{label.label}
           </TableCell>
@@ -128,7 +106,7 @@ const BodyTable = (props) => {
 
   return (
     <TableBody>
-      {dataFilter.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+      {dataFilter && dataFilter.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
         return (
           <TableRow
             hover
@@ -179,7 +157,7 @@ const PaginationTable = (props) => {
     <TablePagination
       rowsPerPageOptions={[5, 10, 25]}
       component="div"
-      count={dataFilter.length}
+      count={dataFilter && dataFilter.length || 0}
       rowsPerPage={rowsPerPage}
       page={page}
       backIconButtonProps={{
@@ -195,7 +173,6 @@ const PaginationTable = (props) => {
 }
 
 const CinemaCpanel = (props) => {
-
   const { classes, actions } = props
   const { CinemaCpanel } = actions
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -235,6 +212,8 @@ const CinemaCpanel = (props) => {
   const handleSearchName = (e) => {
     const { value } = e.target
 
+    if (!dataTables) return [];
+    
     let filter = dataTables.filter((item) => {
       return (item.name).indexOf(value) >= 0;
     });
@@ -331,6 +310,7 @@ const CinemaCpanel = (props) => {
           address: values.address,
           image: ''
       }
+      console.log(payload)
       actions.Add(payload);
 
       setValues({
@@ -423,6 +403,7 @@ const CinemaCpanel = (props) => {
             isChoose.update ? TYPE.BTN_UPDATE :
             TYPE.BTN_DELETE
           }
+          labels={lableDatas}
           handleOpenDialog={handleOpenDialog}
           openDialog={openDialog}
           values={values}
