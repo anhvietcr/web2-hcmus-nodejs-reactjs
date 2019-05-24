@@ -1,5 +1,8 @@
 const Cinema = require('../models/cinema')
 const Router = require('express-promise-router')
+const bodyParser = require('body-parser')
+
+var jsonParser = bodyParser.json()
 let router = new Router();
 
 /***************HOME API ******************/
@@ -46,13 +49,12 @@ router.get('/:id', async (req, res, next) => {
     });
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', jsonParser, async (req, res) => {
     const created_at = new Date();
-    const newCinema = req.body.cinema;
     const cinema = await Cinema.create({
-        name: newCinema.name,
-        image: newPost.address,
-        image: newPost.image,
+        name: req.body.name,
+        address: req.body.address,
+        image: req.body.image,
         created_at: created_at
     });
 
@@ -73,18 +75,17 @@ router.post('/', async (req, res, next) => {
     });
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/', jsonParser, async (req, res, next) => {
     const updated_at = new Date();
-    const updateCinema = req.body.cinema;
     const numAffectedRows = await Cinema.update({
-        name: updateCinema.name,
-        image: updateCinema.address,
-        image: updateCinema.image,
+        name: req.body.name,
+        address: req.body.address,
+        image: req.body.image,
         updated_at: updated_at
     },
         {
             where: {
-                id: req.params.id
+                id: req.body.id
             }
         });
 
@@ -93,7 +94,7 @@ router.put('/:id', async (req, res, next) => {
 
     if (numAffectedRows <= 0) {
         status = 503;
-        message = 'Service Unavailable';
+        message = 'Update cinema failed';
     }
 
     return res.json({
