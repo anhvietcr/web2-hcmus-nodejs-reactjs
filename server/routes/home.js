@@ -1,23 +1,27 @@
-const User = require('../models/user')
-const Router = require('express-promise-router')
-const Movie = require('../models/movie')
-const Showtime = require('../models/showtime')
-const Theater = require('../models/theater')
-const Cinema = require('../models/cinema')
-
-
+const Router = require('express-promise-router');
+const Movie = require('../models/movie');
+const Showtime = require('../models/showtime');
+const Theater = require('../models/theater');
+const Cinema = require('../models/cinema');
+const User = require('../models/user');
+const Booking = require('../models/booking');
+const Ticket = require('../models/ticket');
 var models = {
-    Router,
     Movie,
     Showtime,
     Theater,
-    Cinema
+    Cinema,
+    Booking,
+    User,
+    Ticket
 }
 
 Theater.associate(models);
 Movie.associate(models);
 Cinema.associate(models);
-
+Booking.associate(models);
+User.associate(models);
+Ticket.associate(models);
 let router = new Router();
 
 /***************HOME API ******************/
@@ -44,4 +48,4 @@ router.delete('/', async (req, res, next) => {
     next();
 });
 
-module.exports = router
+module.exports = router;

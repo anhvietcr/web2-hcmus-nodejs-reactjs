@@ -55,5 +55,12 @@ const Showtime = db.define("Showtime", {
         }
     },
 });
+Showtime.associate = function (models) {
+    Showtime.hasMany(models.Booking, {
+        foreignKey: 'showtime_id',
+        sourceKey: 'id',
+        as: 'showtime'
+    });
+};
 
 module.exports = Showtime;

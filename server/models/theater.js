@@ -49,5 +49,4 @@ Theater.associate = function (models) {
     foreignKey: 'theater_id'
   });
 };
-
 module.exports = Theater;
