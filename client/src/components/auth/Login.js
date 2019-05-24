@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import Requirement from '../helper/Requirement'
 import * as TYPE from '../../constants/actionTypes'
-import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import Grid from '@material-ui/core/Grid'

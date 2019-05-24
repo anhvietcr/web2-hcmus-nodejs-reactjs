@@ -50,13 +50,13 @@ const styles = theme => ({
 })
 
 const Alert = (props) => {
-    const { classes, message, variant, open } = props
+    const { classes, message, variant, open, count } = props
     const [openAlert, setOpenAlert] = useState(open);
     const Icon = variantIcon[variant];
 
     useEffect(() => {
         setOpenAlert(open);
-    }, [open]);
+    }, [count, open]);
 
     return (
         <Snackbar

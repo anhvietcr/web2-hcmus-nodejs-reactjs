@@ -19,7 +19,8 @@ const Cinema = db.define("Cinema", {
 Cinema.associate = function (models) {
   Cinema.hasMany(models.Theater, {
     foreignKey: 'cinema_id',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    as: 'theaters'
   });
 };
 
