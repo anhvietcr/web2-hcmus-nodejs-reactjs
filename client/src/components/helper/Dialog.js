@@ -29,11 +29,11 @@ const styles = theme => ({
 })
 
 const CustomDialog = (props) => {
-  const { classes, text, values, handleAdd, setAddValue, openDialog, handleOpenDialog} = props
+  const { classes, textTitle, textAction, values, handleSubmit, setValues, openDialog, handleOpenDialog} = props
 
   const handleChange = (e) => {
     const {name, value} = e.target
-    setAddValue((values) => ({...values, [name]: value}))
+    setValues((values) => ({...values, [name]: value}))
   }
 
   return (
@@ -44,7 +44,7 @@ const CustomDialog = (props) => {
       maxWidth={'xs'}
       fullWidth={true}
     >
-      <DialogTitle id="custom-dialog">{text.ADD_CINEMA}</DialogTitle>
+      <DialogTitle id="custom-dialog">{textTitle}</DialogTitle>
       <Divider />
       <div className={classes.dialogFrom}>
         <TextField
@@ -77,9 +77,9 @@ const CustomDialog = (props) => {
           color="inherit"
           fullWidth={true}
           className={classes.button}
-          onClick={handleAdd}
+          onClick={handleSubmit}
         >
-          {text.BTN_ADD}
+          {textAction}
          <NearMe className={classes.rightIcon} />
         </Button>
       </div>
@@ -88,8 +88,7 @@ const CustomDialog = (props) => {
 }
 
 CustomDialog.propTypes = {
-  classes: PropTypes.object.isRequired,
-  text: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 }
 
 export default withStyles(styles)(CustomDialog)

@@ -18,8 +18,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { Link } from 'react-router-dom';
+
 import MovieCpanel from './Movie';
-import CinemaCpanel from './Cinema';
+import CinemaCpanel from '../../containers/cpanel/Cinema';
 import TheaterCpanel from './Theater';
 import ShowtimeCpanel from './Showtime';
 import IncomeCpanel from './Income';
