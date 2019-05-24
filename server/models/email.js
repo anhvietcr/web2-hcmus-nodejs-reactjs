@@ -1,27 +1,21 @@
 const nodemailer = require('nodemailer');
 
 async function sendEmail(to, subject, text, html) {
-
-     // Create a SMTP transporter object
-     let transporter = nodemailer.createTransport({
-        sendmail: true,
-        newline: 'windows',
-        logger: false,
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
         auth: {
-            user: 'lethinghinh1966@gmail.com',
-            pass: 'lethinghinh',
+            user: 'tlweb2f5@gmail.com',
+            pass: 'trangkhunghaha',
         },
     });
 
     const info = await transporter.sendMail({
-        from: 'lethinghinh1966@gmail.com',
+        from: 'tlweb2f5@gmail.com',
         to,
         subject,
         text,
         html,
     });
-
-    console.log('Message sent successfully as %s', info.messageId);
 
     return info;
 }

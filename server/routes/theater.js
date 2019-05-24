@@ -10,13 +10,23 @@ var jsonParser = bodyParser.json()
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    const theaters = await Theater.findAll(
-        {
-            order: [
-                ['id', 'DESC'],
-            ],
-        }
-    );
+    var theaters = null
+    if (typeof req.query.id !== 'undefined') {
+        theaters = await Theater.findAll({
+            where: {
+                id: req.query.id
+            },
+        });
+    } else {
+        theaters = await Theater.findAll(
+            {
+                order: [
+                    ['id', 'DESC'],
+                ],
+            }
+        );
+    }
+    
     var status = 200;
     var message = '';
 
@@ -33,32 +43,6 @@ router.get('/', async (req, res, next) => {
         }
     });
 });
-
-router.get('/', async (req, res, next) => {
-    const theaters = await Theater.findAll({
-        where: {
-            id: req.query.id
-        },
-    });
-
-    var status = 200;
-    var message = '';
-
-    if (!theaters || theaters.length <= 0) {
-        status = 404;
-        message = 'Not found';
-    }
-
-    return res.json({
-        status: status,
-        message: message,
-        payload: {
-            theaters: theaters
-        }
-    });
-});
-
-
 
 router.get('/showtime', async (req, res, next) => {
     const theaters = await Theater.findAll({
