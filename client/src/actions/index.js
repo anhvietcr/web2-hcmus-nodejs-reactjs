@@ -28,9 +28,42 @@ const UserUpdateInfoAsync = (payload) => {
     }
 }
 
+// Cinema Cpanel
+const CinemaListAsync = (payload) => {
+    return {
+        type: TYPE.CINEMA_LIST_ASYNC,
+        payload
+    }
+}
+
+const CinemaAddAsync = (payload) => {
+    return {
+        type: TYPE.CINEMA_ADD_ASYNC,
+        payload
+    }
+}
+
+const CinemaUpdateAsync = (payload) => {
+    return {
+        type: TYPE.CINEMA_UPDATE_ASYNC,
+        payload
+    }
+}
+
+const CinemaDeleteAsync = (payload) => {
+    return {
+        type: TYPE.CINEMA_DELETE_ASYNC,
+        payload
+    }
+}
+
 export default {
     DatveAsync,
     SignInAsync,
     SignUpAsync,
     UserUpdateInfoAsync,
+    CinemaListAsync,
+    CinemaAddAsync,
+    CinemaUpdateAsync,
+    CinemaDeleteAsync,
 }

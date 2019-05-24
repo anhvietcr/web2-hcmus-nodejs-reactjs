@@ -114,8 +114,7 @@ const User = (props) => {
 
 
     useEffect(() => {
-        if (submitted) {
-            console.log("response: ", actions.User)
+        if (submitted && actions.User.status) {
             if (actions.User.status === 200) {
                 setAlert({
                     open: true,
