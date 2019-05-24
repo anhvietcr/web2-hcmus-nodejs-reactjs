@@ -3,5 +3,5 @@ node_modules
 
 postgres.pgsq
 .DS_store
-.idea
+**/.idea/*
 
