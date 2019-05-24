@@ -1,6 +1,9 @@
 const Movie = require('../models/movie')
 const Router = require('express-promise-router')
 const { Op } = require('sequelize');
+const bodyParser = require('body-parser')
+
+var jsonParser = bodyParser.json()
 
 let router = new Router();
 
@@ -73,7 +76,7 @@ router.get('/search/:keyword', async (req, res, next) => {
 });
 
 
-router.post('/', async (req, res, next) => {
+router.post('/', jsonParser, async (req, res, next) => {
     const created_at = new Date();
     const newMovie = req.body.movie;
     const movie = await Movie.create({
@@ -82,6 +85,7 @@ router.post('/', async (req, res, next) => {
         trailer: newMovie.trailer,
         introduce: newMovie.introduce,
         opening_day: newMovie.opening_day,
+        minute_time: newMovie.minute_time,
         view: newMovie.view,
         created_at: created_at
     });
@@ -103,31 +107,43 @@ router.post('/', async (req, res, next) => {
     });
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/', jsonParser, async (req, res, next) => {
     const updated_at = new Date();
     const updateMovie = req.body.movie;
 
-    const numAffectedRows = await Movie.update({
-        name: updateMovie.name,
-        image: updateMovie.image,
-        trailer: updateMovie.trailer,
-        introduce: updateMovie.introduce,
-        opening_day: updateMovie.opening_day,
-        view: updateMovie.view,
-        updated_at: updated_at
-    },
-        {
-            where: {
-                id: req.params.id
-            }
-        });
+    const movies = await Movie.findOne({
+        where: {
+            id: updateMovie.id
+        }
+    });
 
     var status = 200;
     var message = '';
 
-    if (numAffectedRows <= 0) {
-        status = 503;
-        message = 'Update movie failed';
+    if (!movies || movies.length <= 0) {
+        status = 404;
+        message = 'Not found movie';
+    } else {
+        const numAffectedRows = await Movie.update({
+            name: updateMovie.name,
+            image: updateMovie.image,
+            trailer: updateMovie.trailer,
+            introduce: updateMovie.introduce,
+            opening_day: updateMovie.opening_day,
+            minute_time: updateMovie.minute_time,
+            view: updateMovie.view,
+            updated_at: updated_at
+        },
+            {
+                where: {
+                    id: updateMovie.id
+                }
+            });
+    
+        if (numAffectedRows <= 0) {
+            status = 503;
+            message = 'Update movie failed';
+        }
     }
 
     return res.json({

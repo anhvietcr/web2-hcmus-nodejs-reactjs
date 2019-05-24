@@ -79,25 +79,39 @@ router.post('/', jsonParser, async (req, res) => {
 router.put('/', jsonParser, async (req, res, next) => {
     const updated_at = new Date();
     const cinema = req.body.cinema;
-    const numAffectedRows = await Cinema.update({
-        name: cinema.name,
-        address: cinema.address,
-        image: cinema.image,
-        updated_at: updated_at
-    },
-        {
-            where: {
-                id: cinema.id
-            }
-        });
 
-    var status = 204;
+    const cinemas = await Cinema.findAll({
+        where: {
+            id: cinema.id
+        }
+    });
+
+    var status = 200;
     var message = '';
 
-    if (numAffectedRows <= 0) {
-        status = 503;
-        message = 'Update cinema failed';
+    if (!cinemas || cinemas.length <= 0) {
+        status = 404;
+        message = 'Not found cinema';
+    } else {
+        const numAffectedRows = await Cinema.update({
+            name: cinema.name,
+            address: cinema.address,
+            image: cinema.image,
+            updated_at: updated_at
+        },
+            {
+                where: {
+                    id: cinema.id
+                }
+            });
+
+        if (numAffectedRows <= 0) {
+            status = 503;
+            message = 'Update cinema failed';
+        }
+
     }
+
 
     return res.json({
         status: status,
@@ -112,7 +126,7 @@ router.delete('/:id', async (req, res, next) => {
         }
     });
 
-    var status = 204;
+    var status = 200;
     var message = '';
 
     if (numAffectedRows <= 0) {
