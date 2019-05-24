@@ -11,7 +11,7 @@ router.get('/', async (req, res, next) => {
     var status = 200;
     var message = '';
 
-    if (!cinemas) {
+    if (!cinemas || cinemas.length <= 0) {
         status = 404;
         message = 'Not found';
     }
@@ -35,7 +35,7 @@ router.get('/:id', async (req, res, next) => {
     var status = 200;
     var message = '';
 
-    if (!cinemas) {
+    if (!cinemas || cinemas.length <= 0) {
         status = 404;
         message = 'Not found';
     }
@@ -48,6 +48,14 @@ router.get('/:id', async (req, res, next) => {
         }
     });
 });
+
+// {
+// 	"cinema": {
+// 		"name": "KHTN2",
+// 		"address": "2d",
+// 		"image": ""
+// 	}
+// }
 
 router.post('/', jsonParser, async (req, res) => {
     const created_at = new Date();
@@ -79,7 +87,7 @@ router.post('/', jsonParser, async (req, res) => {
 router.put('/', jsonParser, async (req, res, next) => {
     const updated_at = new Date();
     const cinema = req.body.cinema;
-
+    
     const cinemas = await Cinema.findAll({
         where: {
             id: cinema.id

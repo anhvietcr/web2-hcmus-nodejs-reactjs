@@ -19,21 +19,21 @@ const Theater = db.define("Theater", {
     values: ['2d', '3d', '4dx'],
     allowNull: false,
     validate: {
-      notNull: { args: true, msg: "type is null" }
+      notNull: { args: true, msg: "type cannot be null" }
     },
   },
   number_row: {
     type: Sequelize.INTEGER,
     allowNull: false,
     validate: {
-      notNull: { args: true, msg: "number_row is null" }
+      notNull: { args: true, msg: "number_row cannot be null" }
     },
   },
   number_column: {
     type: Sequelize.INTEGER,
     allowNull: false,
     validate: {
-      notNull: { args: true, msg: "number_column is null" }
+      notNull: { args: true, msg: "number_column cannot be null" }
     },
   },
 });

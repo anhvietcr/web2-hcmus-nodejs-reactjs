@@ -37,7 +37,7 @@ router.get('/:id', async (req, res, next) => {
     var status = 200;
     var message = '';
 
-    if (!movies) {
+    if (!movies || movies.length <= 0) {
         status = 404;
         message = 'Not found';
     }
@@ -61,7 +61,7 @@ router.get('/search/:keyword', async (req, res, next) => {
     var status = 200;
     var message = '';
 
-    if (!movies) {
+    if (!movies || movies.length <= 0) {
         status = 404;
         message = 'Not found';
     }
@@ -75,6 +75,17 @@ router.get('/search/:keyword', async (req, res, next) => {
     });
 });
 
+// {
+// 	"movie": {
+// 		"name": "Sieu nhan",
+// 		"image": "",
+// 		"trailer": "",
+// 		"introduce": "",
+// 		"opening_day": "2019-05-24T06:40:14.671Z",
+// 		"minute_time": 90,
+// 		"view": 0
+// 	}
+// }
 
 router.post('/', jsonParser, async (req, res, next) => {
     const created_at = new Date();

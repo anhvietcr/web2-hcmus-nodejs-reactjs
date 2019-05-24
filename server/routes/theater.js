@@ -1,8 +1,9 @@
 const Theater = require('../models/theater')
 const Cinema = require('../models/cinema')
 const Router = require('express-promise-router')
-let router = new Router();
 const bodyParser = require('body-parser')
+
+let router = new Router();
 
 var jsonParser = bodyParser.json()
 
@@ -12,7 +13,7 @@ router.get('/', async (req, res, next) => {
     var status = 200;
     var message = '';
 
-    if (!theaters) {
+    if (!theaters || theaters.length <= 0) {
         status = 404;
         message = 'Not found';
     }
@@ -35,7 +36,7 @@ router.get('/:id', async (req, res, next) => {
     var status = 200;
     var message = '';
 
-    if (!theaters) {
+    if (!theaters || theaters.length <= 0) {
         status = 404;
         message = 'Not found';
     }
