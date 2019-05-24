@@ -7,9 +7,5 @@ const Router = require('express-promise-router');
 let router = new Router();
 
 /***************Auth API ******************/
-
-router.get('/history', async function f(req,res) {
-
-});
 module.exports = router;
 
