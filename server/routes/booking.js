@@ -10,14 +10,6 @@ let router = new Router();
 
 router.get('/history', async function f(req,res) {
 
-    Booking.sequelize.query("SELECT * FROM Users", { type: Booking.sequelize.QueryTypes.SELECT})
-        .then(users => {
-            res.json(users);
-        });
-
-    // const user = await User.findAll().then(user=>{
-    //    res.json(user);
-    // });
 });
 module.exports = router;
 
