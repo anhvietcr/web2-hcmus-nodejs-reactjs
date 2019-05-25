@@ -68,11 +68,42 @@ function CinemaCpanel(state = initialState, action) {
     }
 }
 
+function TheaterCpanel(state = initialState, action) {
+    switch (action.type) {
+        case TYPE.THEATER_LIST_ASYNC:
+            return {
+                ...state,
+                list: action.payload
+            }
+        case TYPE.THEATER_ADD_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            }
+
+        case TYPE.THEATER_UPDATE_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            }
+
+        case TYPE.THEATER_DELETE_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            } 
+        default:
+            return state;
+    }
+}
+
+
 const rootReducer = combineReducers({
     QuanLyVe,
     Auth,
     User,
-    CinemaCpanel
+    CinemaCpanel,
+    TheaterCpanel
 });
 
 export default rootReducer

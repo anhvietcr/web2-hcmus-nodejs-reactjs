@@ -19,5 +19,21 @@ const Booking = db.define("Booking", {
     allowNull: false
   },
 });
+Booking.associate = function (models) {
+  Booking.belongsTo(models.Showtime, {
+    foreignKey: 'showtime_id',
+    as: 'showtime'
+  });
 
+  Booking.belongsTo(models.User, {
+    foreignKey: 'user_id',
+    as: 'user'
+  });
+
+  Booking.hasMany(models.Ticket, {
+    foreignKey: 'booking_id',
+    sourceKey: 'id',
+    as: 'tickets'
+  });
+};
 module.exports = Booking;

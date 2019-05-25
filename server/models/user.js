@@ -26,5 +26,11 @@ const User = db.define("User", {
     allowNull: false
   }
 });
-
+User.associate = function (models) {
+  User.hasMany(models.Booking, {
+    foreignKey: 'user_id',
+    sourceKey: 'id',
+    as: 'booking'
+  });
+};
 module.exports = User;

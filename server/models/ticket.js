@@ -3,13 +3,12 @@ const db = require('./db')
 
 const Ticket = db.define("Ticket", {
   booking_id: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: false
+    type: Sequelize.INTEGER,
+    allowNull: true,
   },
   chair_id: {
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: true,
     unique: false
   },
   address_x: {
@@ -27,4 +26,11 @@ const Ticket = db.define("Ticket", {
 
 });
 
-module.exports = User;
+Ticket.associate = function (models) {
+  Ticket.belongsTo(models.Booking, {
+    foreignKey: 'booking_id',
+    as: 'booking'
+  });
+};
+
+module.exports = Ticket;
