@@ -44,7 +44,7 @@ function CinemaCpanel(state = initialState, action) {
         case TYPE.CINEMA_LIST_ASYNC:
             return {
                 ...state,
-                list: action.payload
+                cinemas: action.payload.cinemas
             }
         case TYPE.CINEMA_ADD_ASYNC:
             return {
@@ -73,7 +73,7 @@ function TheaterCpanel(state = initialState, action) {
         case TYPE.THEATER_LIST_ASYNC:
             return {
                 ...state,
-                list: action.payload
+                theaters: action.payload.theaters
             }
         case TYPE.THEATER_ADD_ASYNC:
             return {

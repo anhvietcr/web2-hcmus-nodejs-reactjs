@@ -13,15 +13,17 @@ class TheaterContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { TheaterCpanel } = state;
+    const { TheaterCpanel, CinemaCpanel } = state;
 
     return {
-        TheaterCpanel
+        TheaterCpanel,
+        CinemaCpanel
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
     List: () => { dispatch({type: TYPE.THEATER_LIST})},
+    ListCinemas: () => { dispatch({type: TYPE.CINEMA_LIST})},
     Add: (payload) => { dispatch({type: TYPE.THEATER_ADD, payload})},      
     Update: (payload) => { dispatch({type: TYPE.THEATER_UPDATE, payload})},      
     Delete: (payload) => { dispatch({type: TYPE.THEATER_DELETE, payload})},      

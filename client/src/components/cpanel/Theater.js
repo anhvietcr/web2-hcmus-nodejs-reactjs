@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import * as TYPE from '../../constants/actionTypes'
-import CustomDialog from '../helper/Dialog'
+import TheaterDialog from '../helper/dialog/TheaterDialog'
 import Alert from '../helper/Alert'
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -44,11 +44,20 @@ const styles = theme => ({
 })
 
 const lableDatas = [
-  { id: 0, label: 'Tên', name: 'name' },
-  { id: 1, label: 'SL Hàng Ghế', name: 'number_row' },
-  { id: 2, label: 'SL Cột Ghế', name: 'number_column' },
-  { id: 3, label: 'Thao tác', name: 'actions'},
+  { id: 0, label: 'Tên', name: 'name', type: 'textbox', display: true, align: 'left' },
+  { id: 1, label: 'SL Hàng Ghế', name: 'number_row', type: 'textbox', display: true, align: 'left' },
+  { id: 2, label: 'SL Cột Ghế', name: 'number_column', type: 'textbox', display: true, align: 'left' },
+  { id: 3, label: 'Cụm rạp', name_id: 'cinema_id', name: 'cinema_name', type: 'combobox', display: true, align: 'left' },
+  { id: 4, label: 'Loại rạp', name_id: 'type', name: 'type', type: 'combobox', display: true, align: 'left' },
+  { id: 5, label: 'Thao tác', name: 'actions', type: 'icons', display: true, align: 'right' },
 ]
+
+const dataTheaterType = [
+  {id: '2d', name: '2d'},
+  {id: '3d', name: '3d'},
+  {id: '4dx', name: '4dx'},
+]
+
 
 const ToolbarTable = (props) => {
   const { classes, handleSearchName, handleOpenDialog } = props
@@ -88,14 +97,20 @@ const HeadTable = (props) => {
   return (
     <TableHead >
       <TableRow>
-        {lableDatas.map(label => (
-          <TableCell
-            key={label.id}
-            align={label.id < lableDatas.length - 1 ? 'left' : 'right'}
-            padding={'default'}
-          >{label.label}
-          </TableCell>
-        )
+        {lableDatas.map(label => {
+          if (label.display) {
+            return (
+              <TableCell
+                key={label.id}
+                align={label.align}
+                padding={'default'}
+              >{label.label}
+              </TableCell>
+            )
+          } else {
+            return false;
+          }
+        }
         )}
       </TableRow>
     </TableHead>
@@ -115,7 +130,10 @@ const BodyTable = (props) => {
             key={row.id}
           >
             <TableCell align="left">{row.name}</TableCell>
-            <TableCell align="left">{row.address}</TableCell>
+            <TableCell align="left">{row.number_row}</TableCell>
+            <TableCell align="left">{row.number_column}</TableCell>
+            <TableCell align="left" id={row.ciname_id}>{row.cinema.name}</TableCell>
+            <TableCell align="left">{row.type}</TableCell>
             <TableCell align="right">
               <Tooltip
                 title="Edit"
@@ -135,11 +153,11 @@ const BodyTable = (props) => {
                 placement={'bottom-start'}
                 enterDelay={300}
               >
-                <IconButton 
-                  className={classes.iconButton} 
+                <IconButton
+                  className={classes.iconButton}
                   aria-label="Delete"
                   onClick={(e) => { handleOpenDialog(e, 'DELETE', row) }}
-                  >
+                >
                   <Delete />
                 </IconButton>
               </Tooltip>
@@ -158,7 +176,7 @@ const PaginationTable = (props) => {
     <TablePagination
       rowsPerPageOptions={[5, 10, 25]}
       component="div"
-      count={dataFilter && dataFilter.length || 0}
+      count={(dataFilter && dataFilter.length) || 0}
       rowsPerPage={rowsPerPage}
       page={page}
       backIconButtonProps={{
@@ -175,15 +193,15 @@ const PaginationTable = (props) => {
 
 const TheaterCpanel = (props) => {
   const { classes, actions } = props
-  const { TheaterCpanel } = actions
+  const { TheaterCpanel, CinemaCpanel } = actions
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [dataTables, setDataTables] = useState([]);
   const [dataFilter, setDataFilter] = useState(dataTables);
+  const [dataCinemas, setDataCinemas] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false)
-  
+
   const [isChoose, setChoose] = useState({
     add: false,
     update: false,
@@ -193,7 +211,10 @@ const TheaterCpanel = (props) => {
     id: 0,
     name: '',
     number_row: '',
-    number_column: ''
+    number_column: '',
+    cinema_name: '',
+    cinema_id: 0,
+    type: ''    
   })
   const [alert, setAlert] = useState({
     count: 0,
@@ -226,10 +247,18 @@ const TheaterCpanel = (props) => {
     }
   }
 
-  const handleOpenDialog = (e, type, item) => {
-    const {id, name, number_row, number_column} = item || '';
+  const handleOpenDialog = (e, type_open, item) => {
+    const {
+      id,
+      name,
+      number_row,
+      number_column,
+      cinema_name,
+      cinema_id,
+      type
+    } = item || '';
 
-    if (type === 'ADD') {
+    if (type_open === 'ADD') {
       setChoose({
         add: true,
         update: false,
@@ -239,11 +268,14 @@ const TheaterCpanel = (props) => {
         id: 0,
         name: '',
         number_row: '',
-        number_column: ''
+        number_column: '',
+        cinema_name: '',
+        cinema_id: 0,
+        type: ''
       })
     }
-    
-    if (type === 'EDIT') {
+
+    if (type_open === 'EDIT') {
       setChoose({
         add: false,
         update: true,
@@ -253,11 +285,14 @@ const TheaterCpanel = (props) => {
         id,
         name,
         number_row,
-        number_column
+        number_column,
+        cinema_name,
+        cinema_id,
+        type
       })
     }
 
-    if (type === 'DELETE') {
+    if (type_open === 'DELETE') {
       setChoose({
         add: false,
         update: false,
@@ -267,7 +302,10 @@ const TheaterCpanel = (props) => {
         id,
         name,
         number_row,
-        number_column
+        number_column,
+        cinema_name,
+        cinema_id,
+        type
       })
     }
 
@@ -275,12 +313,12 @@ const TheaterCpanel = (props) => {
     setOpenDialog(!openDialog)
     actions.List();
   }
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!values.name || !values.number_row || !values.number_column
-        || !parseInt(values.number_row) || !parseInt(values.number_column)
+      || !parseInt(values.number_row) || !parseInt(values.number_column)
     ) {
       setAlert({
         count: alert.count + 1,
@@ -292,7 +330,7 @@ const TheaterCpanel = (props) => {
     }
 
     setSubmitted(true);
-    
+
     // action here
     if (isChoose.delete) {
       let payload = {
@@ -305,7 +343,10 @@ const TheaterCpanel = (props) => {
         id: values.id,
         name: values.name,
         number_row: values.number_row,
-        number_row: values.number_row,
+        number_column: values.number_column,
+        cinema_name: values.cinema_name,
+        cinema_id: values.cinema_id,
+        type: values.type,
       }
       actions.Update(payload);
     } else {
@@ -314,7 +355,10 @@ const TheaterCpanel = (props) => {
         id: values.id,
         name: values.name,
         number_row: values.number_row,
-        number_row: values.number_row,
+        number_column: values.number_column,
+        cinema_name: values.cinema_name,
+        cinema_id: values.cinema_id,
+        type: values.type,
       }
       actions.Add(payload);
 
@@ -322,26 +366,29 @@ const TheaterCpanel = (props) => {
         id: 0,
         name: '',
         number_row: '',
-        number_column: ''
+        number_column: '',
+        cinema_name: '',
+        cinema_id: 0,
+        type: ''
       })
     }
-
-    setDataLoaded(false);
   }
 
   useEffect(() => {
+    // first load 
+    actions.List();
+    actions.ListCinemas();
+  }, [])
 
-    if (!TheaterCpanel.list) {
-      // first load 
-      actions.List()
-
-    } else {
+  useEffect(() => {
+    if (TheaterCpanel.theaters && CinemaCpanel.cinemas) {
       if (!submitted) {
         // close dialog, update data
-        setDataFilter(TheaterCpanel.list.payload.cinemas);
-        setDataTables(TheaterCpanel.list.payload.cinemas);
-      } 
-      
+        setDataFilter(TheaterCpanel.theaters);
+        setDataTables(TheaterCpanel.theaters);
+        setDataCinemas(CinemaCpanel.cinemas);
+      }
+
       if (submitted && TheaterCpanel.payload.status) {
 
         // alert
@@ -356,13 +403,13 @@ const TheaterCpanel = (props) => {
           setAlert({
             count: alert.count + 1,
             open: true,
-            message: actions.TheaterCpanel.message,
+            message: TheaterCpanel.message,
             variant: "error"
           })
         }
       }
     }
-  }, [submitted, actions, TheaterCpanel.list])
+  }, [submitted, TheaterCpanel, CinemaCpanel])
 
 
   return (
@@ -376,7 +423,7 @@ const TheaterCpanel = (props) => {
       <ToolbarTable classes={classes}
         dataFilter={dataFilter}
         handleSearchName={handleSearchName}
-        handleOpenDialog={handleOpenDialog}        
+        handleOpenDialog={handleOpenDialog}
       />
       <Paper>
         <div className={classes.tableWrapper}>
@@ -397,16 +444,16 @@ const TheaterCpanel = (props) => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleChangePage={handleChangePage}
         />
-        <CustomDialog
+        <TheaterDialog
           textTitle={
             isChoose.add ? TYPE.ADD_THEATER :
-            isChoose.update ? TYPE.UPDATE_THEATER :
-            TYPE.DELETE_THEATER
+              isChoose.update ? TYPE.UPDATE_THEATER :
+                TYPE.DELETE_THEATER
           }
           textAction={
             isChoose.add ? TYPE.BTN_ADD :
-            isChoose.update ? TYPE.BTN_UPDATE :
-            TYPE.BTN_DELETE
+              isChoose.update ? TYPE.BTN_UPDATE :
+                TYPE.BTN_DELETE
           }
           labels={lableDatas}
           handleOpenDialog={handleOpenDialog}
@@ -414,6 +461,8 @@ const TheaterCpanel = (props) => {
           values={values}
           setValues={setValues}
           handleSubmit={handleSubmit}
+          dataCinemas={dataCinemas}
+          dataTheaterType={dataTheaterType}
         />
       </Paper>
     </React.Fragment>
