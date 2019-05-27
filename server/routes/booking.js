@@ -40,37 +40,8 @@ router.post('/',jsonParser,async (req,res)=>{
         res.json(response);
     });
 });
-router.get('/history',jsonParser, async (req, res) => {
-    // const history = await Cinema.findAll({
-    //
-    //     attributes: ['id','name'],
-    //     include: [{
-    //         model: Theater,
-    //         as: 'theaters',
-    //         required: false,
-    //         attributes: ['id', 'name', 'cinema_id'],
-    //         include: [{
-    //             model: Showtime,
-    //             as: 'showtimes',
-    //             required: false,
-    //             attributes: ['id','movie_id','theater_id','start_time','end_time'],
-    //             include: [{
-    //                 model: Movie,
-    //                 as: 'movies',
-    //                 required: false,
-    //                 attributes: ['id', 'name'],
-    //             }],
-    //             include: [{
-    //                 model: Booking,
-    //                 as: 'bookings',
-    //                 required: false,
-    //                 attributes: ['id', 'user_id', 'showtime_id'],
-    //                // where:{user_id :1}
-    //             }]
-    //         }]
-    //     }]
-    // });
 
+router.get('/history',jsonParser, async (req, res) => {
     const payload = req.body.payload;
     const userId = payload.userId;
     const history = await Booking.findAll({
