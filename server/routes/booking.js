@@ -40,7 +40,7 @@ router.post('/',jsonParser,async (req,res)=>{
         res.json(response);
     });
 });
-router.get('/history', async (req, res) => {
+router.get('/history',jsonParser, async (req, res) => {
     // const history = await Cinema.findAll({
     //
     //     attributes: ['id','name'],
@@ -70,11 +70,14 @@ router.get('/history', async (req, res) => {
     //         }]
     //     }]
     // });
+
+    const payload = req.body.payload;
+    const userId = payload.userId;
     const history = await Booking.findAll({
         attributes: ['id', 'user_id', 'showtime_id'],
         where: {
             //id: req.body.payload.userId
-            user_id: 1
+            user_id: userId
         },
         include: [
             {
@@ -124,7 +127,7 @@ router.get('/history', async (req, res) => {
         status: status,
         message: message,
         payload: {
-            history: history
+            history:history
         }
     });
 });
