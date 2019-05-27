@@ -24,14 +24,23 @@ router.get('/', async (req, res) => {
                 ],
                 include: [
                     {
-                        model: Theater,
-                        as: 'theaters',
-                        required: false,
+                        model: Showtime,
+                        as: 'showtimes',
                         include: [{
-                            model: Cinema,
-                            as: 'cinema',
-                            required: false,
-                        }],
+                            model: Theater,
+                            attributes: [
+                                ["name", "theater_name"],
+                                "type",
+                                "number_row",
+                                "number_column",
+                                "cinema_id",
+                            ],
+                            as: 'theater',
+                            include: [{
+                                model: Cinema,
+                                as: 'cinema',
+                            }]
+                        },],
                     },
                 ]
             }
@@ -43,14 +52,23 @@ router.get('/', async (req, res) => {
             },
             include: [
                 {
-                    model: Theater,
-                    as: 'theaters',
-                    required: false,
+                    model: Showtime,
+                    as: 'showtimes',
                     include: [{
-                        model: Cinema,
-                        as: 'cinema',
-                        required: false,
-                    }],
+                        model: Theater,
+                        attributes: [
+                            ["name", "theater_name"],
+                            "type",
+                            "number_row",
+                            "number_column",
+                            "cinema_id",
+                        ],
+                        as: 'theater',
+                        include: [{
+                            model: Cinema,
+                            as: 'cinema',
+                        }]
+                    },],
                 },
             ]
         });
@@ -80,14 +98,23 @@ router.get('/trending', async (req, res, next) => {
             ],
             include: [
                 {
-                    model: Theater,
-                    as: 'theaters',
-                    required: false,
+                    model: Showtime,
+                    as: 'showtimes',
                     include: [{
-                        model: Cinema,
-                        as: 'cinema',
-                        required: false,
-                    }],
+                        model: Theater,
+                        attributes: [
+                            ["name", "theater_name"],
+                            "type",
+                            "number_row",
+                            "number_column",
+                            "cinema_id",
+                        ],
+                        as: 'theater',
+                        include: [{
+                            model: Cinema,
+                            as: 'cinema',
+                        }]
+                    },],
                 },
             ]
         }
@@ -164,14 +191,23 @@ router.get('/search/:keyword', async (req, res, next) => {
         },
         include: [
             {
-                model: Theater,
-                as: 'theaters',
-                required: false,
+                model: Showtime,
+                as: 'showtimes',
                 include: [{
-                    model: Cinema,
-                    as: 'cinema',
-                    required: false,
-                }],
+                    model: Theater,
+                    attributes: [
+                        ["name", "theater_name"],
+                        "type",
+                        "number_row",
+                        "number_column",
+                        "cinema_id",
+                    ],
+                    as: 'theater',
+                    include: [{
+                        model: Cinema,
+                        as: 'cinema',
+                    }]
+                },],
             },
         ]
     });
