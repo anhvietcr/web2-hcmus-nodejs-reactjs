@@ -14,7 +14,7 @@ var models = {
     Booking,
     User,
     Ticket
-}
+};
 
 Theater.associate(models);
 Movie.associate(models);

@@ -50,7 +50,7 @@ router.get('/history', async (req, res) => {
         attributes: ['id', 'user_id', 'showtime_id'],
         where: {
             //id: req.body.payload.userId
-            id: 1
+            user_id: 1
         },
         include: [
             {
@@ -64,9 +64,6 @@ router.get('/history', async (req, res) => {
                         as: 'theater',
                         // required: false,
                         attributes: ['id', 'name', 'cinema_id'],
-                        where: {
-                            id: Showtime.theater_id
-                        },
                         include: [{
                             model: Cinema,
                             as: 'cinema',
@@ -78,9 +75,6 @@ router.get('/history', async (req, res) => {
                         model: Movie,
                         as: 'movie',
                         //required: false,
-                        where: {
-                            id: Showtime.movie_id
-                        },
                         attributes: ['id', 'name'],
                     }
                 ]
