@@ -46,8 +46,8 @@ router.post('/register', jsonParser, async function (req, res) {
     });
     if (temp) {
         let response = {
+            status: 403,
             payload: {
-                status: 403,
                 temp: temp
             }
         };
@@ -55,8 +55,9 @@ router.post('/register', jsonParser, async function (req, res) {
     }
     if (repassword != password) {
         let response = {
+            status: 401,
             payload: {
-                status: 401,
+
             }
         };
         res.json(response);
@@ -70,8 +71,9 @@ router.post('/register', jsonParser, async function (req, res) {
     }).then(function (user) {
         //res.json(user)
         let response = {
+            status: 200,
             payload: {
-                status: 200,
+
                 email: email
             }
         };
@@ -91,8 +93,9 @@ router.post('/login',jsonParser, async function (req, res) {
     if (!user) {
 
         let response = {
+            status: 403,//Khong ton tai email
             payload: {
-                status: 403,//Khong ton tai email
+
             }
         };
         res.json(response);
@@ -100,27 +103,30 @@ router.post('/login',jsonParser, async function (req, res) {
     if (!bcrypt.compareSync(password, user.password)) {
 
         let response = {
+            status: 403,//Sai mat khau
             payload: {
-                status: 403,//Sai mat khau
+
             }
         };
         res.json(response);
     }
     let response = {
+        status: 200,
         payload: {
-            status: 200,
+
             user: user
         }
     };
     res.json(response);
-})
+});
 
 router.post('/logout',jsonParser, function (req, res) {
     const payload = req.body.payload;
     if (payload.userId) {
         let response = {
+            status: 200,//Tồn tại user đang đăng nhập mới thoát được
             payload: {
-                status: 200,//Tồn tại user đang đăng nhập mới thoát được
+
             }
         };
         res.json(response);
