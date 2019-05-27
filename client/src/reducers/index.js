@@ -103,13 +103,42 @@ function TheaterCpanel(state = initialState, action) {
     }
 }
 
+function MovieCpanel(state = initialState, action) {
+    switch (action.type) {
+        case TYPE.MOVIE_LIST_ASYNC:
+            return {
+                ...state,
+                movies: action.payload.movies
+            }
+        case TYPE.MOVIE_ADD_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            }
+
+        case TYPE.MOVIE_UPDATE_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            }
+
+        case TYPE.MOVIE_DELETE_ASYNC:
+            return {
+                ...state,
+                payload: action.payload
+            } 
+        default:
+            return state;
+    }
+}
 
 const rootReducer = combineReducers({
     QuanLyVe,
     Auth,
     User,
     CinemaCpanel,
-    TheaterCpanel
+    TheaterCpanel,
+    MovieCpanel
 });
 
 export default rootReducer
