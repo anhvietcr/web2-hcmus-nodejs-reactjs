@@ -1,10 +1,11 @@
 const User = require('../models/user');
 
-
+const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt');
 const Router = require('express-promise-router');
 let router = new Router();
 const sendmail = require('../models/email');
+var jsonParser = bodyParser.json()
 
 /*************** Auth API ******************/
 router.get('/', async (req, res, next) => {
@@ -22,18 +23,20 @@ router.put('/', async (req, res, next) => {
 router.delete('/', async (req, res, next) => {
     next();
 });
+// {
+// 	"payload": {
+// 		"full": "Loi hai",
+// 		"email": "aaa@gmail.com",
+// 		"password": "123"
+// 	}
+// }
 
-
-router.post('/register', async function (req, res) {
-    const password = req.body.password;
-    const email = req.body.email;
-    const repassword = req.body.repassword;
-    const fullname = req.body.fullname;
-
-    // const password = "123456";
-    // const email = "phannhutrang@gmail.com";
-    // const repassword = "123456";
-    // const fullname = "Nhu Trang";
+router.post('/register', jsonParser, async function (req, res) {
+    const payload = req.body.payload;
+    const password = payload.password;
+    const email = payload.email;
+    const repassword = payload.repassword;
+    const fullname = payload.fullname;
 
     const temp = await User.findOne({
         where: { email },

@@ -40,7 +40,6 @@ Movie.associate = function (models) {
 
   Movie.hasMany(models.Showtime, {
     foreignKey: 'movie_id',
-    sourceKey: 'id',
     as: 'showtimes'
   });
 };

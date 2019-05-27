@@ -22,6 +22,7 @@ Cinema.associate(models);
 Booking.associate(models);
 User.associate(models);
 Ticket.associate(models);
+Showtime.associate(models);
 let router = new Router();
 
 /***************HOME API ******************/
