@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const Router = require('express-promise-router');
 let router = new Router();
 const sendmail = require('../models/email');
-var jsonParser = bodyParser.json()
+var jsonParser = bodyParser.json();
 
 /*************** Auth API ******************/
 router.get('/', async (req, res, next) => {
