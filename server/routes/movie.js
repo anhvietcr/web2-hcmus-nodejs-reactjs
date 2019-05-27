@@ -244,7 +244,7 @@ router.post('/', jsonParser, async (req, res, next) => {
         status: status,
         message: message,
         payload: {
-            movies: movies
+            movie: movie
         }
     });
 });

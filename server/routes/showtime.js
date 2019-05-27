@@ -11,7 +11,7 @@ var jsonParser = bodyParser.json();
 router.get('/', async (req, res, next) => {
     var showtimes = null;
     if (typeof req.query.id !== 'undefined') {
-        showtimes = await Showtime.findOne({
+        showtimes = await Showtime.findAll({
             where: {
                 id: req.query.id
             },
@@ -76,7 +76,7 @@ router.get('/', async (req, res, next) => {
 router.post('/', jsonParser, async (req, res, next) => {
     const created_at = new Date();
     const newShowtime = req.body.showtime;
-    const theaters = await Theater.findOne({
+    const theaters = await Theater.findAll({
         where: {
             id: newShowtime.theater_id
         },
@@ -89,7 +89,7 @@ router.post('/', jsonParser, async (req, res, next) => {
         });
     }
 
-    const movies = await Movie.findOne({
+    const movies = await Movie.findAll({
         where: {
             id: newShowtime.movie_id
         }
@@ -102,7 +102,23 @@ router.post('/', jsonParser, async (req, res, next) => {
         });
     }
 
-    const theater = await Showtime.create({
+    const showtimesWithMovieIdAndTheaterId = await Showtime.findAll({
+        where: {
+            movie_id: updateShowtime.movie_id,
+            theater_id: updateShowtime.theater_id,
+        }
+    });
+
+    if (showtimesWithMovieIdAndTheaterId && showtimesWithMovieIdAndTheaterId.length > 0) {
+        if(showtimesWithMovieIdAndTheaterId[0].id !== updateShowtime.id) {
+            return res.json({
+                status: 403,
+                message: 'Showtime is exists',
+            });
+        }
+    } 
+
+    const showtime = await Showtime.create({
         movie_id: newShowtime.movie_id,
         theater_id: newShowtime.theater_id,
         start_time: newShowtime.start_time,
@@ -123,7 +139,7 @@ router.post('/', jsonParser, async (req, res, next) => {
         status: status,
         message: message,
         payload: {
-            theater: theater
+            showtime: showtime
         }
     });
 });
@@ -168,7 +184,23 @@ router.put('/', jsonParser, async (req, res, next) => {
         });
     }
 
-    const showtimes = await Showtime.findOne({
+    const showtimesWithMovieIdAndTheaterId = await Showtime.findAll({
+        where: {
+            movie_id: updateShowtime.movie_id,
+            theater_id: updateShowtime.theater_id,
+        }
+    });
+
+    if (showtimesWithMovieIdAndTheaterId && showtimesWithMovieIdAndTheaterId.length > 0) {
+        if(showtimesWithMovieIdAndTheaterId[0].id !== updateShowtime.id) {
+            return res.json({
+                status: 403,
+                message: 'Showtime is exists',
+            });
+        }
+    } 
+
+    const showtimes = await Showtime.findAll({
         where: {
             id: updateShowtime.id
         }
