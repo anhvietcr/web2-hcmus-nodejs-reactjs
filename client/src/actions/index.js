@@ -106,6 +106,32 @@ const MovieDeleteAsync = (payload) => {
     }
 }
 
+// Showtime Cpanel
+const ShowtimeListAsync = (payload) => {
+    return {
+        type: TYPE.SHOWTIME_LIST_ASYNC,
+        payload
+    }
+}
+const ShowtimeAddAsync = (payload) => {
+    return {
+        type: TYPE.SHOWTIME_ADD_ASYNC,
+        payload
+    }
+}
+const ShowtimeUpdateAsync = (payload) => {
+    return {
+        type: TYPE.SHOWTIME_UPDATE_ASYNC,
+        payload
+    }
+}
+const ShowtimeDeleteAsync = (payload) => {
+    return {
+        type: TYPE.SHOWTIME_DELETE_ASYNC,
+        payload
+    }
+}
+
 export default {
     DatveAsync,
     SignInAsync,
@@ -127,4 +153,9 @@ export default {
     MovieAddAsync,
     MovieUpdateAsync,
     MovieDeleteAsync,
+
+    ShowtimeListAsync,
+    ShowtimeAddAsync,
+    ShowtimeUpdateAsync,
+    ShowtimeDeleteAsync,
 }
