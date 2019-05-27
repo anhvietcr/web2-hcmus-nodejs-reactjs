@@ -1,9 +1,9 @@
-const router = require('express-promise-router');
+const Router = require('express-promise-router');
 
 const bodyparse  = require('body-parser');
 const jsonParser = bodyparse.json();
 const Ticket = require('../models/ticket');
-
+const router = new Router();
 router.post('/',jsonParser,async (req,res)=>{
 
     //.. Xử lý dữ liệu trên đây
@@ -16,6 +16,7 @@ router.post('/',jsonParser,async (req,res)=>{
     //         "price":20000
     // }
     // }
+
     const payload = req.body.payload;
     const booking_id = payload.booking_id;
     const chair_id = payload.chair_id;
@@ -28,16 +29,15 @@ router.post('/',jsonParser,async (req,res)=>{
         address_x: address_x,
         address_y: address_y,
         price:price
-    }).then(function (ticket) {
-        //res.json(user)
-        let response = {
-            status: 200,
-            payload: {
-                ticket: ticket
-            }
-        };
-        res.json(response);
     });
+    let response = {
+        status: 200,
+        payload: {
+            ticket: ticket
+        }
+    };
+    res.json(response);
+
 });
 
 
