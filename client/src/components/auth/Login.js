@@ -102,17 +102,18 @@ const Login = (props) => {
     });
     
     useEffect(() => {
-        if (submitted) {
-            console.log("response: ", actions.Auth)
-            if (actions.Auth.status === 200) {
-                if (actions.Auth.payload.role === 'admin') {
+        if (submitted && actions.Auth.user) {
+            if (actions.Auth.user.status === 200) {
+                if (actions.Auth.payload.role !== 0) {
                     actions.history.push('/cpanel')
                 } else {
                     actions.history.push('/user')
                 }
+
+                console.log(actions.Auth.user)
             }
         }
-    })
+    }, [submitted, actions.Auth.user])
 
     const handleChange = (e) => {
         const {value, name} = e.target;
