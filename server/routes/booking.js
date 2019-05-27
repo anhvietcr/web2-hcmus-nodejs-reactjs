@@ -6,6 +6,16 @@ const Ticket = require('../models/ticket');
 const Cinema = require('../models/cinema');
 const Router = require('express-promise-router');
 let router = new Router();
+
+// {
+// 	"booking": {
+// 		"user_id": 222222222,
+// 		"showtime_id":1,
+// 		"bookingtime": "2018-11-07 15:03:16.532+00",
+// 		"totalprice": 200000
+// 	}
+// }
+
 router.get('/history', async (req, res) => {
     // const history = await Cinema.findAll({
     //
@@ -37,10 +47,10 @@ router.get('/history', async (req, res) => {
     //     }]
     // });
     const history = await Booking.findAll({
-        attributes: ['id','user_id','showtime_id'],
+        attributes: ['id', 'user_id', 'showtime_id'],
         where: {
             //id: req.body.payload.userId
-            id:1
+            id: 1
         },
         include: [
             {
@@ -52,12 +62,15 @@ router.get('/history', async (req, res) => {
                     {
                         model: Theater,
                         as: 'theater',
-                       // required: false,
+                        // required: false,
                         attributes: ['id', 'name', 'cinema_id'],
+                        where: {
+                            id: Showtime.theater_id
+                        },
                         include: [{
                             model: Cinema,
                             as: 'cinema',
-                           // required: false,
+                            // required: false,
                             attributes: ['id', 'name'],
                         }],
                     },
@@ -65,6 +78,9 @@ router.get('/history', async (req, res) => {
                         model: Movie,
                         as: 'movie',
                         //required: false,
+                        where: {
+                            id: Showtime.movie_id
+                        },
                         attributes: ['id', 'name'],
                     }
                 ]
@@ -73,7 +89,7 @@ router.get('/history', async (req, res) => {
                 model: Ticket,
                 as: 'tickets',
                 //required: false,
-                attributes: ['booking_id','chair_id'],
+                attributes: ['booking_id', 'chair_id'],
             }
         ]
     });
