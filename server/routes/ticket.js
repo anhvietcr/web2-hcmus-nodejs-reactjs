@@ -5,6 +5,17 @@ const jsonParser = bodyparse.json();
 const Ticket = require('../models/ticket');
 
 router.post('/',jsonParser,async (req,res)=>{
+
+    //.. Xử lý dữ liệu trên đây
+    // {
+    //     "payload": {
+    //     "booking_id": 1,
+    //         "chair_id":"B2",
+    //         "address_x": "Hang thu 2",
+    //         "address_y": "Cot thu 2",
+    //         "price":20000
+    // }
+    // }
     const payload = req.body.payload;
     const booking_id = payload.booking_id;
     const chair_id = payload.chair_id;
@@ -28,3 +39,6 @@ router.post('/',jsonParser,async (req,res)=>{
         res.json(response);
     });
 });
+
+
+module.exports = router;

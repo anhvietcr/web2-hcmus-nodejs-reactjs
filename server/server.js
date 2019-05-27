@@ -28,3 +28,4 @@ app.use('/movie', require('./routes/movie'));
 app.use('/showtime', require('./routes/showtime'));
 
 app.use('/booking', require('./routes/booking'));
+app.use('/ticket',require('./routes/ticket'));
