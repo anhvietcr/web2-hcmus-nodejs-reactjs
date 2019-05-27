@@ -22,9 +22,15 @@ let initialState = {
 function Auth(state = initialState, action) {
     switch(action.type) {
         case TYPE.SIGN_IN_ASYNC:
-            return action.payload
+            return {
+                ...state,
+                user: action.payload
+            }
         case TYPE.SIGN_UP_ASYNC:
-            return action.payload
+            return {
+                ...state,
+                user: action.payload
+            }
         default:
             return state;
     }

@@ -7,39 +7,28 @@ const END_POINT = "http://localhost:5000/"
 /****************Auth*****************/
 // Sign In
 function asyncSignIn(payload) {
-    return axios.post(END_POINT + 'auth/login', {
+    return axios.post(END_POINT + 'user/login', {
         payload
-    }).then(response => response.data)
+    }).then(response => response)
         .catch((e) => console.log(e));
 }
-export function* actionSignIn(payload) {
-    console.log("post sign in data: ", payload);
-    // const response = yield call(asyncSignIn, payload);
-    const response = {
-        status: 200,
-        payload: {
-            role: 'admin'
-        }
-    }
-    yield put(actions.SignInAsync(response))
+export function* actionSignIn(data) {
+    const { payload } = data
+    const response = yield call(asyncSignIn, payload);
+
+    yield put(actions.SignInAsync(response.data))
 }
 
 // Sign Up
 function asyncSignUp(payload) {
-    return axios.post(END_POINT + 'auth/register', {
+    return axios.post(END_POINT + 'user/register', {
         payload
-    }).then(response => response.data)
+    }).then(response => response)
         .catch((e) => console.log(e));
 }
-export function* actionSignUp(payload) {
-    console.log("post sign up data: ", payload);
+export function* actionSignUp(data) {
+    const { payload } = data
+    const response = yield call(asyncSignUp, payload);
 
-    // const response = yield call(asyncSignUp, payload);
-    const response = {
-        status: 200,
-        payload: {
-
-        }
-    }
-    yield put(actions.SignUpAsync(response))
+    yield put(actions.SignUpAsync(response.data))
 }
