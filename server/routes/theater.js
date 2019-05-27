@@ -85,7 +85,6 @@ router.get('/showtime', async (req, res, next) => {
     });
 });
 
-//required
 // {
 // 	"theater": {
 // 		"cinema_id": 2,

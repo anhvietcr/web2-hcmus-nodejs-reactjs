@@ -23,13 +23,16 @@ router.put('/', async (req, res, next) => {
 router.delete('/', async (req, res, next) => {
     next();
 });
+
 // {
-// 	"payload": {
-// 		"full": "Loi hai",
-// 		"email": "aaa@gmail.com",
-// 		"password": "123"
-// 	}
+//     "payload": {
+//     "fullname": "Loi hai",
+//         "email": "aaa@gmail.com",
+//         "password": "123",
+//         "repassword":"123"
+//}
 // }
+
 
 router.post('/register', jsonParser, async function (req, res) {
     const payload = req.body.payload;
@@ -69,15 +72,17 @@ router.post('/register', jsonParser, async function (req, res) {
         let response = {
             payload: {
                 status: 200,
-                user: user
+                email: email
             }
         };
         res.json(response);
     });
 });
 
-router.post('/login', async function (req, res) {
-    const { email, password } = req.body;
+router.post('/login',jsonParser, async function (req, res) {
+    const payload = req.body.payload;
+    const email = payload.email;
+    const password = payload.password;
     //const email = "phanthinhutrang@gmail.com";
     //const password = "123456";
     const user = await User.findOne({
@@ -104,8 +109,9 @@ router.post('/login', async function (req, res) {
     res.json(user);
 });
 
-router.post('/logout', function (req, res) {
-    if (req.body.payload.userId) {
+router.post('/logout',jsonParser, function (req, res) {
+    const payload = req.body.payload;
+    if (payload.userId) {
         let response = {
             payload: {
                 status: 200,//Tồn tại user đang đăng nhập mới thoát được
@@ -115,8 +121,9 @@ router.post('/logout', function (req, res) {
     }
 });
 
-router.put('/forgot', async function (req, res) {
-    const email = req.body.payload.email;
+router.put('/forgot',jsonParser, async function (req, res) {
+    const payload = req.payload;
+    const email = payload.email;
     //const email = "phannhutrang@gmail.com";
     const temp = await User.findOne({
         where: { email },
@@ -161,8 +168,9 @@ router.put('/forgot', async function (req, res) {
         });
 });
 
-router.get('/profile', async function f(req, res) {
-    const id = req.body.payload.userId;
+router.get('/profile',jsonParser, async function f(req, res) {
+    const payload = req.payload;
+    const id = payload.userId;
     //const id = 1;
     const user = await User.findOne({
         where: { id },
@@ -184,8 +192,9 @@ router.get('/profile', async function f(req, res) {
         res.json(response);
     }
 });
-router.put('/profile', async function (req, res) {
-    const email = req.body.payload.email;
+router.put('/profile',jsonParser, async function (req, res) {
+    const payload = req.payload;
+    const email = payload.email;
     //const email = "phannhutrang@gmail.com";
     const temp = await User.findOne({
         where: { email },

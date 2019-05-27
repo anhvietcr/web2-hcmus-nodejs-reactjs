@@ -15,7 +15,6 @@ let router = new Router();
 // 		"totalprice": 200000
 // 	}
 // }
-
 router.get('/history', async (req, res) => {
     // const history = await Cinema.findAll({
     //
