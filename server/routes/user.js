@@ -106,8 +106,14 @@ router.post('/login',jsonParser, async function (req, res) {
         };
         res.json(response);
     }
-    res.json(user);
-});
+    let response = {
+        payload: {
+            status: 200,
+            user: user
+        }
+    };
+    res.json(response);
+})
 
 router.post('/logout',jsonParser, function (req, res) {
     const payload = req.body.payload;
