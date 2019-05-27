@@ -27,16 +27,11 @@ router.get('/', async (req, res) => {
                         model: Showtime,
                         as: 'showtimes',
                         include: [{
+                            required: false,
                             model: Theater,
-                            attributes: [
-                                ["name", "theater_name"],
-                                "type",
-                                "number_row",
-                                "number_column",
-                                "cinema_id",
-                            ],
                             as: 'theater',
                             include: [{
+                                required: false,
                                 model: Cinema,
                                 as: 'cinema',
                             }]
@@ -56,15 +51,9 @@ router.get('/', async (req, res) => {
                     as: 'showtimes',
                     include: [{
                         model: Theater,
-                        attributes: [
-                            ["name", "theater_name"],
-                            "type",
-                            "number_row",
-                            "number_column",
-                            "cinema_id",
-                        ],
-                        as: 'theater',
+                        required: false,
                         include: [{
+                            required: false,
                             model: Cinema,
                             as: 'cinema',
                         }]
@@ -100,17 +89,13 @@ router.get('/trending', async (req, res, next) => {
                 {
                     model: Showtime,
                     as: 'showtimes',
+                    required: false,
                     include: [{
                         model: Theater,
-                        attributes: [
-                            ["name", "theater_name"],
-                            "type",
-                            "number_row",
-                            "number_column",
-                            "cinema_id",
-                        ],
                         as: 'theater',
+                        required: false,
                         include: [{
+                            required: false,
                             model: Cinema,
                             as: 'cinema',
                         }]
@@ -147,17 +132,13 @@ router.get('/new', async (req, res) => {
                 {
                     model: Showtime,
                     as: 'showtimes',
+                    required: false,
                     include: [{
                         model: Theater,
-                        attributes: [
-                            ["name", "theater_name"],
-                            "type",
-                            "number_row",
-                            "number_column",
-                            "cinema_id",
-                        ],
+                        required: false,
                         as: 'theater',
                         include: [{
+                            required: false,
                             model: Cinema,
                             as: 'cinema',
                         }]
@@ -194,16 +175,11 @@ router.get('/search/:keyword', async (req, res, next) => {
                 model: Showtime,
                 as: 'showtimes',
                 include: [{
+                    required: false,
                     model: Theater,
-                    attributes: [
-                        ["name", "theater_name"],
-                        "type",
-                        "number_row",
-                        "number_column",
-                        "cinema_id",
-                    ],
                     as: 'theater',
                     include: [{
+                        required: false,
                         model: Cinema,
                         as: 'cinema',
                     }]
