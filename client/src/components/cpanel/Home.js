@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
 import CinemaCpanel from '../../containers/cpanel/Cinema';
 import TheaterCpanel from '../../containers/cpanel/Theater';
 import MovieCpanel from '../../containers/cpanel/Movie';
-import ShowtimeCpanel from './Showtime';
+import ShowtimeCpanel from '../../containers/cpanel/Showtime';
 import IncomeCpanel from './Income';
 
 const drawerWidth = 240;
