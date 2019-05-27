@@ -51,6 +51,7 @@ router.get('/', async (req, res) => {
                     as: 'showtimes',
                     include: [{
                         model: Theater,
+                        as: 'theater',
                         required: false,
                         include: [{
                             required: false,
