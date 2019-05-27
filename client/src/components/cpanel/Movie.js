@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import * as TYPE from '../../constants/actionTypes'
-import CinemaDialog from '../helper/dialog/CinemaDialog'
+import MovieDialog from '../helper/dialog/MovieDialog'
 import Alert from '../helper/Alert'
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -420,7 +420,7 @@ const MovieCpanel = (props) => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleChangePage={handleChangePage}
         />
-        <CinemaDialog
+        <MovieDialog
           textTitle={
             isChoose.add ? TYPE.ADD_MOVIE :
             isChoose.update ? TYPE.UPDATE_MOVIE :
