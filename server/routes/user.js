@@ -113,8 +113,10 @@ router.post('/login',jsonParser, async function (req, res) {
     let response = {
         status: 200,
         payload: {
-
-            user: user
+            email: email,
+            role: user.role,
+            fullname: user.fullname,
+            phone:user.phone
         }
     };
     res.json(response);
@@ -172,8 +174,8 @@ router.put('/forgot',jsonParser, async function (req, res) {
             //res.json(user)
             let response = {
                 status: 200,
-                payload: {
-                    user: user
+                payload:{
+
                 }
             };
             res.json(response);
@@ -198,9 +200,8 @@ router.get('/profile',jsonParser, async function f(req, res) {
         let response = {
             status: 200,
             payload: {
-                user: user
             }
-        }
+        };
         res.json(response);
     }
 });
@@ -251,7 +252,7 @@ router.put('/profile',jsonParser, async function (req, res) {
             let response = {
                 status: 200,
                 payload: {
-                    user: user
+
                 }
             };
             res.json(response);
