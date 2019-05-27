@@ -142,6 +142,32 @@ router.put('/', jsonParser, async (req, res, next) => {
     const updated_at = new Date();
     const updateShowtime = req.body.showtime;
 
+    const theaters = await Theater.findAll({
+        where: {
+            id: updateShowtime.theater_id
+        },
+    });
+
+    if (!theaters || theaters.length <= 0) {
+        return res.json({
+            status: 404,
+            message: 'Not found theater',
+        });
+    }
+
+    const movies = await Movie.findAll({
+        where: {
+            id: updateShowtime.movie_id
+        },
+    });
+
+    if (!movies || movies.length <= 0) {
+        return res.json({
+            status: 404,
+            message: 'Not found movie',
+        });
+    }
+
     const showtimes = await Showtime.findOne({
         where: {
             id: updateShowtime.id
@@ -156,6 +182,8 @@ router.put('/', jsonParser, async (req, res, next) => {
         message = 'Not found';
     } else {
         const numAffectedRows = await Showtime.update({
+            movie_id: updateShowtime.movie_id,
+            theater_id: updateShowtime.theater_id,
             start_time: updateShowtime.start_time,
             end_time: updateShowtime.end_time,
             price: updateShowtime.price,
@@ -163,9 +191,7 @@ router.put('/', jsonParser, async (req, res, next) => {
         },
             {
                 where: {
-                    id: updateShowtime.id,
-                    movie_id: updateShowtime.movie_id,
-                    theater_id: updateShowtime.theater_id,
+                    id: updateShowtime.id
                 }
             });
         var status = 200;
