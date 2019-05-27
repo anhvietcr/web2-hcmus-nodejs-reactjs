@@ -1,4 +1,6 @@
 const Movie = require('../models/movie')
+const Theater = require('../models/theater')
+const Cinema = require('../models/cinema')
 const Router = require('express-promise-router')
 const { Op } = require('sequelize');
 const bodyParser = require('body-parser')
@@ -7,13 +9,83 @@ var jsonParser = bodyParser.json()
 
 let router = new Router();
 
-/***************HOME API ******************/
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
+    var movies = null
+    // console.log(req)
+    if (typeof req.query.id === 'undefined') {
+        console.log('1')
+
+        movies = await Movie.findAll(
+            {
+                order: [
+                    ['id', 'DESC'],
+                ],
+                include: [
+                    {
+                        model: Theater,
+                        as: 'theaters',
+                        required: false,
+                        include: [{
+                            model: Cinema,
+                            as: 'cinema',
+                            required: false,
+                        }],
+                    },
+                ]
+            }
+        );
+    } else {
+        movies = await Movie.findOne({
+            where: {
+                id: req.query.id
+            },
+            include: [
+                {
+                    model: Theater,
+                    as: 'theaters',
+                    required: false,
+                    include: [{
+                        model: Cinema,
+                        as: 'cinema',
+                        required: false,
+                    }],
+                },
+            ]
+        });
+    }
+    var status = 200;
+    var message = '';
+
+    if (!movies) {
+        status = 404;
+        message = 'Not found';
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: movies
+    });
+});
+
+router.get('/trending', async (req, res, next) => {
     const movies = await Movie.findAll(
         {
             order: [
-                ['id', 'DESC'],
+                ['view', 'DESC'],
             ],
+            include: [
+                {
+                    model: Theater,
+                    as: 'theaters',
+                    required: false,
+                    include: [{
+                        model: Cinema,
+                        as: 'cinema',
+                        required: false,
+                    }],
+                },
+            ]
         }
     );
     var status = 200;
@@ -27,23 +99,37 @@ router.get('/', async (req, res, next) => {
     return res.json({
         status: status,
         message: message,
-        payload: {
-            movies: movies
-        }
+        payload: movies
+
     });
 });
 
-router.get('/:id', async (req, res, next) => {
-    const movies = await Movie.findOne({
-        where: {
-            id: req.params.id
+
+router.get('/new', async (req, res) => {
+    const movies = await Movie.findAll(
+        {
+            order: [
+                ['opening_day', 'DESC'],
+            ],
+            include: [
+                {
+                    model: Theater,
+                    as: 'theaters',
+                    required: false,
+                    include: [{
+                        model: Cinema,
+                        as: 'cinema',
+                        required: false,
+                    }],
+                },
+            ]
         }
-    });
+    );
 
     var status = 200;
     var message = '';
 
-    if (!movies || movies.length <= 0) {
+    if (!movies) {
         status = 404;
         message = 'Not found';
     }
@@ -51,9 +137,7 @@ router.get('/:id', async (req, res, next) => {
     return res.json({
         status: status,
         message: message,
-        payload: {
-            movies: movies
-        }
+        payload: movies
     });
 });
 
@@ -61,7 +145,19 @@ router.get('/search/:keyword', async (req, res, next) => {
     const movies = await Movie.findAll({
         where: {
             name: { [Op.like]: '%' + req.params.keyword + '%' }
-        }
+        },
+        include: [
+            {
+                model: Theater,
+                as: 'theaters',
+                required: false,
+                include: [{
+                    model: Cinema,
+                    as: 'cinema',
+                    required: false,
+                }],
+            },
+        ]
     });
 
     var status = 200;
@@ -75,9 +171,7 @@ router.get('/search/:keyword', async (req, res, next) => {
     return res.json({
         status: status,
         message: message,
-        payload: {
-            movies: movies
-        }
+        payload: movies
     });
 });
 
@@ -118,9 +212,8 @@ router.post('/', jsonParser, async (req, res, next) => {
     return res.json({
         status: status,
         message: message,
-        payload: {
-            movie: movie
-        }
+        payload: movies
+
     });
 });
 
@@ -154,6 +247,47 @@ router.put('/', jsonParser, async (req, res, next) => {
             {
                 where: {
                     id: updateMovie.id
+                }
+            });
+
+        if (numAffectedRows <= 0) {
+            status = 503;
+            message = 'Update movie failed';
+        }
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+    });
+});
+
+
+router.put('/view', jsonParser, async (req, res, next) => {
+    const updated_at = new Date();
+    const movieId = req.query.id;
+
+    const movies = await Movie.findAll({
+        where: {
+            id: movieId
+        }
+    });
+
+    var status = 200;
+    var message = '';
+
+    if (!movies || movies.length <= 0) {
+        status = 404;
+        message = 'Not found movie';
+    } else {
+        var movie = movies[0];
+        const numAffectedRows = await Movie.update({
+            view: movie.view + 1,
+            updated_at: updated_at
+        },
+            {
+                where: {
+                    id: movie.id
                 }
             });
 
