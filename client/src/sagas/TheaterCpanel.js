@@ -14,7 +14,7 @@ function asyncTheaterList() {
 export function* actionTheaterList() {
     const response = yield call(asyncTheaterList);
 
-    yield put(actions.TheaterListAsync(response.data))
+    yield put(actions.TheaterListAsync(response.data.payload))
 }
 
 // Add
@@ -37,8 +37,9 @@ function asyncTheaterUpdate(theater) {
         .catch((e) => console.log(e));
 }
 export function* actionTheaterUpdate(data) {
-    const { payload } = data
+    const { payload } = data;
     const response = yield call(asyncTheaterUpdate, payload);
+    
     yield put(actions.TheaterUpdateAsync(response.data))
 }
 

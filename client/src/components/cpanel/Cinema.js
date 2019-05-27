@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import * as TYPE from '../../constants/actionTypes'
-import CustomDialog from '../helper/Dialog'
+import CinemaDialog from '../helper/dialog/CinemaDialog'
 import Alert from '../helper/Alert'
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -44,9 +44,9 @@ const styles = theme => ({
 })
 
 const lableDatas = [
-  { id: 0, label: 'Tên', name: 'name' },
-  { id: 1, label: 'Địa chỉ', name: 'address' },
-  { id: 2, label: 'Thao tác', name: 'actions' },
+  { id: 0, label: 'Tên', name: 'name', type: 'textbox', display: true, align: 'left' },
+  { id: 1, label: 'Địa chỉ', name: 'address', type: 'textbox', display: true, align: 'left' },
+  { id: 2, label: 'Thao tác', name: 'actions', type: 'icons', display: true, align: 'right' },
 ]
 
 const ToolbarTable = (props) => {
@@ -157,7 +157,7 @@ const PaginationTable = (props) => {
     <TablePagination
       rowsPerPageOptions={[5, 10, 25]}
       component="div"
-      count={dataFilter && dataFilter.length || 0}
+      count={dataFilter && dataFilter.length}
       rowsPerPage={rowsPerPage}
       page={page}
       backIconButtonProps={{
@@ -181,7 +181,7 @@ const CinemaCpanel = (props) => {
   const [dataTables, setDataTables] = useState([]);
   const [dataFilter, setDataFilter] = useState(dataTables);
   const [openDialog, setOpenDialog] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false)
+  const [dataLoaded, setDataLoaded] = useState(false);
   
   const [isChoose, setChoose] = useState({
     add: false,
@@ -310,7 +310,6 @@ const CinemaCpanel = (props) => {
           address: values.address,
           image: ''
       }
-      console.log(payload)
       actions.Add(payload);
 
       setValues({
@@ -321,24 +320,24 @@ const CinemaCpanel = (props) => {
       })
     }
 
-    setDataLoaded(false);
+    // setDataLoaded(false);
   }
 
   useEffect(() => {
+    // first load
+    actions.List()
+  }, [])
 
-    if (!CinemaCpanel.list) {
-      // first load 
-      actions.List()
+  useEffect(() => {
 
-    } else {
+    if (CinemaCpanel.cinemas) {
       if (!submitted) {
         // close dialog, update data
-        setDataFilter(CinemaCpanel.list.payload.cinemas);
-        setDataTables(CinemaCpanel.list.payload.cinemas);
+        setDataFilter(CinemaCpanel.cinemas);
+        setDataTables(CinemaCpanel.cinemas);
       } 
       
       if (submitted && CinemaCpanel.payload.status) {
-
         // alert
         if (CinemaCpanel.payload.status === 200) {
           setAlert({
@@ -351,13 +350,13 @@ const CinemaCpanel = (props) => {
           setAlert({
             count: alert.count + 1,
             open: true,
-            message: actions.CinemaCpanel.message,
+            message: CinemaCpanel.message,
             variant: "error"
           })
         }
       }
     }
-  }, [submitted, actions, CinemaCpanel.list])
+  }, [submitted, CinemaCpanel])
 
 
   return (
@@ -392,7 +391,7 @@ const CinemaCpanel = (props) => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleChangePage={handleChangePage}
         />
-        <CustomDialog
+        <CinemaDialog
           textTitle={
             isChoose.add ? TYPE.ADD_CINEMA :
             isChoose.update ? TYPE.UPDATE_CINEMA :

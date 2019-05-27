@@ -16,6 +16,11 @@ router.get('/', async (req, res, next) => {
             where: {
                 id: req.query.id
             },
+            include: [{
+                model: Cinema,
+                as: 'cinema',
+                required: false,
+            }]
         });
     } else {
         theaters = await Theater.findAll(
@@ -23,10 +28,15 @@ router.get('/', async (req, res, next) => {
                 order: [
                     ['id', 'DESC'],
                 ],
-            }
+                include: [{
+                    model: Cinema,
+                    as: 'cinema',
+                    required: false,
+                }]
+            },
         );
     }
-    
+
     var status = 200;
     var message = '';
 
@@ -143,6 +153,7 @@ router.put('/', jsonParser, async (req, res) => {
         const numAffectedRows = await Theater.update({
             name: updateTheater.name,
             type: updateTheater.type,
+            cinema_id: updateTheater.cinema_id,
             number_row: updateTheater.number_row,
             number_column: updateTheater.number_column,
             updated_at: updated_at
