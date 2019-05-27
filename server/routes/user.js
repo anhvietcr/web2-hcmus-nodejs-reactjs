@@ -1,6 +1,5 @@
 const User = require('../models/user');
-const Movie = require('../models/movie');
-const showtime = require('../models/showtime');
+
 
 const bcrypt = require('bcrypt');
 const Router = require('express-promise-router');
@@ -241,6 +240,5 @@ router.get('/forget-password', async function (req, res) {
     res.send(info);
     //res.send("Hello");
 });
-
 
 module.exports = router;

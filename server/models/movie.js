@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const db = require('./db')
+const db = require('./db');
 const Movie = db.define("Movie", {
   name: {
     type: Sequelize.STRING,
@@ -36,6 +36,12 @@ Movie.associate = function (models) {
     through: models.Showtime,
     as: 'theaters',
     foreignKey: 'movie_id',
+  });
+
+  Movie.hasMany(models.Showtime, {
+    foreignKey: 'movie_id',
+    sourceKey: 'id',
+    as: 'showtimes'
   });
 };
 

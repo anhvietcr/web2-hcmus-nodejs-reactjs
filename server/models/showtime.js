@@ -59,7 +59,17 @@ Showtime.associate = function (models) {
     Showtime.hasMany(models.Booking, {
         foreignKey: 'showtime_id',
         sourceKey: 'id',
-        as: 'showtime'
+        as: 'bookings'
+    });
+
+    Showtime.belongsTo(models.Theater, {
+        foreignKey: 'theater_id',
+        as: 'theater'
+    });
+
+    Showtime.belongsTo(models.Movie, {
+        foreignKey: 'movie_id',
+        as: 'movie'
     });
 };
 

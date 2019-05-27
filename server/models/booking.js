@@ -3,11 +3,11 @@ const db = require('./db')
 
 const Booking = db.define("Booking", {
   user_id: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     allowNull: false,
   },
   showtime_id: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     allowNull: false
   },
   bookingtime: {
