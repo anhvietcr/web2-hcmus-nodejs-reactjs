@@ -66,7 +66,9 @@ router.get('/', async (req, res) => {
     return res.json({
         status: status,
         message: message,
-        payload: movies
+        payload: {
+            movies: movies
+        }
     });
 });
 
@@ -101,8 +103,9 @@ router.get('/trending', async (req, res, next) => {
     return res.json({
         status: status,
         message: message,
-        payload: movies
-
+        payload: {
+            movies: movies
+        }
     });
 });
 
@@ -119,8 +122,18 @@ router.get('/new', async (req, res) => {
                     as: 'showtimes',
                     include: [{
                         model: Theater,
-                        attributes:[[Cinema.sequelize.col("name"), "cinema_name"]],
+                        attributes: [
+                            ["name", "theater_name"],
+                            "type",
+                            "number_row",
+                            "number_column",
+                            "cinema_id",
+                        ],
                         as: 'theater',
+                        include: [{
+                            model: Cinema,
+                            as: 'cinema',
+                        }]
                     },],
                 },
             ]
@@ -138,7 +151,9 @@ router.get('/new', async (req, res) => {
     return res.json({
         status: status,
         message: message,
-        payload: movies
+        payload: {
+            movies: movies
+        }
     });
 });
 
@@ -172,7 +187,9 @@ router.get('/search/:keyword', async (req, res, next) => {
     return res.json({
         status: status,
         message: message,
-        payload: movies
+        payload: {
+            movies: movies
+        }
     });
 });
 
@@ -213,8 +230,9 @@ router.post('/', jsonParser, async (req, res, next) => {
     return res.json({
         status: status,
         message: message,
-        payload: movies
-
+        payload: {
+            movies: movies
+        }
     });
 });
 
