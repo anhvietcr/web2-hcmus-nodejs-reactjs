@@ -75,7 +75,33 @@ const TheaterUpdateAsync = (payload) => {
 }
 const TheaterDeleteAsync = (payload) => {
     return {
-        type: TYPE.THEATER_DELETE_ASYNC,
+        type: TYPE.MOVIE_DELETE_ASYNC,
+        payload
+    }
+}
+
+// Movie Cpanel
+const MovieListAsync = (payload) => {
+    return {
+        type: TYPE.MOVIE_LIST_ASYNC,
+        payload
+    }
+}
+const MovieAddAsync = (payload) => {
+    return {
+        type: TYPE.MOVIE_ADD_ASYNC,
+        payload
+    }
+}
+const MovieUpdateAsync = (payload) => {
+    return {
+        type: TYPE.MOVIE_UPDATE_ASYNC,
+        payload
+    }
+}
+const MovieDeleteAsync = (payload) => {
+    return {
+        type: TYPE.MOVIE_DELETE_ASYNC,
         payload
     }
 }
@@ -96,4 +122,9 @@ export default {
     TheaterAddAsync,
     TheaterUpdateAsync,
     TheaterDeleteAsync,
+
+    MovieListAsync,
+    MovieAddAsync,
+    MovieUpdateAsync,
+    MovieDeleteAsync,
 }

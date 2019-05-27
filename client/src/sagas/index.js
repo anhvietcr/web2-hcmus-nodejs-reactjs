@@ -4,6 +4,7 @@ import actions from '../actions'
 import * as TYPE from '../constants/actionTypes'
 import * as CinemaCpanel from './CinemaCpanel'
 import * as TheaterCpanel from './TheaterCpanel'
+import * as MovieCpanel from './MovieCpanel'
 import * as Auth from './Auth'
 import * as User from './User'
 
@@ -43,5 +44,10 @@ function* CustomSaga() {
   yield takeLatest(TYPE.THEATER_ADD, TheaterCpanel.actionTheaterAdd)
   yield takeLatest(TYPE.THEATER_UPDATE, TheaterCpanel.actionTheaterUpdate)
   yield takeLatest(TYPE.THEATER_DELETE, TheaterCpanel.actionTheaterDelete)
+
+  yield takeLatest(TYPE.MOVIE_LIST, MovieCpanel.actionMovieList)
+  yield takeLatest(TYPE.MOVIE_ADD, MovieCpanel.actionMovieAdd)
+  yield takeLatest(TYPE.MOVIE_UPDATE, MovieCpanel.actionMovieUpdate)
+  yield takeLatest(TYPE.MOVIE_DELETE, MovieCpanel.actionMovieDelete)
 }
 export default CustomSaga
