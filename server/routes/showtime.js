@@ -1,8 +1,8 @@
-const Showtime = require('../models/showtime')
-const Theater = require('../models/theater')
-const Router = require('express-promise-router')
+const Showtime = require('../models/showtime');
+const Theater = require('../models/theater');
+const Router = require('express-promise-router');
 const bodyParser = require('body-parser')
-
+const Movie = require('../models/movie');
 let router = new Router();
 var jsonParser = bodyParser.json()
 
@@ -60,7 +60,7 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', jsonParser, async (req, res, next) => {
     const created_at = new Date();
     const newShowtime = req.body.showtime;
-   
+    console.log(req.body.showtime);
     const theaters = await Theater.findOne({
         where: {
             id: newShowtime.theater_id
@@ -88,7 +88,6 @@ router.post('/', jsonParser, async (req, res, next) => {
     }
 
     const theater = await Showtime.create({
-        id: 1,
         movie_id: newShowtime.movie_id,
         theater_id: newShowtime.theater_id,
         start_time: newShowtime.start_time,
