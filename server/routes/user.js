@@ -48,7 +48,7 @@ router.post('/register', jsonParser, async function (req, res) {
         let response = {
             status: 403,
             payload: {
-                temp: temp
+
             }
         };
         res.json(response);
@@ -73,8 +73,9 @@ router.post('/register', jsonParser, async function (req, res) {
         let response = {
             status: 200,
             payload: {
-
-                email: email
+                id:user.id,
+                email: email,
+                fullname:fullname
             }
         };
         res.json(response);
@@ -113,6 +114,7 @@ router.post('/login',jsonParser, async function (req, res) {
     let response = {
         status: 200,
         payload: {
+            id:user.id,
             email: email,
             role: user.role,
             fullname: user.fullname,
