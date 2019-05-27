@@ -24,6 +24,11 @@ router.get('/', async (req, res, next) => {
                     model: Cinema,
                     as: 'cinema',
                 }]
+            },
+            {
+                required: false,
+                model: Movie,
+                as: 'movie',
             }],
         });
     } else {
@@ -41,7 +46,12 @@ router.get('/', async (req, res, next) => {
                         model: Cinema,
                         as: 'cinema',
                     }]
-                },],
+                },
+                {
+                    required: false,
+                    model: Movie,
+                    as: 'movie',
+                }],
             }
         );
     }
