@@ -1,9 +1,11 @@
 const Movie = require('../models/movie')
 const Theater = require('../models/theater')
 const Cinema = require('../models/cinema')
+const Showtime = require('../models/showtime')
 const Router = require('express-promise-router')
 const { Op } = require('sequelize');
 const bodyParser = require('body-parser')
+var Sequelize = require('sequelize');
 
 var jsonParser = bodyParser.json()
 
@@ -113,14 +115,13 @@ router.get('/new', async (req, res) => {
             ],
             include: [
                 {
-                    model: Theater,
-                    as: 'theaters',
-                    required: false,
+                    model: Showtime,
+                    as: 'showtimes',
                     include: [{
-                        model: Cinema,
-                        as: 'cinema',
-                        required: false,
-                    }],
+                        model: Theater,
+                        attributes:[[Cinema.sequelize.col("name"), "cinema_name"]],
+                        as: 'theater',
+                    },],
                 },
             ]
         }
