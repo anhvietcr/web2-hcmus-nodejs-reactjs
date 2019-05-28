@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 
 // Sync database
 db.sync().then(() => {
-    app.listen(port, () => console.log(`Server listening on port ${port}`)); 
+    app.listen(port, () => console.log(`Server listening on port ${port}`));
 }).catch((err) => {
     console.log("Error occur when server start: " + err)
 });
@@ -26,6 +26,5 @@ app.use('/cinema', require('./routes/cinema'));
 app.use('/user', require('./routes/user'));
 app.use('/movie', require('./routes/movie'));
 app.use('/showtime', require('./routes/showtime'));
-
 app.use('/booking', require('./routes/booking'));
 app.use('/ticket',require('./routes/ticket'));
