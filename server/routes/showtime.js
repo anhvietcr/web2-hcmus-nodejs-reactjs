@@ -1,5 +1,6 @@
 const Showtime = require('../models/showtime');
 const Theater = require('../models/theater');
+const Cinema = require('../models/cinema');
 const Router = require('express-promise-router');
 const bodyParser = require('body-parser');
 const Movie = require('../models/movie');
@@ -8,13 +9,53 @@ var jsonParser = bodyParser.json();
 
 /***************HOME API ******************/
 router.get('/', async (req, res, next) => {
-    const showtimes = await Showtime.findAll(
-        {
-            order: [
-                ['id', 'DESC'],
-            ],
-        }
-    );
+    var showtimes = null;
+    if (typeof req.query.id !== 'undefined') {
+        showtimes = await Showtime.findAll({
+            where: {
+                id: req.query.id
+            },
+            include: [{
+                model: Theater,
+                as: 'theater',
+                required: false,
+                include: [{
+                    required: false,
+                    model: Cinema,
+                    as: 'cinema',
+                }]
+            },
+            {
+                required: false,
+                model: Movie,
+                as: 'movie',
+            }],
+        });
+    } else {
+        showtimes = await Showtime.findAll(
+            {
+                order: [
+                    ['id', 'DESC'],
+                ],
+                include: [{
+                    model: Theater,
+                    required: false,
+                    as: 'theater',
+                    include: [{
+                        required: false,
+                        model: Cinema,
+                        as: 'cinema',
+                    }]
+                },
+                {
+                    required: false,
+                    model: Movie,
+                    as: 'movie',
+                }],
+            }
+        );
+    }
+
     var status = 200;
     var message = '';
 
@@ -30,40 +71,15 @@ router.get('/', async (req, res, next) => {
             showtimes: showtimes
         }
     });
-});
-
-router.get('/:id', async (req, res, next) => {
-    const showtimes = await Showtime.findOne({
-        where: {
-            id: req.params.id
-        }
-    });
-
-    var status = 200;
-    var message = '';
-
-    if (!showtimes || showtimes.length <= 0) {
-        status = 404;
-        message = 'Not found';
-    }
-
-    return res.json({
-        status: status,
-        message: message,
-        payload: {
-            showtimes: showtimes
-        }
-    });
-
 });
 
 router.post('/', jsonParser, async (req, res, next) => {
     const created_at = new Date();
     const newShowtime = req.body.showtime;
-    const theaters = await Theater.findOne({
+    const theaters = await Theater.findAll({
         where: {
             id: newShowtime.theater_id
-        }
+        },
     });
 
     if (!theaters || theaters.length <= 0) {
@@ -73,7 +89,7 @@ router.post('/', jsonParser, async (req, res, next) => {
         });
     }
 
-    const movies = await Movie.findOne({
+    const movies = await Movie.findAll({
         where: {
             id: newShowtime.movie_id
         }
@@ -86,7 +102,23 @@ router.post('/', jsonParser, async (req, res, next) => {
         });
     }
 
-    const theater = await Showtime.create({
+    const showtimesWithMovieIdAndTheaterId = await Showtime.findAll({
+        where: {
+            movie_id: updateShowtime.movie_id,
+            theater_id: updateShowtime.theater_id,
+        }
+    });
+
+    if (showtimesWithMovieIdAndTheaterId && showtimesWithMovieIdAndTheaterId.length > 0) {
+        if(showtimesWithMovieIdAndTheaterId[0].id !== updateShowtime.id) {
+            return res.json({
+                status: 403,
+                message: 'Showtime is exists',
+            });
+        }
+    } 
+
+    const showtime = await Showtime.create({
         movie_id: newShowtime.movie_id,
         theater_id: newShowtime.theater_id,
         start_time: newShowtime.start_time,
@@ -107,7 +139,7 @@ router.post('/', jsonParser, async (req, res, next) => {
         status: status,
         message: message,
         payload: {
-            theater: theater
+            showtime: showtime
         }
     });
 });
@@ -126,7 +158,49 @@ router.put('/', jsonParser, async (req, res, next) => {
     const updated_at = new Date();
     const updateShowtime = req.body.showtime;
 
-    const showtimes = await Showtime.findOne({
+    const theaters = await Theater.findAll({
+        where: {
+            id: updateShowtime.theater_id
+        },
+    });
+
+    if (!theaters || theaters.length <= 0) {
+        return res.json({
+            status: 404,
+            message: 'Not found theater',
+        });
+    }
+
+    const movies = await Movie.findAll({
+        where: {
+            id: updateShowtime.movie_id
+        },
+    });
+
+    if (!movies || movies.length <= 0) {
+        return res.json({
+            status: 404,
+            message: 'Not found movie',
+        });
+    }
+
+    const showtimesWithMovieIdAndTheaterId = await Showtime.findAll({
+        where: {
+            movie_id: updateShowtime.movie_id,
+            theater_id: updateShowtime.theater_id,
+        }
+    });
+
+    if (showtimesWithMovieIdAndTheaterId && showtimesWithMovieIdAndTheaterId.length > 0) {
+        if(showtimesWithMovieIdAndTheaterId[0].id !== updateShowtime.id) {
+            return res.json({
+                status: 403,
+                message: 'Showtime is exists',
+            });
+        }
+    } 
+
+    const showtimes = await Showtime.findAll({
         where: {
             id: updateShowtime.id
         }
@@ -140,6 +214,8 @@ router.put('/', jsonParser, async (req, res, next) => {
         message = 'Not found';
     } else {
         const numAffectedRows = await Showtime.update({
+            movie_id: updateShowtime.movie_id,
+            theater_id: updateShowtime.theater_id,
             start_time: updateShowtime.start_time,
             end_time: updateShowtime.end_time,
             price: updateShowtime.price,
@@ -147,14 +223,12 @@ router.put('/', jsonParser, async (req, res, next) => {
         },
             {
                 where: {
-                    id: updateShowtime.id,
-                    movie_id: updateShowtime.movie_id,
-                    theater_id: updateShowtime.theater_id,
+                    id: updateShowtime.id
                 }
             });
         var status = 200;
         var message = '';
-    
+
         if (numAffectedRows <= 0) {
             status = 503;
             message = 'Update showtime failed';
@@ -173,7 +247,7 @@ router.delete('/:id', async (req, res, next) => {
             id: req.params.id
         }
     });
-    
+
     var status = 200;
     var message = '';
 

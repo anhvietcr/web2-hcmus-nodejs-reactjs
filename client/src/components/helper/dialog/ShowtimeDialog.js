@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import CustomTextField from '../TextField'
 import CustomButtonIcon from '../ButtonIcon'
+import CustomSelect from '../Select'
 import { withStyles } from '@material-ui/core/styles'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
@@ -14,7 +15,7 @@ const styles = theme => ({
   },
 })
 
-const CinemaDialog = (props) => {
+const ShowtimeDialog = (props) => {
   const {
     classes,
     textTitle,
@@ -24,13 +25,10 @@ const CinemaDialog = (props) => {
     setValues,
     openDialog,
     handleOpenDialog,
-    labels
+    labels,
+    dataTheaters,
+    dataMovies
   } = props
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setValues((values) => ({ ...values, [name]: value }))
-  }
 
   return (
     <Dialog
@@ -57,6 +55,32 @@ const CinemaDialog = (props) => {
             return false;
           }
         })}
+        <CustomSelect
+          label={
+            {
+              id: 0,
+              label: 'Phim',
+              name: 'movie_name',
+              name_id: 'movie_id'
+            }
+          }
+          values={values}
+          setValues={setValues}
+          dataCombobox={dataMovies}
+        />
+        <CustomSelect
+          label={
+            {
+              id: 1,
+              label: 'Rạp',
+              name: 'theater_name',
+              name_id: 'theater_id'
+            }
+          }
+          values={values}
+          setValues={setValues}
+          dataCombobox={dataTheaters}
+        />
         <Divider />
         <CustomButtonIcon
           text={textAction}
@@ -67,8 +91,8 @@ const CinemaDialog = (props) => {
   );
 }
 
-CinemaDialog.propTypes = {
+ShowtimeDialog.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(CinemaDialog)
+export default withStyles(styles)(ShowtimeDialog)

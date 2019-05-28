@@ -19,10 +19,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { Link } from 'react-router-dom';
 
-import MovieCpanel from './Movie';
 import CinemaCpanel from '../../containers/cpanel/Cinema';
 import TheaterCpanel from '../../containers/cpanel/Theater';
-import ShowtimeCpanel from './Showtime';
+import MovieCpanel from '../../containers/cpanel/Movie';
+import ShowtimeCpanel from '../../containers/cpanel/Showtime';
 import IncomeCpanel from './Income';
 
 const drawerWidth = 240;

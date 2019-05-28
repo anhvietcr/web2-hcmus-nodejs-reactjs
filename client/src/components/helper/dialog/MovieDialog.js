@@ -14,7 +14,7 @@ const styles = theme => ({
   },
 })
 
-const CinemaDialog = (props) => {
+const MovieDialog = (props) => {
   const {
     classes,
     textTitle,
@@ -67,8 +67,8 @@ const CinemaDialog = (props) => {
   );
 }
 
-CinemaDialog.propTypes = {
+MovieDialog.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(CinemaDialog)
+export default withStyles(styles)(MovieDialog)

@@ -24,14 +24,18 @@ router.get('/', async (req, res) => {
                 ],
                 include: [
                     {
-                        model: Theater,
-                        as: 'theaters',
-                        required: false,
+                        model: Showtime,
+                        as: 'showtimes',
                         include: [{
-                            model: Cinema,
-                            as: 'cinema',
                             required: false,
-                        }],
+                            model: Theater,
+                            as: 'theater',
+                            include: [{
+                                required: false,
+                                model: Cinema,
+                                as: 'cinema',
+                            }]
+                        },],
                     },
                 ]
             }
@@ -43,14 +47,18 @@ router.get('/', async (req, res) => {
             },
             include: [
                 {
-                    model: Theater,
-                    as: 'theaters',
-                    required: false,
+                    model: Showtime,
+                    as: 'showtimes',
                     include: [{
-                        model: Cinema,
-                        as: 'cinema',
+                        model: Theater,
+                        as: 'theater',
                         required: false,
-                    }],
+                        include: [{
+                            required: false,
+                            model: Cinema,
+                            as: 'cinema',
+                        }]
+                    },],
                 },
             ]
         });
@@ -66,7 +74,9 @@ router.get('/', async (req, res) => {
     return res.json({
         status: status,
         message: message,
-        payload: movies
+        payload: {
+            movies: movies
+        }
     });
 });
 
@@ -78,14 +88,19 @@ router.get('/trending', async (req, res, next) => {
             ],
             include: [
                 {
-                    model: Theater,
-                    as: 'theaters',
+                    model: Showtime,
+                    as: 'showtimes',
                     required: false,
                     include: [{
-                        model: Cinema,
-                        as: 'cinema',
+                        model: Theater,
+                        as: 'theater',
                         required: false,
-                    }],
+                        include: [{
+                            required: false,
+                            model: Cinema,
+                            as: 'cinema',
+                        }]
+                    },],
                 },
             ]
         }
@@ -101,8 +116,9 @@ router.get('/trending', async (req, res, next) => {
     return res.json({
         status: status,
         message: message,
-        payload: movies
-
+        payload: {
+            movies: movies
+        }
     });
 });
 
@@ -117,10 +133,16 @@ router.get('/new', async (req, res) => {
                 {
                     model: Showtime,
                     as: 'showtimes',
+                    required: false,
                     include: [{
                         model: Theater,
-                        attributes:[[Cinema.sequelize.col("name"), "cinema_name"]],
+                        required: false,
                         as: 'theater',
+                        include: [{
+                            required: false,
+                            model: Cinema,
+                            as: 'cinema',
+                        }]
                     },],
                 },
             ]
@@ -138,7 +160,9 @@ router.get('/new', async (req, res) => {
     return res.json({
         status: status,
         message: message,
-        payload: movies
+        payload: {
+            movies: movies
+        }
     });
 });
 
@@ -149,14 +173,18 @@ router.get('/search/:keyword', async (req, res, next) => {
         },
         include: [
             {
-                model: Theater,
-                as: 'theaters',
-                required: false,
+                model: Showtime,
+                as: 'showtimes',
                 include: [{
-                    model: Cinema,
-                    as: 'cinema',
                     required: false,
-                }],
+                    model: Theater,
+                    as: 'theater',
+                    include: [{
+                        required: false,
+                        model: Cinema,
+                        as: 'cinema',
+                    }]
+                },],
             },
         ]
     });
@@ -172,7 +200,9 @@ router.get('/search/:keyword', async (req, res, next) => {
     return res.json({
         status: status,
         message: message,
-        payload: movies
+        payload: {
+            movies: movies
+        }
     });
 });
 
@@ -213,8 +243,9 @@ router.post('/', jsonParser, async (req, res, next) => {
     return res.json({
         status: status,
         message: message,
-        payload: movies
-
+        payload: {
+            movie: movie
+        }
     });
 });
 
