@@ -7,7 +7,6 @@ const Movie = require('../models/movie');
 let router = new Router();
 var jsonParser = bodyParser.json();
 
-/***************HOME API ******************/
 router.get('/', async (req, res, next) => {
     var showtimes = null;
     if (typeof req.query.id !== 'undefined') {

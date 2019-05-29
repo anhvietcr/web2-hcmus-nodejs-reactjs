@@ -41,7 +41,7 @@ const Showtime = db.define("Showtime", {
             notNull: { args: true, msg: "start_time cannot be null" }
         },
         get: function () {
-            return Utils.formatDate(this.getDataValue('createdAt'))
+            return Utils.formatDate(this.getDataValue('start_time'))
         }
     },
     end_time: {
@@ -51,7 +51,7 @@ const Showtime = db.define("Showtime", {
             notNull: { args: true, msg: "end_time cannot be null" }
         },
         get: function () {
-            return Utils.formatDate(this.getDataValue('createdAt'))
+            return Utils.formatDate(this.getDataValue('end_time'))
         }
     },
     price: {
@@ -72,7 +72,7 @@ const Showtime = db.define("Showtime", {
         type: Sequelize.DATE,
         allowNull: false,
         get: function () {
-            return Utils.formatDate(this.getDataValue('createdAt'))
+            return Utils.formatDate(this.getDataValue('updatedAt'))
         }
     },
 });

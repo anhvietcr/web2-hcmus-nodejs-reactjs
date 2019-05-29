@@ -7,7 +7,6 @@ const bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 let router = new Router();
 
-/***************HOME API ******************/
 router.get('/', async (req, res, next) => {
     var cinemas = null
     if (typeof req.query.id !== 'undefined') {

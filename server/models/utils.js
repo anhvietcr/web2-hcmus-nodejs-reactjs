@@ -1,5 +1,11 @@
 class Utils {
     static formatDate(date) {
+        if (typeof date === 'undefined') {
+            return date;
+        }
+        if (date == null) {
+            return null
+        }
         var dd = date.getDate();
         var mmm = date.getMonth() + 1; //January is 0!
         var hh = date.getHours();
@@ -12,7 +18,8 @@ class Utils {
             mmm = '0' + mmm;
         }
         var result = `${dd}/${mmm}/${yyyy} ${hh}:${mm}` 
-        return result;
+        return result
     }
 }
+
 module.exports = Utils;

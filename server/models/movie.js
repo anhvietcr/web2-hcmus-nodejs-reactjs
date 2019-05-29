@@ -44,7 +44,7 @@ const Movie = db.define("Movie", {
     type: Sequelize.DATE,
     allowNull: false,
     get: function () {
-      return Utils.formatDate(this.getDataValue('createdAt'))
+      return Utils.formatDate(this.getDataValue('updatedAt'))
     }
   },
 });

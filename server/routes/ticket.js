@@ -39,5 +39,4 @@ router.post('/',jsonParser,async (req,res)=>{
     res.json(response);
 });
 
-
 module.exports = router;
