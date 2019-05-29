@@ -40,6 +40,11 @@ function User(state = initialState, action) {
     switch (action.type) {
         case TYPE.USER_UPDATE_INFO_ASYNC:
         return action.payload
+    case TYPE.USER_HISTORY_ASYNC:
+        return {
+            ...state,
+            history: action.payload
+        }
     default:
         return state;
     }

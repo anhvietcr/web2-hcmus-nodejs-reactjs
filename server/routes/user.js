@@ -423,7 +423,6 @@ router.post('/history',jsonParser, async (req, res) => {
         status = 404;
         message = 'Not found';
     }
-
     return res.json({
         status: status,
         message: message,

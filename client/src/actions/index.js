@@ -21,9 +21,17 @@ const SignUpAsync = (payload) => {
     }
 }
 
+// User Cpanel
 const UserUpdateInfoAsync = (payload) => {
     return {
         type: TYPE.USER_UPDATE_INFO_ASYNC,
+        payload
+    }
+}
+
+const UserHistoryAsync = (payload) => {
+    return {
+        type: TYPE.USER_HISTORY_ASYNC,
         payload
     }
 }
@@ -138,6 +146,7 @@ export default {
     SignUpAsync,
     
     UserUpdateInfoAsync,
+    UserHistoryAsync,
 
     CinemaListAsync,
     CinemaAddAsync,

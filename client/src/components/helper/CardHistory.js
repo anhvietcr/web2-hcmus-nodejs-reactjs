@@ -25,28 +25,34 @@ const styles = theme => ({
 })
 
 const CardHistory = (props) => {
-    const {classes, info} = props
+    const {classes, 
+        avatarText,
+        title,
+        subheader,
+        mainText,
+        time
+    } = props
 
     return (
         <Card className={classes.card}>
            <CardHeader
                 avatar={
                     <Avatar aria-label="Recipe">
-                    A{info}
+                    {avatarText}
                     </Avatar>
                 }
-                title="Rạp: Lotte Q7"
-                subheader="Cụm Sài Gòn"
+                title={title}
+                subheader={subheader}
                 className={classes.cardHeaderLeft}
             />
             <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="h5" component="h2">
-                    Tên phim
+                    {mainText}
                 </Typography>
             </CardContent>
             <CardActions>
                 <Typography>
-                    1/1/2019 00:00
+                    {time}
                 </Typography>
             </CardActions>
         </Card>
