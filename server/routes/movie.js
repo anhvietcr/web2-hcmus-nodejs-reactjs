@@ -3,6 +3,7 @@ const Theater = require('../models/theater')
 const Cinema = require('../models/cinema')
 const Showtime = require('../models/showtime')
 const Router = require('express-promise-router')
+// const Utils = require('utils')
 const { Op } = require('sequelize');
 const bodyParser = require('body-parser')
 var Sequelize = require('sequelize');
@@ -86,23 +87,11 @@ router.get('/trending', async (req, res, next) => {
             order: [
                 ['view', 'DESC'],
             ],
-            include: [
-                {
-                    model: Showtime,
-                    as: 'showtimes',
-                    required: false,
-                    include: [{
-                        model: Theater,
-                        as: 'theater',
-                        required: false,
-                        include: [{
-                            required: false,
-                            model: Cinema,
-                            as: 'cinema',
-                        }]
-                    },],
-                },
-            ]
+            where: {
+                view: {
+                    [Op.gt]: [0]
+                }
+            }
         }
     );
     var status = 200;
@@ -129,6 +118,13 @@ router.get('/new', async (req, res) => {
             order: [
                 ['opening_day', 'DESC'],
             ],
+            where: {
+                createdAt: {
+                    view: {
+                        [Op.gte]: Date()
+                    }
+                }
+            },
             include: [
                 {
                     model: Showtime,
@@ -143,7 +139,8 @@ router.get('/new', async (req, res) => {
                             model: Cinema,
                             as: 'cinema',
                         }]
-                    },],
+                    },
+                    ],
                 },
             ]
         }
