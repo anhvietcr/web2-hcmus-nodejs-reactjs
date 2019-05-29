@@ -21,9 +21,17 @@ const SignUpAsync = (payload) => {
     }
 }
 
+// User Cpanel
 const UserUpdateInfoAsync = (payload) => {
     return {
         type: TYPE.USER_UPDATE_INFO_ASYNC,
+        payload
+    }
+}
+
+const UserHistoryAsync = (payload) => {
+    return {
+        type: TYPE.USER_HISTORY_ASYNC,
         payload
     }
 }
@@ -106,6 +114,22 @@ const MovieDeleteAsync = (payload) => {
     }
 }
 
+const MovieListNewAsync = (payload) => {
+    return {
+        type: TYPE.MOVIE_LIST_NEW_ASYNC,
+        payload
+    }
+}
+
+const MovieListTrendAsync = (payload) => {
+    return {
+        type: TYPE.MOVIE_LIST_TREND_ASYNC,
+        payload
+    }
+}
+
+
+
 // Showtime Cpanel
 const ShowtimeListAsync = (payload) => {
     return {
@@ -138,6 +162,7 @@ export default {
     SignUpAsync,
     
     UserUpdateInfoAsync,
+    UserHistoryAsync,
 
     CinemaListAsync,
     CinemaAddAsync,
@@ -153,6 +178,8 @@ export default {
     MovieAddAsync,
     MovieUpdateAsync,
     MovieDeleteAsync,
+    MovieListNewAsync,
+    MovieListTrendAsync,
 
     ShowtimeListAsync,
     ShowtimeAddAsync,

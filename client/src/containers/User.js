@@ -12,13 +12,15 @@ class UserContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
+    const { User } = state
     return {
-        User: state.User
+        User
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    UserUpdateInfo: (payload) => {dispatch({type: TYPE.USER_UPDATE_INFO, payload})}
+    UserUpdateInfo: (payload) => {dispatch({type: TYPE.USER_UPDATE_INFO, payload})},
+    GetHistory: (payload) => {dispatch({type: TYPE.USER_HISTORY, payload})}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer)

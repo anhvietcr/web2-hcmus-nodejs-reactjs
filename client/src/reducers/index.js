@@ -40,6 +40,11 @@ function User(state = initialState, action) {
     switch (action.type) {
         case TYPE.USER_UPDATE_INFO_ASYNC:
         return action.payload
+    case TYPE.USER_HISTORY_ASYNC:
+        return {
+            ...state,
+            history: action.payload
+        }
     default:
         return state;
     }
@@ -126,7 +131,17 @@ function MovieCpanel(state = initialState, action) {
             return {
                 ...state,
                 payload: action.payload
-            } 
+            }
+        case TYPE.MOVIE_LIST_NEW_ASYNC:
+            return {
+                ...state,
+                news: action.payload
+            }
+        case TYPE.MOVIE_LIST_TREND_ASYNC:
+            return {
+                ...state,
+                trends: action.payload
+            }
         default:
             return state;
     }
