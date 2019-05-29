@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import SimpleSelect from './helper/SimpleSelect'
 import CustomDatePicker from './helper/DatePicker'
+import Navbar from './head/Navbar'
 
 const styles = theme => ({
   root: {
@@ -47,9 +48,9 @@ const Theater = (props) => {
 
   useEffect(() => {
     if (ShowtimeCpanel.showtimes_theater) {
-      const { theaters } = ShowtimeCpanel.showtimes_theater.payload
+      const { theater } = ShowtimeCpanel.showtimes_theater.payload
 
-      setDataShowtime(theaters[0])
+      setDataShowtime(theater)
     }
   }, [ShowtimeCpanel])
 
@@ -58,18 +59,16 @@ const Theater = (props) => {
     setValues((values) => ({ ...values, [name]: value }))
   }
 
+  // HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEE <<----
   const showShowTimes = (dataShowtime) => {
-    console.log(dataShowtime)
-
-    dataShowtime.map(showtime => {
-      return (
-        <p>{showtime.id}</p>
-      )
+    dataShowtime.movies.map((movie) => {
+        console.log(movie)
     })
   }
 
   return (
     <React.Fragment>
+      <Navbar />
       <CustomDatePicker
         handleChange={handleChangeValues} />
 
@@ -82,7 +81,7 @@ const Theater = (props) => {
         label={lableDatas}
       />
 
-      {dataShowtime.length > 0 && showShowTimes(dataShowtime)}
+      {dataShowtime.movies && showShowTimes(dataShowtime)}
 
     </React.Fragment>
   )
