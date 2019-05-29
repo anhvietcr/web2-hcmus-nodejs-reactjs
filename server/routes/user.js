@@ -290,8 +290,8 @@ router.post('/forget-password',jsonParser, async function (req, res) {
         return;
     }
     var contain = `Bấm vào link <a href = \`http://localhost:5000/user/verify?code=${code}\`> này </a> để khôi phục mật khẩu`;
-    console.log(contain);
-    //const info = await sendmail("phanthinhutranghahl@gmail.com", 'Quên mật khẩu', 'Bạn có quên mật khẩu', '<h1>Bạn có quên mật khẩu</h1>'+contain);
+    //console.log(contain);
+    const info = await sendmail(email, 'Quên mật khẩu', 'Bạn có quên mật khẩu', '<h1>Bạn có quên mật khẩu</h1>'+contain);
     // res.send(info);
     let respone = {
         status:200,
