@@ -121,9 +121,9 @@ const MovieListNewAsync = (payload) => {
     }
 }
 
-const MovieListViewestAsync = (payload) => {
+const MovieListTrendAsync = (payload) => {
     return {
-        type: TYPE.MOVIE_LIST_VIEWEST_ASYNC,
+        type: TYPE.MOVIE_LIST_TREND_ASYNC,
         payload
     }
 }
@@ -179,7 +179,7 @@ export default {
     MovieUpdateAsync,
     MovieDeleteAsync,
     MovieListNewAsync,
-    MovieListViewestAsync,
+    MovieListTrendAsync,
 
     ShowtimeListAsync,
     ShowtimeAddAsync,

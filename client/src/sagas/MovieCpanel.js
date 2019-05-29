@@ -73,16 +73,16 @@ export function* actionMovieListNew() {
 }
 
 // List Viewest
-function asyncMovieListViewest() {
-    return axios.get(END_POINT + 'movie/view')
+function asyncMovieListTrend() {
+    return axios.get(END_POINT + 'movie/trending')
         .then(response => response)
         .catch(e => console.log(e))
 }
 
-export function* actionMovieListViewest() {
-    const response = yield call(actionMovieListViewest);
+export function* actionMovieListTrend() {
+    const response = yield call(asyncMovieListTrend);
 
-    console.log("list movie viewest: ", response);
+    console.log("list movie trending: ", response);
 
-    yield put(actions.MovieListViewestAsync(response.data))
+    yield put(actions.MovieListTrendAsync(response.data))
 }

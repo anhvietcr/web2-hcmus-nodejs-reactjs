@@ -43,12 +43,12 @@ const Home = (props) => {
   const { MovieCpanel } = actions
   const [hover, setHover] = useState(false)
   const [dataMoviesNew, setDataMoviesNew] = useState([])
-  const [dataMoviesViewest, setDataMoviesViewest] = useState([])
+  const [dataMoviesTrend, setDataMoviesTrend] = useState([])
 
 
   useEffect(() => {
     actions.ListNews();
-    actions.ListViewest();
+    actions.ListTrends();
   }, []);
 
   useEffect(() => {
@@ -56,16 +56,17 @@ const Home = (props) => {
       const { movies } = MovieCpanel.news.payload
       setDataMoviesNew(movies)
     }
+
+    if (MovieCpanel.trends) {
+      const { movies } = MovieCpanel.trends.payload
+      setDataMoviesTrend(movies)
+    }
+
+    console.log(actions)
   }, [MovieCpanel]);
 
-
-  const handleClickBook = (e) => {
-    e.preventDefault()
-    console.log(e.target.id)
-  }
-
+  // render movie cards
   const showMovies = (data) => {
-
     return data.map((movie) => {
       return (
         <Grid item sm={6} xs={6} md={4} lg={3} key={movie.id}>
@@ -73,7 +74,6 @@ const Home = (props) => {
             id={movie.id}
             image="movie.jpg"
             mainText={movie.name}
-            handleClick={handleClickBook}
           />
         </Grid>
       )
@@ -97,18 +97,7 @@ const Home = (props) => {
         </div>
         <section className={classes.movies}>
           <Grid container spacing={8}>
-            <Grid item sm={6} xs={6} md={4} lg={3}>
-              <CardFilm />
-            </Grid>
-            <Grid item sm={6} xs={6} md={4} lg={3}>
-              <CardFilm />
-            </Grid>
-            <Grid item sm={6} xs={6} md={4} lg={3}>
-              <CardFilm />
-            </Grid>
-            <Grid item sm={6} xs={6} md={4} lg={3}>
-              <CardFilm />
-            </Grid>
+            {dataMoviesTrend.length > 0 && showMovies(dataMoviesTrend)}
           </Grid>
         </section>
       </div>

@@ -74,14 +74,11 @@ const CardFilm = (props) => {
     image,
     mainText,
     id,
-    handleClick
   } = props
   const [hover, setHover] = useState(false)
 
   return (
-    <Paper className={classes.movieCard}
-      onClick={handleClick}
-      >
+    <Paper className={classes.movieCard}>
       <img src={image} alt={"img"} />
       <a href={`/booking_movie/${id}`}>
         <div

@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     ListNews: () => {dispatch({type: TYPE.MOVIE_LIST_NEW})},
-    ListViewest: () => {dispatch({type: TYPE.MOVIE_LIST_VIEWEST})},
+    ListTrends: () => {dispatch({type: TYPE.MOVIE_LIST_TREND})},
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer)
