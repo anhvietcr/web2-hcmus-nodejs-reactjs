@@ -48,7 +48,7 @@ router.post('/register', jsonParser, async function (req, res) {
     const fullname = payload.fullname;
 
     const temp = await User.findOne({
-        where: { email },
+        where: { email:email },
     });
     if (temp) {
         let response = {
@@ -58,6 +58,7 @@ router.post('/register', jsonParser, async function (req, res) {
             }
         };
         res.json(response);
+        return;
     }
     if (repassword != password) {
         let response = {
@@ -67,6 +68,7 @@ router.post('/register', jsonParser, async function (req, res) {
             }
         };
         res.json(response);
+        return;
     }
     const hashedPassword = bcrypt.hashSync(password, 10);
     const user = await User.create({
@@ -88,6 +90,15 @@ router.post('/register', jsonParser, async function (req, res) {
     });
 });
 
+/** ===========   LOGIN =============*/
+
+// {
+//     "payload": {
+//     "email":"aaa@gmail.com",
+//         "password":"11"
+// }
+// }
+
 router.post('/login',jsonParser, async function (req, res) {
     const payload = req.body.payload;
     const email = payload.email;
@@ -106,6 +117,7 @@ router.post('/login',jsonParser, async function (req, res) {
             }
         };
         res.json(response);
+        return;
     }
     if (!bcrypt.compareSync(password, user.password)) {
 
@@ -116,6 +128,7 @@ router.post('/login',jsonParser, async function (req, res) {
             }
         };
         res.json(response);
+        return;
     }
     let response = {
         status: 200,
@@ -143,8 +156,13 @@ router.post('/logout',jsonParser, function (req, res) {
     }
 });
 
+
+
 //cập nhật thông tin cá nhân
-/******** ****** **** profile ****** ******* ******* *****/
+/******** ****** **** ======= PROFILE ========= ****** ******* ******* *****/
+
+
+
 router.get('/profile',jsonParser, async function f(req, res) {
     const payload = req.payload;
     const id = payload.userId;
@@ -158,6 +176,7 @@ router.get('/profile',jsonParser, async function f(req, res) {
             message: "Không tồn tại ID User"
         };
         res.json(response);
+        return;
     }
     else {
         let response = {
@@ -181,6 +200,7 @@ router.put('/profile',jsonParser, async function (req, res) {
             message: "Không tồn tại email"
         };
         res.json(response);
+        return;
     }
     const password = req.body.payload.password;
     const repassword = req.body.payload.repassword;
@@ -199,6 +219,7 @@ router.put('/profile',jsonParser, async function (req, res) {
             message: "Password không khớp nhau"
         };
         res.json(response);
+        return;
     }
 
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -222,6 +243,7 @@ router.put('/profile',jsonParser, async function (req, res) {
         });
 });
 
+
 /******** ****** **** forget-password ****** ******* ******* *****/
 
 /*
@@ -243,28 +265,29 @@ router.post('/forget-password',jsonParser, async function (req, res) {
     const email = payload.email;
 
     const user = await User.findOne({
-        where: { email:email },
+        where: {email: email}
     });
-
-    if(!user || user == ""){
-        let respone ={
-            status:403,
-            message:"email không tồn tại!"
+    if (!user || user == "") {
+        let respone = {
+            status: 403,
+            message: "email không tồn tại!"
 
         };
         res.json(respone);
+        return;
     }
-    let temp = await Verify.create({
+    let verify = await Verify.create({
        email:user.email,
        code:code,
         done:false
     });
-    if(!temp){
+    if(!verify){
         let respone = {
-          status:403,
-          message:"Không insert được csdl xuống"
+            status:403,
+            message:"Không insert được csdl xuống"
         };
         res.json(respone);
+        return;
     }
     var contain = `Bấm vào link <a href = \`http://localhost:5000/user/verify?code=${code}\`> này </a> để khôi phục mật khẩu`;
     console.log(contain);
@@ -287,62 +310,111 @@ router.get('/verify',async function (req,res) {
         where:{
             code:code
         }
-    }).then(function (user) {
-        //res.json(user)
-        let response = {
-            status: 200,
-            payload:{
+    });
+    verify.then(function (v) {
+        if(!v || v =="")
+        {
+            let respone = {
+                status:403,
+                message:"Lỗi tìm kiếm chuỗi mã hóa"
+            };
+            res.json(respone);
+            return;
+        }
+        else {
 
+
+            const createTime = v.createdAt;
+            var now = new Date();
+            var dt = Math.abs(now - createTime);
+
+            //set time in 10 minute
+            if (dt <= 600000 && v.done == false) {
+                //Nếu xác nhận được thì trả về email => Hiển thị form user/veryfile để cập nhật mật khẩu mới
+                let respone = {
+                    status: 200,
+                    message: "Xác nhận được mã code",
+                    payload: {
+                        email: v.email,
+                        code:code
+                    }
+                };
+                res.json(respone);
+                return;
+
+            } else {
+                let respone = {
+                    status: 408,
+                    message: "Chuỗi mã đã hết hạn!"
+                };
+                res.json(respone);
             }
-        };
-        res.json(response);
-    }).catch(function (err) { });
-
-    if(!verify || verify =="")
-    {
-        let respone = {
-            status:403,
-            message:"Lỗi tìm kiếm chuỗi mã hóa"
-        };
-        res.json(respone);
-    }
-    if(verify){
-        const dt = dateTime.create();
-        console.log(dt - verify.createdAt);
-//Nếu xác nhận được thì trả về email => Hiển thị form user/veryfile để cập nhật mật khẩu mới
-        let respone = {
-            status:200,
-            message:"Xác nhận được mã code",
-            payload:{
-                email:verify.email,
-
-            }
-        };
-        res.json(respone);
-    }
+        }
+    });
 
 });
 
+//
+// {
+//     "payload": {
+//     "email":"aaa@gmail.com",
+//         "code":"scbgnbm",
+//         "newpassword":"131",
+//         "renewpassword":"131"
+// }
+// }
+
+
 
 router.put('/verify',jsonParser, async function (req, res) {
-    const payload = req.payload;
-    const email = payload.email;
-    //const email = "phannhutrang@gmail.com";
-    const temp = await User.findOne({
-        where: { email },
-    });
-    if (!temp) {
-        let response = {
-            status: 403,
-            message: "Không tồn tại email"
-        };
-        res.json(response);
-    }
 
-    const newpassword = req.body.payload.newpassword;
-    const renewpassword = req.body.payload.renewpassword;
-    // const newpassword = "123";
-    // const renewpassword = "123";
+    const payload = req.body.payload;
+    const email = payload.email;
+    const code = payload.code;
+    const newpassword = payload.newpassword;
+    const renewpassword = payload.renewpassword;
+
+
+    // const verify = Verify.findOne({
+    //     where:{
+    //         code:code
+    //     }
+    // });
+    // verify.then(function (v) {
+    //     if(!v || v =="")
+    //     {
+    //         let respone = {
+    //             status:403,
+    //             message:"Lỗi tìm kiếm chuỗi mã hóa"
+    //         };
+    //         res.json(respone);
+    //         return;
+    //     }
+    //     else {
+    //         if (v.done == true) {
+    //             let respone = {
+    //                 status: 408,
+    //                 message: "Chuỗi mã đã hết hạn!"
+    //             };
+    //             res.json(respone);
+    //             return;
+    //         }
+    //     }
+    // });
+    //
+    // const user = await User.findOne({
+    //     where: { email:email }
+    // }).then( function (user){
+    //     if (!user) {
+    //         let response = {
+    //             status: 403,
+    //             message: "Không tồn tại email"
+    //         };
+    //         res.json(response);
+    //         return;
+    //     }
+    // });
+
     if (newpassword !== renewpassword) {
         let response = {
             status: 403,
@@ -350,32 +422,49 @@ router.put('/verify',jsonParser, async function (req, res) {
         };
         res.json(response);
     }
+    else {
 
-    const hashedPassword = bcrypt.hashSync(newpassword, 10);
-    const user = await User.update({
-        password: hashedPassword,
+        console.log("Update password");
+        const hashedPassword = bcrypt.hashSync(newpassword, 10);
+        await User.update({
+            password: hashedPassword,
 
-    }, {
-        where: {
-            email: email
-        }
-    }).then(function (user) {
-        //res.json(user)
-        let response = {
-            status: 200,
-            payload:{
-
+        }, {
+            where: {
+                email:email
             }
+        });
+        await Verify.update({
+            done: true,
+        }, {
+            where: {
+                code: code
+            }
+        });
+
+        let respone = {
+          message:"Cập nhật thành công!",
+          status: 200
         };
-        res.json(response);
-    });
+        res.json(respone);
+    }
 });
+
+
+/** ====== HISTORY ========= */
+
+// {
+//     "payload": {
+//     "userId":"1"
+// }
+// }
+
 
 router.post('/history',jsonParser, async (req, res) => {
     const payload = req.body.payload;
     const userId = payload.userId;
     const history = await Booking.findAll({
-        attributes: ['id', 'user_id', 'showtime_id'],
+        attributes: ['id', 'user_id', 'showtime_id','createdAt'],
         where: {
             //id: req.body.payload.userId
             user_id: userId
