@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import Alert from './helper/Alert'
 import CardHistory from './helper/CardHistory'
+import ButtonIcon from './helper/ButtonIcon'
 import * as TYPE from '../constants/actionTypes'
 import Requirement from './helper/Requirement'
 import { withStyles } from '@material-ui/core/styles'
@@ -111,7 +112,7 @@ const User = (props) => {
         password: TYPE.REQUIRE_PASSW,
         repassword: TYPE.REQUIRE_REPASSW, 
     });
-
+    const [dataHistory, setDataHistory] = useState([])
 
     useEffect(() => {
         if (submitted && actions.User.status) {
@@ -129,6 +130,14 @@ const User = (props) => {
                 });
             }
         }
+
+        // Get data history
+        if (actions.User.history) {
+            const { history } = actions.User.history.payload
+            setDataHistory(history)
+        }
+        
+
     }, [submitted, actions])
 
 
@@ -194,9 +203,20 @@ const User = (props) => {
     }
 
     const loadHistory = () => {
-        return [1,2,3,4,5].map((data) => {
+        actions.GetHistory({userId: 1});
+    }
+
+    const showHistory = () => {
+        return dataHistory.map((data) => {
             return (
-                <CardHistory info={data} key={data}/>
+                <CardHistory 
+                    key={data.id}
+                    avatarText={`A${data.id}`}
+                    title={data.showtime.theater.name}
+                    subheader={data.showtime.theater.cinema.name}
+                    mainText={data.showtime.movie.name}
+                    time={data.showtime.start_time}    
+                />
             )
         })
     }
@@ -335,7 +355,10 @@ const User = (props) => {
                         </Typography>
                     </div>
                     <Divider />
-                    {loadHistory()}
+                    <ButtonIcon 
+                        text="Hiển thị"
+                        handleSubmit={loadHistory} 
+                    />{dataHistory && showHistory()}
                 </Paper>
             </Grid>
         </Grid>        

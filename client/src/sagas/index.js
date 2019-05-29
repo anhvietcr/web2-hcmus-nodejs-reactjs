@@ -34,7 +34,9 @@ function* CustomSaga() {
   yield takeLatest(TYPE.DAT_VE, actionDatve);
   yield takeLatest(TYPE.SIGN_IN, Auth.actionSignIn);
   yield takeLatest(TYPE.SIGN_UP, Auth.actionSignUp);
+
   yield takeLatest(TYPE.USER_UPDATE_INFO, User.actionUserUpdateInfo);
+  yield takeLatest(TYPE.USER_HISTORY, User.actionUserHistory);
 
   yield takeLatest(TYPE.CINEMA_LIST, CinemaCpanel.actionCinemaList)
   yield takeLatest(TYPE.CINEMA_ADD, CinemaCpanel.actionCinemaAdd)
@@ -50,6 +52,8 @@ function* CustomSaga() {
   yield takeLatest(TYPE.MOVIE_ADD, MovieCpanel.actionMovieAdd)
   yield takeLatest(TYPE.MOVIE_UPDATE, MovieCpanel.actionMovieUpdate)
   yield takeLatest(TYPE.MOVIE_DELETE, MovieCpanel.actionMovieDelete)
+  yield takeLatest(TYPE.MOVIE_LIST_NEW, MovieCpanel.actionMovieListNew)
+  yield takeLatest(TYPE.MOVIE_LIST_TREND, MovieCpanel.actionMovieListTrend)
 
   yield takeLatest(TYPE.SHOWTIME_LIST, ShowtimeCpanel.actionShowtimeList)
   yield takeLatest(TYPE.SHOWTIME_ADD, ShowtimeCpanel.actionShowtimeAdd)

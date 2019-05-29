@@ -24,3 +24,18 @@ export function* actionUserUpdateInfo(payload) {
     }
     yield put(actions.UserUpdateInfoAsync(response))
 }
+
+// List History user by id
+function asyncUserHistory(payload) {
+    return axios.post(END_POINT + 'user/history', {
+        payload
+    }).then(response => response)
+        .catch(e => console.log(e))
+}
+
+export function* actionUserHistory(data) {
+    const { payload } = data
+    const response = yield call(asyncUserHistory, payload);
+
+    yield put(actions.UserHistoryAsync(response.data))
+}
