@@ -71,7 +71,7 @@ router.post('/register', jsonParser, async function (req, res) {
         return;
     }
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const user = await User.create({
+    const user = User.create({
         email: email,
         fullname: fullname,
         password: hashedPassword,
@@ -223,7 +223,7 @@ router.put('/profile',jsonParser, async function (req, res) {
     }
 
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const user = await User.update({
+    const user = User.update({
         password: hashedPassword,
         phone: phone,
         fullname: fullname
@@ -375,79 +375,87 @@ router.put('/verify',jsonParser, async function (req, res) {
     const renewpassword = payload.renewpassword;
 
 
-    // const verify = Verify.findOne({
-    //     where:{
-    //         code:code
-    //     }
-    // });
-    // verify.then(function (v) {
-    //     if(!v || v =="")
-    //     {
-    //         let respone = {
-    //             status:403,
-    //             message:"Lỗi tìm kiếm chuỗi mã hóa"
-    //         };
-    //         res.json(respone);
-    //         return;
-    //     }
-    //     else {
-    //         if (v.done == true) {
-    //             let respone = {
-    //                 status: 408,
-    //                 message: "Chuỗi mã đã hết hạn!"
-    //             };
-    //             res.json(respone);
-    //             return;
-    //         }
-    //     }
-    // });
-    //
-    // const user = await User.findOne({
-    //     where: { email:email }
-    // }).then( function (user){
-    //     if (!user) {
-    //         let response = {
-    //             status: 403,
-    //             message: "Không tồn tại email"
-    //         };
-    //         res.json(response);
-    //         return;
-    //     }
-    // });
+    const verify = await Verify.findOne({
+        where:{
+            code:code,
+            email:email
+        }
+    });
+    if(!verify || verify =="")
+    {
+        let respone = {
+            status:403,
+            message:"Lỗi tìm kiếm chuỗi mã hóa"
+        };
+        res.json(respone);
+        return verify;
+    }
 
+    if (verify.done == true) {
+        console.log("Chuỗi hết hạn");
+        let respone = {
+            status: 408,
+            message: "Chuỗi mã đã hết hạn!"
+        };
+        res.json(respone);
+        return verify;
+    }
+    console.log("jgfsf");
+    const user = await User.findOne({
+        where: {
+            email:email
+        }
+    });
+    if (!user) {
+        let response = {
+            status: 403,
+            message: "Không tồn tại email"
+        };
+        res.json(response);
+        return;
+    }
     if (newpassword !== renewpassword) {
         let response = {
             status: 403,
             message: "Mật khẩu không khớp nhau"
         };
         res.json(response);
+        return;
     }
-    else {
 
-        console.log("Update password");
-        const hashedPassword = bcrypt.hashSync(newpassword, 10);
-        await User.update({
-            password: hashedPassword,
+    console.log("Update password");
+    const hashedPassword = bcrypt.hashSync(newpassword, 10);
+    const u = await User.update({
+        password: hashedPassword,
 
-        }, {
-            where: {
-                email:email
-            }
-        });
-        await Verify.update({
-            done: true,
-        }, {
-            where: {
-                code: code
-            }
-        });
-
+    }, {
+        where: {
+            email:email
+        }
+    });
+    const v = await Verify.update({
+        done: true
+    }, {
+        where: {
+            code: code
+        }
+    });
+    if(v && u)
+    {
         let respone = {
-          message:"Cập nhật thành công!",
-          status: 200
+            message:"Cập nhật thành công!",
+            status: 200
         };
         res.json(respone);
     }
+    else{
+        let respone = {
+            message:"Cập nhật không thành công!",
+            status: 409
+        };
+        res.json(respone);
+    }
+
 });
 
 
