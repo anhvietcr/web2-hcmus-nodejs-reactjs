@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('./db')
+const Utils = require("./utils");
 
 const Showtime = db.define("Showtime", {
     id: {
@@ -38,6 +39,9 @@ const Showtime = db.define("Showtime", {
         allowNull: false,
         validate: {
             notNull: { args: true, msg: "start_time cannot be null" }
+        },
+        get: function () {
+            return Utils.formatDate(this.getDataValue('start_time'))
         }
     },
     end_time: {
@@ -45,6 +49,9 @@ const Showtime = db.define("Showtime", {
         allowNull: false,
         validate: {
             notNull: { args: true, msg: "end_time cannot be null" }
+        },
+        get: function () {
+            return Utils.formatDate(this.getDataValue('end_time'))
         }
     },
     price: {
@@ -52,6 +59,20 @@ const Showtime = db.define("Showtime", {
         allowNull: false,
         validate: {
             notNull: { args: true, msg: "price cannot be null" }
+        }
+    },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        get: function () {
+            return Utils.formatDate(this.getDataValue('createdAt'))
+        }
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        get: function () {
+            return Utils.formatDate(this.getDataValue('updatedAt'))
         }
     },
 });

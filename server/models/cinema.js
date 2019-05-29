@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('./db')
+const Utils = require("./utils");
 
 const Cinema = db.define("Cinema", {
   name: {
@@ -13,6 +14,20 @@ const Cinema = db.define("Cinema", {
   image: {
     type: Sequelize.STRING,
     allowNull: true
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    get: function () {
+      return Utils.formatDate(this.getDataValue('createdAt'))
+    }
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    get: function () {
+      return Utils.formatDate(this.getDataValue('updatedAt'))
+    }
   },
 });
 

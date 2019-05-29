@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('./db')
+const Utils = require("./utils");
 
 const Theater = db.define("Theater", {
   name: {
@@ -35,6 +36,20 @@ const Theater = db.define("Theater", {
     validate: {
       notNull: { args: true, msg: "number_column cannot be null" }
     },
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    get: function () {
+      return Utils.formatDate(this.getDataValue('createdAt'))
+    }
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    get: function () {
+      return Utils.formatDate(this.getDataValue('updatedAt'))
+    }
   },
 });
 

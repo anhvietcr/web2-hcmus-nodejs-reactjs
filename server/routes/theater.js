@@ -8,7 +8,6 @@ let router = new Router();
 
 var jsonParser = bodyParser.json()
 
-/***************HOME API ******************/
 router.get('/', async (req, res, next) => {
     var theaters = null
     if (typeof req.query.id !== 'undefined') {
