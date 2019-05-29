@@ -116,7 +116,7 @@ router.get('/movie/showtime', async (req, res, next) => {
     });
 });
 
-//
+
 // {
 //     "cinema": {
 //         "name": "KHTN2",

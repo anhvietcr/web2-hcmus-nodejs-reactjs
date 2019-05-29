@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('./db');
+const Utils = require("./utils");
 const Movie = db.define("Movie", {
   name: {
     type: Sequelize.STRING,
@@ -19,7 +20,10 @@ const Movie = db.define("Movie", {
   },
   opening_day: {
     type: Sequelize.DATE,
-    allowNull: true
+    allowNull: true,
+    get: function () {
+      return Utils.formatDate(this.getDataValue('opening_day'))
+    }
   },
   minute_time: {
     type: Sequelize.INTEGER,
@@ -28,6 +32,20 @@ const Movie = db.define("Movie", {
   view: {
     type: Sequelize.INTEGER,
     allowNull: true,
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    get: function () {
+      return Utils.formatDate(this.getDataValue('createdAt'))
+    }
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    get: function () {
+      return Utils.formatDate(this.getDataValue('createdAt'))
+    }
   },
 });
 

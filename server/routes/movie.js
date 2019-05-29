@@ -3,7 +3,6 @@ const Theater = require('../models/theater')
 const Cinema = require('../models/cinema')
 const Showtime = require('../models/showtime')
 const Router = require('express-promise-router')
-// const Utils = require('utils')
 const { Op } = require('sequelize');
 const bodyParser = require('body-parser')
 var Sequelize = require('sequelize');
@@ -119,10 +118,8 @@ router.get('/new', async (req, res) => {
                 ['opening_day', 'DESC'],
             ],
             where: {
-                createdAt: {
-                    view: {
-                        [Op.gte]: Date()
-                    }
+                opening_day: {
+                    [Op.gte]: new Date()
                 }
             },
             include: [
