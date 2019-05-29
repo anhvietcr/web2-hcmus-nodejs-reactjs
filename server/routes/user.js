@@ -7,6 +7,7 @@ const Booking = require('../models/booking');
 const Theater = require('../models/theater');
 const Ticket = require('../models/ticket');
 const Cinema = require('../models/cinema');
+const Register = require('../models/register');
 const bcrypt = require('bcrypt');
 const Router = require('express-promise-router');
 let router = new Router();
@@ -30,13 +31,13 @@ router.delete('/', async (req, res, next) => {
     next();
 });
 
-// {t
+// {
 //     "payload": {
 //     "fullname": "Loi hai",
 //         "email": "aaa@gmail.com",
 //         "password": "123",
 //         "repassword":"123"
-//}
+// }
 // }
 
 
@@ -71,25 +72,103 @@ router.post('/register', jsonParser, async function (req, res) {
         return;
     }
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const user = User.create({
+    let code = Math.random().toString(36).substring(2);
+    Register.create({
         email: email,
         fullname: fullname,
         password: hashedPassword,
-        role: 0 //Cái này quy định sao??
-    }).then(function (user) {
+        code:code,
+        done:false
+    }).then(function (register) {
         //res.json(user)
-        let response = {
-            status: 200,
-            payload: {
-                id:user.id,
-                email: email,
-                fullname:fullname
-            }
-        };
-        res.json(response);
+        if(!register)
+        {
+            let response = {
+                status: 409,
+                message:"Không thể insert xuống CSDL"
+            };
+            res.json(response);
+            return;
+        }
     });
+    var contain = `Bấm vào link <a href = \`http://localhost:5000/user/register?code=${code}\`> này </a> để xác nhận đăng ký`;
+    console.log(contain);
+    const info = await sendmail(email, 'Quên mật khẩu', 'Bạn có quên mật khẩu', '<h1>Đăng ký tài khoản</h1>'+contain);
+    // res.send(info);
+    let respone = {
+        status:200,
+        message:"Đã gửi mail thành công!",
+        payload:{
+        }
+    };
+    res.json(respone);
 });
 
+router.get('/register', jsonParser, async function (req, res) {
+
+    const code = req.query.code;
+    console.log(code);
+    const register =  await Register.findOne({
+        where:{
+            code:code
+        }
+    });
+
+
+    if(!register || register =="")
+    {
+        let respone = {
+            status:403,
+            message:"Lỗi tìm kiếm chuỗi mã hóa"
+        };
+        res.json(respone);
+    }
+    else {
+        const createTime = register.createdAt;
+        var now = new Date();
+        var dt = Math.abs(now - createTime);
+
+        //set time in 10 minute
+        if (dt <= 600000 && register.done == false) {
+            //Nếu xác nhận được thì trả về email => Hiển thị form user/veryfile để cập nhật mật khẩu mới
+            User.create({
+                email: register.email,
+                fullname: register.fullname,
+                password: register.password,
+                role:0
+            }).then(function (user) {
+                //res.json(user)
+                if(!user)
+                {
+                    let response = {
+                        status: 409,
+                        message:"Không thể insert xuống CSDL"
+                    };
+                    res.json(response);
+                }
+                else{
+                    let response = {
+                        status: 200,
+                        payload:{
+                            userId:user.id,
+                            email:user.email,
+                            fullname:user.fullname,
+                            role:user.role
+                        }
+                    };
+                    res.json(response);
+                }
+             });
+        }
+        else {
+            let respone = {
+                status: 408,
+                message: "Chuỗi mã đã hết hạn!"
+            };
+            res.json(respone);
+        }
+    }
+});
 /** ===========   LOGIN =============*/
 
 // {
@@ -290,8 +369,8 @@ router.post('/forget-password',jsonParser, async function (req, res) {
         return;
     }
     var contain = `Bấm vào link <a href = \`http://localhost:5000/user/verify?code=${code}\`> này </a> để khôi phục mật khẩu`;
-    console.log(contain);
-    //const info = await sendmail("phanthinhutranghahl@gmail.com", 'Quên mật khẩu', 'Bạn có quên mật khẩu', '<h1>Bạn có quên mật khẩu</h1>'+contain);
+    //console.log(contain);
+    const info = await sendmail(email, 'Quên mật khẩu', 'Bạn có quên mật khẩu', '<h1>Bạn có quên mật khẩu</h1>'+contain);
     // res.send(info);
     let respone = {
         status:200,
