@@ -131,7 +131,17 @@ function MovieCpanel(state = initialState, action) {
             return {
                 ...state,
                 payload: action.payload
-            } 
+            }
+        case TYPE.MOVIE_LIST_NEW_ASYNC:
+            return {
+                ...state,
+                news: action.payload
+            }
+        case TYPE.MOVIE_LIST_VIEWEST_ASYNC:
+            return {
+                ...state,
+                viewest: action.payload
+            }
         default:
             return state;
     }

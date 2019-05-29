@@ -58,3 +58,31 @@ export function* actionMovieDelete(data) {
 
     yield put(actions.MovieDeleteAsync(response.data))
 }
+
+// List new
+function asyncMovieListNew() {
+    return axios.get(END_POINT + 'movie/new')
+        .then(response => response)
+        .catch(e => console.log(e))
+}
+
+export function* actionMovieListNew() {
+    const response = yield call(asyncMovieListNew)
+
+    yield put(actions.MovieListNewAsync(response.data))
+}
+
+// List Viewest
+function asyncMovieListViewest() {
+    return axios.get(END_POINT + 'movie/view')
+        .then(response => response)
+        .catch(e => console.log(e))
+}
+
+export function* actionMovieListViewest() {
+    const response = yield call(actionMovieListViewest);
+
+    console.log("list movie viewest: ", response);
+
+    yield put(actions.MovieListViewestAsync(response.data))
+}

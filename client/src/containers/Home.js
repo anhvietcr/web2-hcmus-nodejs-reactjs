@@ -13,15 +13,16 @@ class HomeContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { QuanLyVe } = state;
+    const { MovieCpanel } = state;
 
     return {
-        QuanLyVe
+        MovieCpanel
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    Datve: (data) => { dispatch({type: TYPE.DAT_VE, data})}        
+    ListNews: () => {dispatch({type: TYPE.MOVIE_LIST_NEW})},
+    ListViewest: () => {dispatch({type: TYPE.MOVIE_LIST_VIEWEST})},
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer)

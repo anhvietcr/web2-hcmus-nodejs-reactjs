@@ -70,13 +70,20 @@ const styles = (theme) => ({
 });
 
 const CardFilm = (props) => {
-  const { classes } = props
+  const { classes,
+    image,
+    mainText,
+    id,
+    handleClick
+  } = props
   const [hover, setHover] = useState(false)
 
   return (
-    <Paper className={classes.movieCard}>
-      <img src="movie.jpg" alt={"img"} />
-      <a href="/ticket">
+    <Paper className={classes.movieCard}
+      onClick={handleClick}
+      >
+      <img src={image} alt={"img"} />
+      <a href={`/booking_movie/${id}`}>
         <div
           className={classNames(classes.overlap, classes.movieHover, hover ? classes.override : "")}
           onMouseOver={() => {
@@ -101,7 +108,7 @@ const CardFilm = (props) => {
         variant="h5"
         component="h3"
         className={classes.movieTitle}
-      > Tên phim
+      > {mainText}
         </Typography>
     </Paper>
   )

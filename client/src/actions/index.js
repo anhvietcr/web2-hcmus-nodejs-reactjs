@@ -114,6 +114,22 @@ const MovieDeleteAsync = (payload) => {
     }
 }
 
+const MovieListNewAsync = (payload) => {
+    return {
+        type: TYPE.MOVIE_LIST_NEW_ASYNC,
+        payload
+    }
+}
+
+const MovieListViewestAsync = (payload) => {
+    return {
+        type: TYPE.MOVIE_LIST_VIEWEST_ASYNC,
+        payload
+    }
+}
+
+
+
 // Showtime Cpanel
 const ShowtimeListAsync = (payload) => {
     return {
@@ -162,6 +178,8 @@ export default {
     MovieAddAsync,
     MovieUpdateAsync,
     MovieDeleteAsync,
+    MovieListNewAsync,
+    MovieListViewestAsync,
 
     ShowtimeListAsync,
     ShowtimeAddAsync,

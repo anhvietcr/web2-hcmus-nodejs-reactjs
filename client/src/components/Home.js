@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Navbar from './head/Navbar';
@@ -40,7 +40,45 @@ const styles = (theme) => ({
 
 const Home = (props) => {
   const { actions, classes } = props;
+  const { MovieCpanel } = actions
   const [hover, setHover] = useState(false)
+  const [dataMoviesNew, setDataMoviesNew] = useState([])
+  const [dataMoviesViewest, setDataMoviesViewest] = useState([])
+
+
+  useEffect(() => {
+    actions.ListNews();
+    actions.ListViewest();
+  }, []);
+
+  useEffect(() => {
+    if (MovieCpanel.news) {
+      const { movies } = MovieCpanel.news.payload
+      setDataMoviesNew(movies)
+    }
+  }, [MovieCpanel]);
+
+
+  const handleClickBook = (e) => {
+    e.preventDefault()
+    console.log(e.target.id)
+  }
+
+  const showMovies = (data) => {
+
+    return data.map((movie) => {
+      return (
+        <Grid item sm={6} xs={6} md={4} lg={3} key={movie.id}>
+          <CardFilm
+            id={movie.id}
+            image="movie.jpg"
+            mainText={movie.name}
+            handleClick={handleClickBook}
+          />
+        </Grid>
+      )
+    });
+  }
 
   return (
     <React.Fragment>
@@ -51,18 +89,7 @@ const Home = (props) => {
         </div>
         <section className={classes.movies}>
           <Grid container spacing={8}>
-            <Grid item sm={6} xs={6} md={4} lg={3}>
-              <CardFilm />
-            </Grid>
-            <Grid item sm={6} xs={6} md={4} lg={3}>
-              <CardFilm />
-            </Grid>
-            <Grid item sm={6} xs={6} md={4} lg={3}>
-              <CardFilm />
-            </Grid>
-            <Grid item sm={6} xs={6} md={4} lg={3}>
-              <CardFilm />
-            </Grid>
+            {dataMoviesNew.length > 0 && showMovies(dataMoviesNew)}
           </Grid>
         </section>
         <div className={classes.homeTitle}>
