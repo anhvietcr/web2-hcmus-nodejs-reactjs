@@ -70,7 +70,7 @@ router.get('/showtime', async (req, res, next) => {
     var status = 200;
     var message = '';
 
-    if (!theater || theaters.length <= 0) {
+    if (!theater || theater.length <= 0) {
         status = 404;
         message = 'Not found';
     }
