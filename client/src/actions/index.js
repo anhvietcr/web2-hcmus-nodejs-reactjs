@@ -155,6 +155,12 @@ const ShowtimeDeleteAsync = (payload) => {
         payload
     }
 }
+const ShowtimeByTheaterAsync = (payload) => {
+    return {
+        type: TYPE.SHOWTIME_BY_THEATER_ASYNC,
+        payload
+    }
+}
 
 export default {
     DatveAsync,
@@ -185,4 +191,5 @@ export default {
     ShowtimeAddAsync,
     ShowtimeUpdateAsync,
     ShowtimeDeleteAsync,
+    ShowtimeByTheaterAsync,
 }

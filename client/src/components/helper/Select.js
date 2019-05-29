@@ -25,7 +25,6 @@ const CustomSelect = (props) => {
   } = props
 
   const handleChange = (e) => {
-    console.log(e.target)
     const { name, value } = e.target
     setValues((values) => ({ ...values, [name]: value }));
   }

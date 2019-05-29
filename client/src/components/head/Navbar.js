@@ -11,21 +11,22 @@ const styles = theme => ({
         fontSize: '18px',
         padding: '0',
         margin: '0',
-
-        "& li": {
+        fontSize: '15px',
+        fontWeight: 600,
+        
+        "& a": {
             padding: '10px',
             border: '1px solid #eee',
             width: '100%',
             minWidthL: '50px',
-            "& > *": {
-                textDecoration: 'none',
-                color: '#000',
-            }
+            textDecoration: 'none',
+            color: '#000',
+            textTransform: 'uppercase',
         },
-        "& li:hover": {
-            backgroundColor: '#eee',
+        "& a:hover": {
+            backgroundColor: '#fafafa',
             cursor: 'pointer',
-            color: '#fcfcfc'
+            color: 'rgba(255, 0, 0, 0.7);'
         },
     }
 })
@@ -35,9 +36,9 @@ const Navbar = (props) => {
 
     return (
         <ul className="nav" className={classes.root}>
-            <li><NavLink to="/user">User</NavLink></li>
-            <li><NavLink to="/cpanel">Cpanel</NavLink></li>
-            <li><Link to="/">Home</Link></li>
+            <NavLink to="/">Trang chủ</NavLink>
+            <NavLink to="/theater">Rạp/Suất chiếu</NavLink>
+            <NavLink to="/cpanel">Cpanel</NavLink>
         </ul>
     )
 }
