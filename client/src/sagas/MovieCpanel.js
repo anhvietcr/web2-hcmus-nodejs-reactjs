@@ -82,7 +82,5 @@ function asyncMovieListTrend() {
 export function* actionMovieListTrend() {
     const response = yield call(asyncMovieListTrend);
 
-    console.log("list movie trending: ", response);
-
     yield put(actions.MovieListTrendAsync(response.data))
 }

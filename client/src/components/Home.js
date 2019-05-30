@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Navbar from './head/Navbar';
 import Grid from '@material-ui/core/Grid'
 import CardFilm from './helper/CardFilm'
+import SimpleTextField from './helper/SimpleTextField'
 
 const styles = (theme) => ({
   root: {
@@ -61,13 +62,11 @@ const Home = (props) => {
       const { movies } = MovieCpanel.trends.payload
       setDataMoviesTrend(movies)
     }
-
-    console.log(actions)
   }, [MovieCpanel]);
 
   // render movie cards
   const showMovies = (data) => {
-    return data.map((movie) => {
+    return data.slice(0, 11).map((movie) => {
       return (
         <Grid item sm={6} xs={6} md={4} lg={3} key={movie.id}>
           <CardFilm
@@ -83,6 +82,7 @@ const Home = (props) => {
   return (
     <React.Fragment>
       <Navbar />
+      <SimpleTextField label="Tìm suất chiếu của phim" />
       <div className={classes.root}>
         <div className={classes.homeTitle}>
           <h2>movie news</h2>
@@ -93,7 +93,7 @@ const Home = (props) => {
           </Grid>
         </section>
         <div className={classes.homeTitle}>
-          <h3>movie views</h3>
+          <h3>movie trend</h3>
         </div>
         <section className={classes.movies}>
           <Grid container spacing={8}>

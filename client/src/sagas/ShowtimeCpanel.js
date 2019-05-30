@@ -59,3 +59,20 @@ export function* actionShowtimeDelete(data) {
 
     yield put(actions.ShowtimeDeleteAsync(response.data))
 }
+
+// Show Showtime by Theater
+function asyncShowtimeByTheater(payload) {
+    const { theater_id } = payload
+    if (!theater_id) return false;
+
+    return axios.get(END_POINT + 'theater/showtime?theater_id=' + parseInt(theater_id))
+        .then(response => response)
+        .catch(e => console.log(e));
+}
+
+export function* actionShowtimeByTheater(data) {
+    const { payload } = data;
+    const response = yield call(asyncShowtimeByTheater, payload);
+
+    yield put(actions.ShowtimeByTheaterAsync(response.data))
+}

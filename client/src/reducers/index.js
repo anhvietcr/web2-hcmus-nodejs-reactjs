@@ -171,6 +171,12 @@ function ShowtimeCpanel(state = initialState, action) {
                 ...state,
                 payload: action.payload
             } 
+
+        case TYPE.SHOWTIME_BY_THEATER_ASYNC: 
+            return {
+                ...state,
+                showtimes_theater: action.payload
+            }
         default:
             return state;
     }

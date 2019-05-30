@@ -54,7 +54,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/showtime', async (req, res, next) => {
-    const theaters = await Theater.findAll({
+    const theater = await Theater.findOne({
         where: {
             id: req.query.theater_id
         },
@@ -70,7 +70,7 @@ router.get('/showtime', async (req, res, next) => {
     var status = 200;
     var message = '';
 
-    if (!theaters || theaters.length <= 0) {
+    if (!theater || theater.length <= 0) {
         status = 404;
         message = 'Not found';
     }
@@ -79,7 +79,7 @@ router.get('/showtime', async (req, res, next) => {
         status: status,
         message: message,
         payload: {
-            theaters: theaters
+            theater: theater
         }
     });
 });
