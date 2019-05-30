@@ -193,7 +193,8 @@ router.post('/login',jsonParser, async function (req, res) {
             status: 403,//Khong ton tai email
             payload: {
 
-            }
+            },
+            message:"Không tồn tại email"
         };
         res.json(response);
         return;
@@ -204,7 +205,8 @@ router.post('/login',jsonParser, async function (req, res) {
             status: 403,//Sai mat khau
             payload: {
 
-            }
+            },
+            message:"Sai password"
         };
         res.json(response);
         return;
