@@ -50,12 +50,6 @@ const Movie = db.define("Movie", {
 });
 
 Movie.associate = function (models) {
-  Movie.belongsToMany(models.Theater, {
-    through: models.Showtime,
-    as: 'theaters',
-    foreignKey: 'movie_id',
-  });
-
   Movie.hasMany(models.Showtime, {
     foreignKey: 'movie_id',
     as: 'showtimes'

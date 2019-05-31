@@ -1,6 +1,7 @@
 const Cinema = require('../models/cinema')
 const Theater = require('../models/theater')
 const Movie = require('../models/movie')
+const Showtime = require('../models/showtime')
 const Router = require('express-promise-router')
 const bodyParser = require('body-parser')
 
@@ -8,13 +9,24 @@ var jsonParser = bodyParser.json()
 let router = new Router();
 
 router.get('/', async (req, res, next) => {
+    var status = 200;
+    var message = '';
+    var payload = null;
     var cinemas = null
     if (typeof req.query.id !== 'undefined') {
-        cinemas = await Cinema.findAll({
+        cinemas = await Cinema.findOne({
             where: {
                 id: req.query.id
             }
         });
+        if (!cinemas || cinemas.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        } else {
+            payload = {
+                cinema: cinemas
+            }
+        }
     } else {
         cinemas = await Cinema.findAll(
             {
@@ -23,27 +35,26 @@ router.get('/', async (req, res, next) => {
                 ],
             }
         );
-    }
-
-    var status = 200;
-    var message = '';
-
-    if (!cinemas || cinemas.length <= 0) {
-        status = 404;
-        message = 'Not found';
+        if (!cinemas || cinemas.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        } else {
+            payload = {
+                cinemas: cinemas
+            }
+        }
     }
 
     return res.json({
         status: status,
         message: message,
-        payload: {
-            cinemas: cinemas
-        }
+        payload: payload
     });
 });
 
+
 router.get('/theater', async (req, res) => {
-    const cinemas = await Cinema.findAll({
+    const cinema = await Cinema.findOne({
         where: {
             id: req.query.cinema_id
         },
@@ -52,13 +63,14 @@ router.get('/theater', async (req, res) => {
             as: 'theaters',
             required: false,
             include: [{
-                model: Movie,
-                as: 'movies',
+                model: Showtime,
+                as: 'showtimes',
                 required: false,
-                attributes: ['id', 'name', 'image', 'trailer', 'introduce', 'opening_day', 'view'],
-                through: {
-                    attributes: ['start_time', 'end_time', 'price'],
-                }
+                include: [{
+                    model: Movie,
+                    as: 'movie',
+                    required: false,
+                }]
             }]
         }]
     });
@@ -66,7 +78,7 @@ router.get('/theater', async (req, res) => {
     var status = 200;
     var message = '';
 
-    if (!cinemas || cinemas.length <= 0) {
+    if (!cinema) {
         status = 404;
         message = 'Not found';
     }
@@ -75,33 +87,40 @@ router.get('/theater', async (req, res) => {
         status: status,
         message: message,
         payload: {
-            cinemas: cinemas
+            cinema: cinema
         }
     });
 });
 
 router.get('/movie/showtime', async (req, res, next) => {
-
-    const movies = await Movie.findAll({
+    const cinema = await Cinema.findOne({
         where: {
-            id: req.query.movie_id,
+            id: req.query.cinema_id
         },
         include: [{
             model: Theater,
             as: 'theaters',
             required: false,
-            where: {
-                cinema_id: req.query.cinema_id
-            },
-            through: {
-            }
+            include: [{
+                model: Showtime,
+                as: 'showtimes',
+                required: false,
+                include: [{
+                    model: Movie,
+                    as: 'movie',
+                    required: false,
+                    where: {
+                        id: req.query.movie_id,
+                    },
+                }]
+            }]
         }]
     });
 
     var status = 200;
     var message = '';
 
-    if (!movies || movies.length <= 0) {
+    if (!cinema) {
         status = 404;
         message = 'Not found';
     }
@@ -110,7 +129,7 @@ router.get('/movie/showtime', async (req, res, next) => {
         status: status,
         message: message,
         payload: {
-            movies: movies
+            cinema: cinema
         }
     });
 });

@@ -58,11 +58,6 @@ Theater.associate = function (models) {
     foreignKey: 'cinema_id',
     as: 'cinema'
   });
-  Theater.belongsToMany(models.Movie, {
-    through: models.Showtime,
-    as: 'movies',
-    foreignKey: 'theater_id'
-  });
   Theater.hasMany(models.Showtime, {
     foreignKey: 'theater_id',
     sourceKey: 'id',

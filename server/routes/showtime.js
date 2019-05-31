@@ -9,8 +9,12 @@ var jsonParser = bodyParser.json();
 
 router.get('/', async (req, res, next) => {
     var showtimes = null;
+    var status = 200;
+    var message = '';
+    var payload = null
+
     if (typeof req.query.id !== 'undefined') {
-        showtimes = await Showtime.findAll({
+        showtimes = await Showtime.findOne({
             where: {
                 id: req.query.id
             },
@@ -30,6 +34,16 @@ router.get('/', async (req, res, next) => {
                 as: 'movie',
             }],
         });
+
+        if (!showtimes || showtimes.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        } else {
+            payload = {
+                showtime: showtimes
+            }
+        }
+
     } else {
         showtimes = await Showtime.findAll(
             {
@@ -53,22 +67,21 @@ router.get('/', async (req, res, next) => {
                 }],
             }
         );
-    }
 
-    var status = 200;
-    var message = '';
-
-    if (!showtimes || showtimes.length <= 0) {
-        status = 404;
-        message = 'Not found';
+        if (!showtimes || showtimes.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        } else {
+            payload = {
+                showtimes: showtimes
+            }
+        }
     }
 
     return res.json({
         status: status,
         message: message,
-        payload: {
-            showtimes: showtimes
-        }
+        payload: payload
     });
 });
 
@@ -101,22 +114,6 @@ router.post('/', jsonParser, async (req, res, next) => {
         });
     }
 
-    const showtimesWithMovieIdAndTheaterId = await Showtime.findAll({
-        where: {
-            movie_id: updateShowtime.movie_id,
-            theater_id: updateShowtime.theater_id,
-        }
-    });
-
-    if (showtimesWithMovieIdAndTheaterId && showtimesWithMovieIdAndTheaterId.length > 0) {
-        if(showtimesWithMovieIdAndTheaterId[0].id !== updateShowtime.id) {
-            return res.json({
-                status: 403,
-                message: 'Showtime is exists',
-            });
-        }
-    } 
-
     const showtime = await Showtime.create({
         movie_id: newShowtime.movie_id,
         theater_id: newShowtime.theater_id,
@@ -129,7 +126,7 @@ router.post('/', jsonParser, async (req, res, next) => {
     var status = 200;
     var message = '';
 
-    if (!theater) {
+    if (!showtime) {
         status = 503;
         message = 'Create showtime failed';
     }
@@ -191,13 +188,13 @@ router.put('/', jsonParser, async (req, res, next) => {
     });
 
     if (showtimesWithMovieIdAndTheaterId && showtimesWithMovieIdAndTheaterId.length > 0) {
-        if(showtimesWithMovieIdAndTheaterId[0].id !== updateShowtime.id) {
+        if (showtimesWithMovieIdAndTheaterId[0].id !== updateShowtime.id) {
             return res.json({
                 status: 403,
                 message: 'Showtime is exists',
             });
         }
-    } 
+    }
 
     const showtimes = await Showtime.findAll({
         where: {
