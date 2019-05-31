@@ -19,6 +19,7 @@ function App() {
           <Route path="/user" component={User} />
           <Route path="/cpanel" component={HomeCpanel} />
           <Route path="/theater" component={Theater} />
+          <Route path="/search" component={HomeCpanel} />
           <Route path="/" component={Home} />
       </Switch>
     </div>

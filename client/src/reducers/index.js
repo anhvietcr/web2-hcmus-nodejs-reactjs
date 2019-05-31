@@ -159,23 +159,25 @@ function ShowtimeCpanel(state = initialState, action) {
                 ...state,
                 payload: action.payload
             }
-
         case TYPE.SHOWTIME_UPDATE_ASYNC:
             return {
                 ...state,
                 payload: action.payload
             }
-
         case TYPE.SHOWTIME_DELETE_ASYNC:
             return {
                 ...state,
                 payload: action.payload
             } 
-
         case TYPE.SHOWTIME_BY_THEATER_ASYNC: 
             return {
                 ...state,
                 showtimes_theater: action.payload
+            }
+        case TYPE.SHOWTIME_BY_CINEMA_ASYNC: 
+            return {
+                ...state,
+                showtimes_cinema: action.payload
             }
         default:
             return state;

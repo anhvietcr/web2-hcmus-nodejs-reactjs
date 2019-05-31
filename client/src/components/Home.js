@@ -79,10 +79,19 @@ const Home = (props) => {
     });
   }
 
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && e.target.value !== "") {
+      actions.history.push("/search?phim="+e.target.value)
+    }
+  }
+
   return (
     <React.Fragment>
       <Navbar />
-      <SimpleTextField label="Tìm suất chiếu của phim" />
+      <SimpleTextField
+        label="Tìm suất chiếu của phim" 
+        handleSearch={handleSearch}
+        />
       <div className={classes.root}>
         <div className={classes.homeTitle}>
           <h2>movie news</h2>
