@@ -172,9 +172,12 @@ router.get('/new', async (req, res) => {
 });
 
 router.get('/search/:keyword', async (req, res, next) => {
+
+    var keyword = decodeURI(req.params.keyword).toLowerCase();
+
     const movies = await Movie.findAll({
         where: {
-            name: { [Op.like]: '%' + req.params.keyword + '%' }
+            name: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('Movie.name')), 'LIKE', '%' + keyword + '%')
         },
         include: [
             {
