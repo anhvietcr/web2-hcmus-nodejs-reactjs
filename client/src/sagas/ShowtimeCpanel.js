@@ -76,3 +76,20 @@ export function* actionShowtimeByTheater(data) {
 
     yield put(actions.ShowtimeByTheaterAsync(response.data))
 }
+
+// Show Showtime by Cinama & Movie
+function asyncShowtimeByCinema(payload) {
+    const { movie_id, cinema_id } = payload
+    if (!cinema_id || !movie_id) return false;
+
+    return axios.get(END_POINT + '/cinema/movie/showtime?cinema_id='+parseInt(cinema_id)+'&movie_id='+parseInt(movie_id))
+        .then(response => response)
+        .catch(e => console.log(e));
+}
+
+export function* actionShowtimeByCinema(data) {
+    const { payload } = data;
+    const response = yield call(asyncShowtimeByCinema, payload);
+
+    yield put(actions.ShowtimeByCinemaAsync(response.data))
+}

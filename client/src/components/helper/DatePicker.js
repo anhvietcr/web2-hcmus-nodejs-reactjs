@@ -23,7 +23,7 @@ const CustomDatePicker = (props) => {
     <form className={classes.container} noValidate>
       <TextField
         id="date"
-        label="Birthday"
+        label="Chọn ngày"
         type="date"
         defaultValue="2019-06-01"
         name="date"
