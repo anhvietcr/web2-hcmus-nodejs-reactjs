@@ -142,6 +142,11 @@ function MovieCpanel(state = initialState, action) {
                 ...state,
                 trends: action.payload
             }
+        case TYPE.MOVIE_SEARCH_KEYWORD_ASYNC:
+            return {
+                ...state,
+                search: action.payload
+            }
         default:
             return state;
     }

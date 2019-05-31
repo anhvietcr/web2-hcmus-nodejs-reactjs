@@ -81,7 +81,7 @@ const Home = (props) => {
 
   const handleSearch = (e) => {
     if (e.key === 'Enter' && e.target.value !== "") {
-      actions.history.push("/search?phim="+e.target.value)
+      actions.history.push("/movie/search?key="+e.target.value)
     }
   }
 
