@@ -54,6 +54,10 @@ router.get('/', async (req, res, next) => {
 
 
 router.get('/theater', async (req, res) => {
+
+    var payload = null
+    var theaters = []
+
     const cinema = await Cinema.findOne({
         where: {
             id: req.query.cinema_id
@@ -61,34 +65,53 @@ router.get('/theater', async (req, res) => {
         include: [{
             model: Theater,
             as: 'theaters',
-            required: false,
+            required: false
+        }]
+    })
+
+    for (var i = 0; i < cinema.theaters.length; i++) {
+        const entry = cinema.theaters[i];
+        const movies = await Movie.findAll({
             include: [{
                 model: Showtime,
                 as: 'showtimes',
                 required: false,
-                include: [{
-                    model: Movie,
-                    as: 'movie',
-                    required: false,
-                }]
+                where: {
+                    theater_id: theaterQuery.id
+                }
             }]
-        }]
-    });
+        });
+        const theater = {
+            name: entry.name,
+            cinema_id: entry.cinema_id,
+            type: entry.type,
+            number_row: entry.number_row,
+            number_column: entry.number_column,
+            id: entry.id,
+            createdAt: entry.createdAt,
+            updatedAt: entry.updatedAt,
+            movies: movies
+        };
+        theaters.push(theater);
+    }
+
+
+    payload = {
+        theaters: theaters
+    }
 
     var status = 200;
     var message = '';
 
     if (!cinema) {
         status = 404;
-        message = 'Not found';
+        message = 'Not found cinema';
     }
 
     return res.json({
         status: status,
         message: message,
-        payload: {
-            cinema: cinema
-        }
+        payload: payload
     });
 });
 

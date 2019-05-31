@@ -67,36 +67,51 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/showtime', async (req, res, next) => {
-    const theater = await Theater.findOne({
-        where: {
-            id: req.query.theater_id
-        },
-        include: [{
-            model: Showtime,
-            as: 'showtimes',
-            required: false,
-            include: [{
-                model: Movie,
-                as: 'movie',
-                required: false,
-            }]
-        }]
-    });
 
     var status = 200;
     var message = '';
+    var payload = null
+    const theaterQuery = await Theater.findOne({
+        where: {
+            id: req.query.theater_id
+        },
+    });
 
-    if (!theater || theater.length <= 0) {
+    if (!theaterQuery || theaterQuery.length <= 0) {
         status = 404;
-        message = 'Not found';
+        message = "Not found theater";
+
+    } else {
+        const movies = await Movie.findAll({
+            include: [{
+                model: Showtime,
+                as: 'showtimes',
+                required: false,
+                where: {
+                    theater_id: theaterQuery.id
+                }
+            }]
+        });
+        const theater = {
+            name: theaterQuery.name,
+            cinema_id: theaterQuery.cinema_id,
+            type: theaterQuery.type,
+            number_row: theaterQuery.number_row,
+            number_column: theaterQuery.number_column,
+            id: theaterQuery.id,
+            createdAt: theaterQuery.createdAt,
+            updatedAt: theaterQuery.updatedAt,
+            movies: movies
+        };
+        payload = {
+            theater: theater
+        }
     }
 
     return res.json({
         status: status,
         message: message,
-        payload: {
-            theater: theater
-        }
+        payload: payload
     });
 });
 
