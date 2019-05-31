@@ -179,23 +179,7 @@ router.put('/', jsonParser, async (req, res, next) => {
             message: 'Not found movie',
         });
     }
-
-    const showtimesWithMovieIdAndTheaterId = await Showtime.findAll({
-        where: {
-            movie_id: updateShowtime.movie_id,
-            theater_id: updateShowtime.theater_id,
-        }
-    });
-
-    if (showtimesWithMovieIdAndTheaterId && showtimesWithMovieIdAndTheaterId.length > 0) {
-        if (showtimesWithMovieIdAndTheaterId[0].id !== updateShowtime.id) {
-            return res.json({
-                status: 403,
-                message: 'Showtime is exists',
-            });
-        }
-    }
-
+    
     const showtimes = await Showtime.findAll({
         where: {
             id: updateShowtime.id
