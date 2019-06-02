@@ -79,9 +79,11 @@ const Theater = (props) => {
       });
     }
   }, [TheaterCpanel])
-   
+
   // get showtime by theater id || time
   useEffect(() => {
+    setDataShowtime([])
+    
     actions.ShowtimesByTheater(values)
   }, [values])
 
@@ -100,27 +102,37 @@ const Theater = (props) => {
     setValues((values) => ({ ...values, [name]: value }))
   }
 
+  const getShowtimeByMovie = movie => {
+    return movie.showtimes.map((showtime) => {
+      return (
+        <SmallButton
+          key={showtime.id}
+          handleSubmit={handleShowTimeClick}
+          text={showtime.start_time.split(" ")[1]} />
+      )
+    })
+  }
+
+
   // load Movies
   const loadMovies = (dataShowtime) => {
     if (dataShowtime.movies.length) {
-
       return (
         <List className={classes.root}>
           {dataShowtime.movies.map((movie) => {
-          console.log(movie);
+            if (movie.showtimes.length) {
+              return (
+                <ListItem alignItems="flex-start" key={movie.id} className={classes.list}>
+                  <Grid container spacing={8}>
+                    <Grid item sm={12} xs={12} md={4} lg={4}>
+                      <img alt="Remy Sharp" src="/movie.jpg" className={classes.imgLeft} />
+                    </Grid>
 
-          return (
-              <ListItem alignItems="flex-start" key={movie.id} className={classes.list}>
-                <Grid container spacing={8}>
-                  <Grid item sm={12} xs={12} md={4} lg={4}>
-                      <img alt="Remy Sharp" src="/movie.jpg" className={classes.imgLeft}/>
-                  </Grid>
-
-                  <Grid item sm={12} xs={12} md={8} lg={8}>
-                    <ListItemText
-                      primary={
-                        <React.Fragment>
-                          <Typography
+                    <Grid item sm={12} xs={12} md={8} lg={8}>
+                      <ListItemText
+                        primary={
+                          <React.Fragment>
+                            <Typography
                               component="span"
                               variant="h5"
                               color="textPrimary"
@@ -133,32 +145,25 @@ const Theater = (props) => {
                               color="textPrimary"
                               className={classes.inline}
                             >
-                              <Timelapse className={classes.smallicon}/> {movie.minute_time + " phút"}
+                              <Timelapse className={classes.smallicon} /> {movie.minute_time + " phút"}
                             </Typography>
                             {" — " + movie.introduce.slice(0, 100)}
                           </React.Fragment>
-                      }
-                    />
-                    <span className={classes.smallbtn}>
-                      <SmallButton 
-                        handleSubmit={handleShowTimeClick}
-                        text="20:10"/>
-                      <SmallButton 
-                        handleSubmit={handleShowTimeClick}
-                        text="20:10"/>
-                      <SmallButton 
-                        handleSubmit={handleShowTimeClick}
-                        text="20:10"/>
-                    </span>
+                        }
+                      />
+                      <span className={classes.smallbtn}>
+                        {getShowtimeByMovie(movie)}
+                      </span>
                     </Grid>
                   </Grid>
-                <Divider className={classes.divider}/>
-              </ListItem>
-          )
-      })}
-      </List>
+                  <Divider className={classes.divider} />
+                </ListItem>
+              )
+            }
+          })}
+        </List>
       )
-    }
+    } 
   }
 
   // get Showtimes by movie
