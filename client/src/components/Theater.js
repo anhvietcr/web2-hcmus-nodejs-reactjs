@@ -2,19 +2,51 @@ import React, { useState, useEffect } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import SimpleSelect from './helper/SimpleSelect'
-import CustomDatePicker from './helper/DatePicker'
+import SmallButton from './helper/SmallButton'
 import Navbar from './head/Navbar'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Card from '@material-ui/core/Card'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import Divider from '@material-ui/core/Divider'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
+import Typography from '@material-ui/core/Typography'
+import Timelapse from '@material-ui/icons/Timelapse'
+import Avatar from '@material-ui/core/Avatar'
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    width: '100%',
+    // width: '100%',
+    margin: '0px 10%',
+    backgroundColor: '#fafafa',
+    borderRadius: '14px',
+    border: '1px solid #fafbfc'
   },
   paper: {
     width: "100%",
+  },
+  inline: {
+    display: 'inline',
+  },
+  smallicon: {
+    marginTop: "10px"
+  },
+  smallbtn: {
+    margin: "15px 0px 0px 0px",
+    bottom: 0,
+  },
+  list: {
+    display: 'inline-block',
+    position: 'relative',
+  },
+  imgLeft: {
+    width: "100%",
+    height: '250px',
+  },
+  divider: {
+    marginTop: '10px'
   }
 })
 
@@ -43,7 +75,7 @@ const Theater = (props) => {
 
       setValues({
         date: "2019-06-01",
-        theater_id: TheaterCpanel.theaters[0].id
+        theater_id: 3 //TheaterCpanel.theaters[0].id
       });
     }
   }, [TheaterCpanel])
@@ -58,6 +90,8 @@ const Theater = (props) => {
       const { theater } = ShowtimeCpanel.showtimes_theater.payload
 
       setDataShowtime(theater)
+
+      // console.log(theater)
     }
   }, [ShowtimeCpanel])
 
@@ -66,47 +100,90 @@ const Theater = (props) => {
     setValues((values) => ({ ...values, [name]: value }))
   }
 
-  const loadShowTimes = (dataShowtime) => {
-    if (dataShowtime.showtimes.length) {
+  // load Movies
+  const loadMovies = (dataShowtime) => {
+    if (dataShowtime.movies.length) {
 
-      console.log(dataShowtime)
+      return (
+        <List className={classes.root}>
+          {dataShowtime.movies.map((movie) => {
+          console.log(movie);
 
-      dataShowtime.showtimes.map((movie) => {
-        console.log(movie)
-      })
+          return (
+              <ListItem alignItems="flex-start" key={movie.id} className={classes.list}>
+                <Grid container spacing={8}>
+                  <Grid item sm={12} xs={12} md={4} lg={4}>
+                      <img alt="Remy Sharp" src="/movie.jpg" className={classes.imgLeft}/>
+                  </Grid>
+
+                  <Grid item sm={12} xs={12} md={8} lg={8}>
+                    <ListItemText
+                      primary={
+                        <React.Fragment>
+                          <Typography
+                              component="span"
+                              variant="h5"
+                              color="textPrimary"
+                            >
+                              {movie.name}
+                            </Typography>
+                            <Typography
+                              component="span"
+                              variant="subheading"
+                              color="textPrimary"
+                              className={classes.inline}
+                            >
+                              <Timelapse className={classes.smallicon}/> {movie.minute_time + " phút"}
+                            </Typography>
+                            {" — " + movie.introduce.slice(0, 100)}
+                          </React.Fragment>
+                      }
+                    />
+                    <span className={classes.smallbtn}>
+                      <SmallButton 
+                        handleSubmit={handleShowTimeClick}
+                        text="20:10"/>
+                      <SmallButton 
+                        handleSubmit={handleShowTimeClick}
+                        text="20:10"/>
+                      <SmallButton 
+                        handleSubmit={handleShowTimeClick}
+                        text="20:10"/>
+                    </span>
+                    </Grid>
+                  </Grid>
+                <Divider className={classes.divider}/>
+              </ListItem>
+          )
+      })}
+      </List>
+      )
     }
+  }
+
+  // get Showtimes by movie
+
+
+  // Showtime click
+  const handleShowTimeClick = (e) => {
+    console.log(e.target)
   }
 
   return (
     <React.Fragment>
       <Navbar />
+      <SimpleSelect
+        handleChange={handleChangeValues}
+        dataCombobox={dataTheater}
+        values={values}
+        setValues={setValues}
+        defaultValue={values.theater_id}
+        label={lableDatas}
+      />
+      <section>
+        {dataShowtime.id && loadMovies(dataShowtime)}
+      </section>
 
-      <Grid container spacing={8} className={classes.root}>
-        <Grid item xs={6} md={6} lg={6}>
-          <CustomDatePicker
-            handleChange={handleChangeValues} />
-        </Grid>
-        <Grid item xs={6} md={6} lg={6}>
-          <SimpleSelect
-            handleChange={handleChangeValues}
-            dataCombobox={dataTheater}
-            values={values}
-            setValues={setValues}
-            defaultValue={values.theater_id}
-            label={lableDatas}
-          />
-        </Grid>
-      </Grid>
-      <Grid container spacing={8}>
-        <Grid item xs={12} md={12} lg={12}>
-
-        </Grid>
-      </Grid>
-
-
-
-
-      {dataShowtime.showtimes && loadShowTimes(dataShowtime)}
 
     </React.Fragment>
   )

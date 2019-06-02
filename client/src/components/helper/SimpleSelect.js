@@ -10,10 +10,16 @@ const styles = theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
+    textAlign: 'center',
+    margin: '20px 0px'
   },
   formControl: {
     margin: theme.spacing.unit * 2,
     minWidth: 120,
+    margin: '0 auto',
+    fontSize: "20px",
+    padding: "10px 0px 5px",
+    width: "50%",
   },
 })
 
