@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import classNames from 'classnames'
 import Navbar from '../components/head/Navbar'
 import SimpleSelect from './helper/SimpleSelect'
 import SmallButton from './helper/SmallButton'
@@ -62,8 +61,7 @@ const MovieDetail = (props) => {
   const movie_id = actions.match.params.id;
   const [dataMovie, setDataMovie] = useState([])
   const [dataCinemas, setDataCinemas] = useState([])
-  const [dataTheater, setDataTheater] = useState([])
-  const [dataShowtime, setDataShowtime] = useState([])
+  const [comboboxId, setComboboxId] = useState(0)
 
   // Get showtimes by movie id
   useEffect(() => {
@@ -72,8 +70,6 @@ const MovieDetail = (props) => {
 
   useEffect(() => {
     if (ShowtimeCpanel.showtimes_movie) {
-      console.log(ShowtimeCpanel.showtimes_movie.payload)
-
       const { movie, cinemas } = ShowtimeCpanel.showtimes_movie.payload
       setDataCinemas(cinemas)
       setDataMovie(movie)
@@ -82,7 +78,6 @@ const MovieDetail = (props) => {
 
   // load area movie
   const movieDetailArea = () => {
-
     return (
       <React.Fragment>
         <Grid item xs={6} sm={6} md={6} lg={6}>
@@ -98,6 +93,36 @@ const MovieDetail = (props) => {
     )
   }
 
+  const getShowtimes = showtimes => {
+    return showtimes.map((showtime) => {
+      return (
+        <SmallButton
+          key={showtime.id}
+          id={showtime.id}
+          text={showtime.start_time.split(" ")[1]} />
+      )
+    })
+  }
+
+  const cinemaCombobox = () => {
+
+      return (
+        <SimpleSelect
+          label={{
+            label: 'Cum Rap',
+            name_id: 'cinema_id'
+          }}
+          defaultValue={comboboxId}
+          dataCombobox={dataCinemas}
+          handleChange={handleChangeCombobox}
+        />
+      )
+  }
+  const handleChangeCombobox = (e) => {
+    console.log(e.target.value)
+    setComboboxId(e.target.value)
+  }
+
   // load area cinemas
   const mainArea = () => {
     return (
@@ -110,22 +135,6 @@ const MovieDetail = (props) => {
         </Grid>
       </React.Fragment>
     )
-  }
-
-  const handleShowTimeClick = (e) => {
-    console.log(e.target)
-  }
-
-  const getShowtimes = showtimes => {
-    return showtimes.map((showtime) => {
-      return (
-        <SmallButton
-          key={showtime.id}
-          id={showtime.id}
-          handleSubmit={handleShowTimeClick}
-          text={showtime.start_time.split(" ")[1]} />
-      )
-    })
   }
 
   const theaterArea = (cinema_id) => {
@@ -145,40 +154,40 @@ const MovieDetail = (props) => {
         {
           theaters.map((theater) => {
             return (
-                <ListItem alignItems="flex-start" key={theater.id} className={classes.list}>
-                  <Grid container spacing={8}>
-                    <Grid item sm={12} xs={12} md={12} lg={12}>
-                      <ListItemText
-                        primary={
-                          <React.Fragment>
-                            <Typography
-                              component="span"
-                              variant="h5"
-                              color="textPrimary"
-                            >
-                              {theater.name}
-                            </Typography>
-                            <Typography
-                              component="span"
-                              variant="subheading"
-                              color="textPrimary"
-                              className={classes.inline}
-                            >
-                              <Timelapse className={classes.smallicon} /> {dataMovie.minute_time + " phút"}
-                            </Typography>
-                            {" — " + theater.type}
-                          </React.Fragment>
-                        }
-                      />
-                      <span className={classes.smallbtn}>
-                        {getShowtimes(theater.showtimes)}
-                      </span>
-                    </Grid>
+              <ListItem alignItems="flex-start" key={theater.id} className={classes.list}>
+                <Grid container spacing={8}>
+                  <Grid item sm={12} xs={12} md={12} lg={12}>
+                    <ListItemText
+                      primary={
+                        <React.Fragment>
+                          <Typography
+                            component="span"
+                            variant="h5"
+                            color="textPrimary"
+                          >
+                            {theater.name}
+                          </Typography>
+                          <Typography
+                            component="span"
+                            variant="subheading"
+                            color="textPrimary"
+                            className={classes.inline}
+                          >
+                            <Timelapse className={classes.smallicon} /> {dataMovie.minute_time + " phút"}
+                          </Typography>
+                          {" — " + theater.type}
+                        </React.Fragment>
+                      }
+                    />
+                    <span className={classes.smallbtn}>
+                      {getShowtimes(theater.showtimes)}
+                    </span>
                   </Grid>
-                  <Divider className={classes.divider} />
-                </ListItem>
+                </Grid>
+                <Divider className={classes.divider} />
+              </ListItem>
             )
-        })}
+          })}
       </List>
     )
   }
@@ -187,16 +196,14 @@ const MovieDetail = (props) => {
     return (
       <Grid container spacing={8}>
         <Grid item sm={12} xs={12} md={12} lg={12}>
-          <p>Cinemas combobox</p>
-       </Grid>
-       <Grid item sm={12} xs={12} md={12} lg={12}>
+          {dataCinemas.length && cinemaCombobox()}
+        </Grid>
+        <Grid item sm={12} xs={12} md={12} lg={12}>
           <p>Cinema map</p>
-       </Grid>
+        </Grid>
       </Grid>
     )
   }
-
-
 
   return (
     <section className={classes.root}>
@@ -204,7 +211,7 @@ const MovieDetail = (props) => {
       <Grid container spacing={8}>
         {dataMovie.id && movieDetailArea()}
       </Grid>
-      <Divider className={classes.divider}/>
+      <Divider className={classes.divider} />
       <Grid container spacing={8}>
         {mainArea()}
       </Grid>

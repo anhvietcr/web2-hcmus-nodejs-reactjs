@@ -104,7 +104,6 @@ const Theater = (props) => {
         <SmallButton
           key={showtime.id}
           id={showtime.id}
-          handleSubmit={handleShowTimeClick}
           text={showtime.start_time.split(" ")[1]} />
       )
     })
@@ -160,14 +159,6 @@ const Theater = (props) => {
         </List>
       )
     }
-  }
-
-  // get Showtimes by movie
-
-
-  // Showtime click
-  const handleShowTimeClick = (e) => {
-    console.log(e.target)
   }
 
   return (
