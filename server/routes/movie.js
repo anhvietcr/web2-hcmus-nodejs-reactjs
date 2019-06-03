@@ -2,6 +2,7 @@ const Movie = require('../models/movie')
 const Theater = require('../models/theater')
 const Cinema = require('../models/cinema')
 const Showtime = require('../models/showtime')
+const Utils = require('../models/utils')
 const Router = require('express-promise-router')
 const { Op } = require('sequelize');
 const bodyParser = require('body-parser')
@@ -229,12 +230,14 @@ router.get('/search/:keyword', async (req, res, next) => {
 router.post('/', jsonParser, async (req, res, next) => {
     const created_at = new Date();
     const newMovie = req.body.movie;
+    const opening_day = Utils.dateParse(req.body.movie.opening_day);
+
     const movie = await Movie.create({
         name: newMovie.name,
         image: newMovie.image,
         trailer: newMovie.trailer,
         introduce: newMovie.introduce,
-        opening_day: newMovie.opening_day,
+        opening_day: opening_day,
         minute_time: newMovie.minute_time,
         view: newMovie.view,
         created_at: created_at
@@ -260,7 +263,7 @@ router.post('/', jsonParser, async (req, res, next) => {
 router.put('/', jsonParser, async (req, res, next) => {
     const updated_at = new Date();
     const updateMovie = req.body.movie;
-
+    const opening_day = Utils.dateParse(req.body.movie.opening_day);
     const movies = await Movie.findOne({
         where: {
             id: updateMovie.id
@@ -279,7 +282,7 @@ router.put('/', jsonParser, async (req, res, next) => {
             image: updateMovie.image,
             trailer: updateMovie.trailer,
             introduce: updateMovie.introduce,
-            opening_day: updateMovie.opening_day,
+            opening_day: opening_day,
             minute_time: updateMovie.minute_time,
             view: updateMovie.view,
             updated_at: updated_at

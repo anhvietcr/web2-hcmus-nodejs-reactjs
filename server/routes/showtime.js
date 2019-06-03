@@ -1,6 +1,7 @@
 const Showtime = require('../models/showtime');
 const Theater = require('../models/theater');
 const Cinema = require('../models/cinema');
+const Utils = require('../models/utils');
 const Router = require('express-promise-router');
 const bodyParser = require('body-parser');
 const Movie = require('../models/movie');
@@ -113,12 +114,14 @@ router.post('/', jsonParser, async (req, res, next) => {
             message: "Not found movie",
         });
     }
+    const start_time = Utils.dateParse(newShowtime.start_time);
+    const end_time = Utils.dateParse(newShowtime.end_time);
 
     const showtime = await Showtime.create({
         movie_id: newShowtime.movie_id,
         theater_id: newShowtime.theater_id,
-        start_time: newShowtime.start_time,
-        end_time: newShowtime.end_time,
+        start_time: start_time,
+        end_time: end_time,
         price: newShowtime.price,
         created_at: created_at
     });
@@ -179,12 +182,16 @@ router.put('/', jsonParser, async (req, res, next) => {
             message: 'Not found movie',
         });
     }
-    
+
     const showtimes = await Showtime.findAll({
         where: {
             id: updateShowtime.id
         }
     });
+
+    const start_time = Utils.dateParse(updateShowtime.start_time);
+    const end_time = Utils.dateParse(updateShowtime.end_time);
+
 
     var status = 200;
     var message = '';
@@ -196,8 +203,8 @@ router.put('/', jsonParser, async (req, res, next) => {
         const numAffectedRows = await Showtime.update({
             movie_id: updateShowtime.movie_id,
             theater_id: updateShowtime.theater_id,
-            start_time: updateShowtime.start_time,
-            end_time: updateShowtime.end_time,
+            start_time: start_time,
+            end_time: end_time,
             price: updateShowtime.price,
             updated_at: updated_at
         },

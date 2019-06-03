@@ -86,25 +86,30 @@ router.get('/showtime', async (req, res, next) => {
             include: [{
                 model: Showtime,
                 as: 'showtimes',
-                required: false,
+                required: true,
                 where: {
                     theater_id: theaterQuery.id
                 }
             }]
         });
-        const theater = {
-            name: theaterQuery.name,
-            cinema_id: theaterQuery.cinema_id,
-            type: theaterQuery.type,
-            number_row: theaterQuery.number_row,
-            number_column: theaterQuery.number_column,
-            id: theaterQuery.id,
-            createdAt: theaterQuery.createdAt,
-            updatedAt: theaterQuery.updatedAt,
-            movies: movies
-        };
-        payload = {
-            theater: theater
+        if (!movies && movies.length <= 0) {
+            status = 404;
+            message = "Not found theater";
+        } else {
+            const theater = {
+                name: theaterQuery.name,
+                cinema_id: theaterQuery.cinema_id,
+                type: theaterQuery.type,
+                number_row: theaterQuery.number_row,
+                number_column: theaterQuery.number_column,
+                id: theaterQuery.id,
+                createdAt: theaterQuery.createdAt,
+                updatedAt: theaterQuery.updatedAt,
+                movies: movies
+            };
+            payload = {
+                theater: theater
+            }
         }
     }
 
