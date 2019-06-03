@@ -1,6 +1,7 @@
 const Cinema = require('../models/cinema')
 const Theater = require('../models/theater')
 const Movie = require('../models/movie')
+const Showtime = require('../models/showtime')
 const Router = require('express-promise-router')
 const bodyParser = require('body-parser')
 
@@ -8,13 +9,24 @@ var jsonParser = bodyParser.json()
 let router = new Router();
 
 router.get('/', async (req, res, next) => {
+    var status = 200;
+    var message = '';
+    var payload = null;
     var cinemas = null
     if (typeof req.query.id !== 'undefined') {
-        cinemas = await Cinema.findAll({
+        cinemas = await Cinema.findOne({
             where: {
                 id: req.query.id
             }
         });
+        if (!cinemas || cinemas.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        } else {
+            payload = {
+                cinema: cinemas
+            }
+        }
     } else {
         cinemas = await Cinema.findAll(
             {
@@ -23,94 +35,138 @@ router.get('/', async (req, res, next) => {
                 ],
             }
         );
-    }
-
-    var status = 200;
-    var message = '';
-
-    if (!cinemas || cinemas.length <= 0) {
-        status = 404;
-        message = 'Not found';
+        if (!cinemas || cinemas.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        } else {
+            payload = {
+                cinemas: cinemas
+            }
+        }
     }
 
     return res.json({
         status: status,
         message: message,
-        payload: {
-            cinemas: cinemas
-        }
+        payload: payload
     });
 });
 
+
 router.get('/theater', async (req, res) => {
-    const cinemas = await Cinema.findAll({
+
+    var payload = null
+    var theaters = []
+
+    const cinema = await Cinema.findOne({
         where: {
             id: req.query.cinema_id
         },
         include: [{
             model: Theater,
             as: 'theaters',
-            required: false,
+            required: false
+        }]
+    })
+
+    for (var i = 0; i < cinema.theaters.length; i++) {
+        const entry = cinema.theaters[i];
+        const movies = await Movie.findAll({
             include: [{
-                model: Movie,
-                as: 'movies',
+                model: Showtime,
+                as: 'showtimes',
                 required: false,
-                attributes: ['id', 'name', 'image', 'trailer', 'introduce', 'opening_day', 'view'],
-                through: {
-                    attributes: ['start_time', 'end_time', 'price'],
+                where: {
+                    theater_id: theaterQuery.id
                 }
             }]
-        }]
-    });
+        });
+        const theater = {
+            name: entry.name,
+            cinema_id: entry.cinema_id,
+            type: entry.type,
+            number_row: entry.number_row,
+            number_column: entry.number_column,
+            id: entry.id,
+            createdAt: entry.createdAt,
+            updatedAt: entry.updatedAt,
+            movies: movies
+        };
+        theaters.push(theater);
+    }
+
+
+    payload = {
+        theaters: theaters
+    }
 
     var status = 200;
     var message = '';
 
-    if (!cinemas || cinemas.length <= 0) {
+    if (!cinema) {
         status = 404;
-        message = 'Not found';
+        message = 'Not found cinema';
     }
 
     return res.json({
         status: status,
         message: message,
-        payload: {
-            cinemas: cinemas
-        }
+        payload: payload
     });
 });
 
 router.get('/movie/showtime', async (req, res, next) => {
-
-    const movies = await Movie.findAll({
+    const cinemas = await Cinema.findAll({
         where: {
-            id: req.query.movie_id,
-        },
-        include: [{
-            model: Theater,
-            as: 'theaters',
-            required: false,
-            where: {
-                cinema_id: req.query.cinema_id
-            },
-            through: {
-            }
-        }]
+            id: req.query.cinema_id
+        }
     });
 
     var status = 200;
     var message = '';
-
-    if (!movies || movies.length <= 0) {
+    var showtimes = null
+    if (!cinemas || cinemas.length <= 0) {
         status = 404;
-        message = 'Not found';
+        message = 'Not found cinema';
+    } else {
+        showtimes = await Showtime.findAll({
+            where: {
+                movie_id: req.query.movie_id,
+            },
+            include: [{
+                model: Movie,
+                as: 'movie',
+                required: false,
+            },
+            {
+                model: Theater,
+                as: 'theater',
+                required: false,
+                where: {
+                    cinema_id: req.query.cinema_id
+                },
+                include: [{
+                    model: Cinema,
+                    as: 'cinema',
+                    required: false,
+                }]
+            }]
+        });
+
+        var status = 200;
+        var message = '';
+
+        if (!showtimes || showtimes.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        }
     }
 
     return res.json({
         status: status,
         message: message,
         payload: {
-            movies: movies
+            showtimes: showtimes
         }
     });
 });

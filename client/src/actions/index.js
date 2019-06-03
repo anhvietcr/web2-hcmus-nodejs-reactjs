@@ -127,6 +127,12 @@ const MovieListTrendAsync = (payload) => {
         payload
     }
 }
+const MovieSearchKeyword = (payload) => {
+    return {
+        type: TYPE.MOVIE_SEARCH_KEYWORD_ASYNC,
+        payload
+    }
+}
 
 
 
@@ -161,6 +167,12 @@ const ShowtimeByTheaterAsync = (payload) => {
         payload
     }
 }
+const ShowtimeByCinemaAsync = (payload) => {
+    return {
+        type: TYPE.SHOWTIME_BY_CINEMA_ASYNC,
+        payload
+    }
+}
 
 export default {
     DatveAsync,
@@ -186,10 +198,12 @@ export default {
     MovieDeleteAsync,
     MovieListNewAsync,
     MovieListTrendAsync,
+    MovieSearchKeyword,
 
     ShowtimeListAsync,
     ShowtimeAddAsync,
     ShowtimeUpdateAsync,
     ShowtimeDeleteAsync,
     ShowtimeByTheaterAsync,
+    ShowtimeByCinemaAsync,
 }

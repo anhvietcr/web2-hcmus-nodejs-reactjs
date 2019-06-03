@@ -7,6 +7,7 @@ const Showtime = db.define("Showtime", {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+        unique: true,
         allowNull: false,
         validate: {
             notNull: { args: true, msg: "id cannot be null" }
@@ -15,10 +16,7 @@ const Showtime = db.define("Showtime", {
     movie_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-            model: 'Movies',
-            key: 'id'
-        },
+        unique: false,
         validate: {
             notNull: { args: true, msg: "theater_id cannot be null" }
         }
@@ -26,10 +24,7 @@ const Showtime = db.define("Showtime", {
     theater_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-            model: 'Theaters',
-            key: 'id'
-        },
+        unique: false,
         validate: {
             notNull: { args: true, msg: "theater_id cannot be null" }
         }

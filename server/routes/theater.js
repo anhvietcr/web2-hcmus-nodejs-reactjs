@@ -3,6 +3,7 @@ const Cinema = require('../models/cinema')
 const Router = require('express-promise-router')
 const bodyParser = require('body-parser')
 const Movie = require('../models/movie')
+const Showtime = require('../models/showtime')
 
 let router = new Router();
 
@@ -10,8 +11,12 @@ var jsonParser = bodyParser.json()
 
 router.get('/', async (req, res, next) => {
     var theaters = null
+    var status = 200;
+    var message = '';
+    var payload = null;
+
     if (typeof req.query.id !== 'undefined') {
-        theaters = await Theater.findAll({
+        theaters = await Theater.findOne({
             where: {
                 id: req.query.id
             },
@@ -21,6 +26,16 @@ router.get('/', async (req, res, next) => {
                 required: false,
             }]
         });
+
+        if (!theaters || theaters.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        } else {
+            payload = {
+                theater: theaters
+            }
+        }
+
     } else {
         theaters = await Theater.findAll(
             {
@@ -34,53 +49,69 @@ router.get('/', async (req, res, next) => {
                 }]
             },
         );
-    }
-
-    var status = 200;
-    var message = '';
-
-    if (!theaters || theaters.length <= 0) {
-        status = 404;
-        message = 'Not found';
+        if (!theaters || theaters.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        } else {
+            payload = {
+                theaters: theaters
+            }
+        }
     }
 
     return res.json({
         status: status,
         message: message,
-        payload: {
-            theaters: theaters
-        }
+        payload: payload
     });
 });
 
 router.get('/showtime', async (req, res, next) => {
-    const theater = await Theater.findOne({
-        where: {
-            id: req.query.theater_id
-        },
-        include: [{
-            model: Movie,
-            as: 'movies',
-            required: false,
-            through: {
-            }
-        }]
-    });
 
     var status = 200;
     var message = '';
+    var payload = null
+    const theaterQuery = await Theater.findOne({
+        where: {
+            id: req.query.theater_id
+        },
+    });
 
-    if (!theater || theater.length <= 0) {
+    if (!theaterQuery || theaterQuery.length <= 0) {
         status = 404;
-        message = 'Not found';
+        message = "Not found theater";
+
+    } else {
+        const movies = await Movie.findAll({
+            include: [{
+                model: Showtime,
+                as: 'showtimes',
+                required: false,
+                where: {
+                    theater_id: theaterQuery.id
+                }
+            }]
+        });
+        const theater = {
+            name: theaterQuery.name,
+            cinema_id: theaterQuery.cinema_id,
+            type: theaterQuery.type,
+            number_row: theaterQuery.number_row,
+            number_column: theaterQuery.number_column,
+            id: theaterQuery.id,
+            createdAt: theaterQuery.createdAt,
+            updatedAt: theaterQuery.updatedAt,
+            movies: movies
+        };
+        payload = {
+            theater: theater
+        }
     }
 
     return res.json({
         status: status,
         message: message,
-        payload: {
-            theater: theater
-        }
+        payload: payload
     });
 });
 

@@ -32,7 +32,6 @@ export function* actionShowtimeAdd(data) {
 
 // Update
 function asyncShowtimeUpdate(showtime) {
-    console.log(showtime)
     return axios.put(END_POINT + 'showtime', { showtime })
         .then(response => response)
         .catch((e) => console.log(e));
@@ -40,7 +39,7 @@ function asyncShowtimeUpdate(showtime) {
 export function* actionShowtimeUpdate(data) {
     const { payload } = data;
     const response = yield call(asyncShowtimeUpdate, payload);
-    
+
     yield put(actions.ShowtimeUpdateAsync(response.data))
 }
 
@@ -75,4 +74,21 @@ export function* actionShowtimeByTheater(data) {
     const response = yield call(asyncShowtimeByTheater, payload);
 
     yield put(actions.ShowtimeByTheaterAsync(response.data))
+}
+
+// Show Showtime by Cinama & Movie
+function asyncShowtimeByCinema(payload) {
+    const { movie_id, cinema_id } = payload
+    if (!cinema_id || !movie_id) return false;
+
+    return axios.get(END_POINT + '/cinema/movie/showtime?cinema_id='+parseInt(cinema_id)+'&movie_id='+parseInt(movie_id))
+        .then(response => response)
+        .catch(e => console.log(e));
+}
+
+export function* actionShowtimeByCinema(data) {
+    const { payload } = data;
+    const response = yield call(asyncShowtimeByCinema, payload);
+
+    yield put(actions.ShowtimeByCinemaAsync(response.data))
 }

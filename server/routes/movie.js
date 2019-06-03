@@ -13,10 +13,11 @@ let router = new Router();
 
 router.get('/', async (req, res) => {
     var movies = null
-    // console.log(req)
-    if (typeof req.query.id === 'undefined') {
-        console.log('1')
+    var payload = null
+    var status = 200;
+    var message = '';
 
+    if (typeof req.query.id === 'undefined') {
         movies = await Movie.findAll(
             {
                 order: [
@@ -40,6 +41,15 @@ router.get('/', async (req, res) => {
                 ]
             }
         );
+
+        if (!movies || movies.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        } else {
+            payload = {
+                movies: movies
+            }
+        }
     } else {
         movies = await Movie.findOne({
             where: {
@@ -62,21 +72,22 @@ router.get('/', async (req, res) => {
                 },
             ]
         });
-    }
-    var status = 200;
-    var message = '';
 
-    if (!movies) {
-        status = 404;
-        message = 'Not found';
+        if (!movies || movies.length <= 0) {
+            status = 404;
+            message = 'Not found';
+        } else {
+            payload = {
+                movie: movies
+            }
+        }
     }
+
 
     return res.json({
         status: status,
         message: message,
-        payload: {
-            movies: movies
-        }
+        payload: payload
     });
 });
 
@@ -161,9 +172,12 @@ router.get('/new', async (req, res) => {
 });
 
 router.get('/search/:keyword', async (req, res, next) => {
+
+    var keyword = decodeURI(req.params.keyword).toLowerCase();
+
     const movies = await Movie.findAll({
         where: {
-            name: { [Op.like]: '%' + req.params.keyword + '%' }
+            name: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('Movie.name')), 'LIKE', '%' + keyword + '%')
         },
         include: [
             {
