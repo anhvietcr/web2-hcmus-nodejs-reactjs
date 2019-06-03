@@ -173,6 +173,12 @@ const ShowtimeByCinemaAsync = (payload) => {
         payload
     }
 }
+const ShowtimeByMovie = (payload) => {
+    return {
+        type: TYPE.SHOWTIME_BY_MOVIE_ASYNC,
+        payload
+    }
+}
 
 export default {
     DatveAsync,
@@ -206,4 +212,5 @@ export default {
     ShowtimeDeleteAsync,
     ShowtimeByTheaterAsync,
     ShowtimeByCinemaAsync,
+    ShowtimeByMovie,
 }

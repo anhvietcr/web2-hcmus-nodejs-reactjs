@@ -325,6 +325,8 @@ const MovieCpanel = (props) => {
         trailer: values.trailer,
         image: ''
       }
+      
+
       actions.Update(payload);
     } else {
 

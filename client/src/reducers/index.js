@@ -209,6 +209,11 @@ function ShowtimeCpanel(state = initialState, action) {
                 ...state,
                 showtimes_cinema: action.payload
             }
+        case TYPE.SHOWTIME_BY_MOVIE_ASYNC:
+            return {
+                ...state,
+                showtimes_movie: action.payload
+            }
         default:
             return state;
     }

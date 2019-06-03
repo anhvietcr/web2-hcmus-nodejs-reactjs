@@ -27,9 +27,7 @@ const SimpleSelect = (props) => {
   const {
     classes,
     label,
-    values,
     defaultValue,
-    setValues,
     dataCombobox,
     handleChange
   } = props

@@ -62,5 +62,6 @@ function* CustomSaga() {
   yield takeLatest(TYPE.SHOWTIME_DELETE, ShowtimeCpanel.actionShowtimeDelete)
   yield takeLatest(TYPE.SHOWTIME_BY_THEATER, ShowtimeCpanel.actionShowtimeByTheater)
   yield takeLatest(TYPE.SHOWTIME_BY_CINEMA, ShowtimeCpanel.actionShowtimeByCinema)
+  yield takeLatest(TYPE.SHOWTIME_BY_MOVIE, ShowtimeCpanel.actionShowtimeByMovie)
 }
 export default CustomSaga

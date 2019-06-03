@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import * as TYPE from '../constants/actionTypes'
 import { connect } from 'react-redux'
-import Movie from '../components/Movie'
+import MovieSearch from '../components/MovieSearch'
 
 class MovieContainer extends Component {
     render() {
         return (
-            <Movie actions={this.props}/>
+            <MovieSearch actions={this.props}/>
         )
     }
 }

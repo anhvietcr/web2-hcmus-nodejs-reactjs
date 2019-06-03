@@ -73,6 +73,7 @@ const Home = (props) => {
             id={movie.id}
             image="movie.jpg"
             mainText={movie.name}
+            href={'/movie/detail/'}
           />
         </Grid>
       )

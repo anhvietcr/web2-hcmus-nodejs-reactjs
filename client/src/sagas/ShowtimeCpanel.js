@@ -1,6 +1,7 @@
 import { call, put } from 'redux-saga/effects'
 import axios from 'axios'
 import actions from '../actions'
+import { END } from '@redux-saga/core';
 
 const END_POINT = "http://localhost:5000/"
 
@@ -91,4 +92,21 @@ export function* actionShowtimeByCinema(data) {
     const response = yield call(asyncShowtimeByCinema, payload);
 
     yield put(actions.ShowtimeByCinemaAsync(response.data))
+}
+
+// Showtime by movie id
+function asyncShowtimeByMovie(payload) {
+    const { movie_id } = payload
+    if (!movie_id) return false;
+
+    return axios.get(END_POINT + 'movie/cinemas?movie_id=' + movie_id)
+        .then(response => response)
+        .catch(err =>  console.log(err))
+}
+
+export function* actionShowtimeByMovie(data) {
+    const { payload } = data
+    const response = yield call(asyncShowtimeByMovie, payload)
+
+    yield put(actions.ShowtimeByMovie(response.data))
 }
