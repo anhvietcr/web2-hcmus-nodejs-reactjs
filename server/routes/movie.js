@@ -92,6 +92,51 @@ router.get('/', async (req, res) => {
     });
 });
 
+// Get all showtime for movie
+// ../cienemas?movie_id=[your_id]
+router.get('/cinemas', async (req, res, next) => {
+    var payload = null
+    const movies = await Movie.findOne(
+        {
+            where: {
+                id: req.query.movie_id
+            },
+        }
+    );
+    var status = 200;
+    var message = '';
+
+    if (!movies || movies.length <= 0) {
+        status = 404;
+        message = 'Not found';
+    } else {
+        const cinemas = await Cinema.findAll({
+            include: [{
+                model: Theater,
+                as: 'theaters',
+                required: true,
+                include: [{
+                    required: true,
+                    model: Showtime,
+                    as: 'showtimes',
+                }]
+            },],
+        });
+        payload = {
+            movie: movies,
+            cinemas: cinemas
+        }
+    }
+
+    return res.json({
+        status: status,
+        message: message,
+        payload: payload
+    });
+});
+
+
+
 router.get('/trending', async (req, res, next) => {
     const movies = await Movie.findAll(
         {
