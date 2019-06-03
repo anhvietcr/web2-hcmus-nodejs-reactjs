@@ -25,7 +25,8 @@ const styles = theme => ({
 const SimpleTextField = (props) => {
   const { classes,
     label,
-    handleSearch
+    handleSearch,
+    value
     } = props
 
   return (
@@ -36,6 +37,7 @@ const SimpleTextField = (props) => {
         inputProps={{
           'aria-label': 'Description',
         }}
+        defaultValue={value}
         onKeyPress={handleSearch}
         endAdornment={<InputAdornment position="end">
         <IconButton className={classes.iconButton} aria-label="Search">

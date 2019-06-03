@@ -14,7 +14,7 @@ function asyncMovieList() {
 export function* actionMovieList() {
     const response = yield call(asyncMovieList);
 
-    yield put(actions.MovieListAsync(response.data.payload))
+    yield put(actions.MovieListAsync(response.data))
 }
 
 // Add
@@ -83,4 +83,18 @@ export function* actionMovieListTrend() {
     const response = yield call(asyncMovieListTrend);
 
     yield put(actions.MovieListTrendAsync(response.data))
+}
+
+// Search phim by keyword
+function asyncMovieSearchKeyword(keyword) {
+    return axios.get(END_POINT + 'movie/search/' + keyword)
+        .then(response => response)
+        .catch(e => console.log(e))
+}
+
+export function* actionMovieSearchKeyword(data) {
+    const { payload } = data;
+    const reponse = yield call(asyncMovieSearchKeyword, payload);
+
+    yield put(actions.MovieSearchKeyword(reponse.data));
 }

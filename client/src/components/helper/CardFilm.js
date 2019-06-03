@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
-import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
@@ -35,7 +34,6 @@ const styles = (theme) => ({
 
   },
   btnBook: {
-    color: '#fff',
     border: "1px solid #fff",
     display: "inline-block",
     fontSize: "14px",
@@ -80,7 +78,7 @@ const CardFilm = (props) => {
   return (
     <Paper className={classes.movieCard}>
       <img src={image} alt={"img"} />
-      <a href={`/booking_movie/${id}`}>
+      <a href={`/ticket/${id}`}>
         <div
           className={classNames(classes.overlap, classes.movieHover, hover ? classes.override : "")}
           onMouseOver={() => {

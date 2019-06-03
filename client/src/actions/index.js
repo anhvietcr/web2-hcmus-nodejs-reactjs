@@ -127,6 +127,12 @@ const MovieListTrendAsync = (payload) => {
         payload
     }
 }
+const MovieSearchKeyword = (payload) => {
+    return {
+        type: TYPE.MOVIE_SEARCH_KEYWORD_ASYNC,
+        payload
+    }
+}
 
 
 
@@ -192,6 +198,7 @@ export default {
     MovieDeleteAsync,
     MovieListNewAsync,
     MovieListTrendAsync,
+    MovieSearchKeyword,
 
     ShowtimeListAsync,
     ShowtimeAddAsync,

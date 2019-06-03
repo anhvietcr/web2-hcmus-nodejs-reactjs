@@ -14,7 +14,7 @@ function asyncShowtimeList() {
 export function* actionShowtimeList() {
     const response = yield call(asyncShowtimeList);
 
-    yield put(actions.ShowtimeListAsync(response.data.payload))
+    yield put(actions.ShowtimeListAsync(response.data))
 }
 
 // Add
@@ -32,7 +32,6 @@ export function* actionShowtimeAdd(data) {
 
 // Update
 function asyncShowtimeUpdate(showtime) {
-    console.log(showtime)
     return axios.put(END_POINT + 'showtime', { showtime })
         .then(response => response)
         .catch((e) => console.log(e));
@@ -40,7 +39,7 @@ function asyncShowtimeUpdate(showtime) {
 export function* actionShowtimeUpdate(data) {
     const { payload } = data;
     const response = yield call(asyncShowtimeUpdate, payload);
-    
+
     yield put(actions.ShowtimeUpdateAsync(response.data))
 }
 
