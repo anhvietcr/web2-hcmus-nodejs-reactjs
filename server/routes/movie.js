@@ -119,6 +119,9 @@ router.get('/cinemas', async (req, res, next) => {
                     required: true,
                     model: Showtime,
                     as: 'showtimes',
+                    where: {
+                        movie_id: req.query.movie_id
+                    }
                 }]
             },],
         });
