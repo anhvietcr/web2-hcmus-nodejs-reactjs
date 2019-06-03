@@ -15,30 +15,24 @@ const styles = theme => ({
 
 const SmallButton = (props) => {
     const {
-    classes,
+        classes,
         text,
         handleSubmit,
+        id
   } = props
-
+  
     return (
         <Button
+            id={id}
             variant="outlined"
             size="small"
             color="primary"
             className={classes.margin}
             onClick={handleSubmit}
+            href={'/ticket/:id'}
         >
             {text}
         </Button>
-    // <Button
-    //   variant="contained"
-    //   color="inherit"
-    //   fullWidth={true}
-    //   className={classes.button}
-    //   onClick={handleSubmit}
-    // >
-
-    // </Button>
   )
 }
 

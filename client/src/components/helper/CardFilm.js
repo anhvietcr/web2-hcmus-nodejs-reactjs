@@ -79,7 +79,7 @@ const CardFilm = (props) => {
   return (
     <Paper className={classes.movieCard}>
       <img src={image} alt={"img"} />
-      <a href={`/booking_movie/${id}`}>
+      <a href={`/ticket/${id}`}>
         <div
           className={classNames(classes.overlap, classes.movieHover, hover ? classes.override : "")}
           onMouseOver={() => {

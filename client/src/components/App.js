@@ -16,7 +16,7 @@ function App() {
       <Switch>
           <Route path="/auth/login" component={Login} />
           <Route path="/auth/register" component={Register} />
-          <Route path="/booking_movie/:id" component={Book} />
+          <Route path="/ticket/:id" component={Book} />
           <Route path="/user" component={User} />
           <Route path="/cpanel" component={HomeCpanel} />
           <Route path="/theater" component={Theater} />

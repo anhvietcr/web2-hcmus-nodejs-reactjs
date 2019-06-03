@@ -87,16 +87,16 @@ const Theater = (props) => {
     actions.ShowtimesByTheater(values)
   }, [values])
 
+  // set showtimes data[]
   useEffect(() => {
     if (ShowtimeCpanel.showtimes_theater) {
       const { theater } = ShowtimeCpanel.showtimes_theater.payload
 
       setDataShowtime(theater)
-
-      // console.log(theater)
     }
   }, [ShowtimeCpanel])
 
+  // Onchange value (theater,...)
   const handleChangeValues = (e) => {
     const { name, value } = e.target
     setValues((values) => ({ ...values, [name]: value }))
@@ -107,12 +107,12 @@ const Theater = (props) => {
       return (
         <SmallButton
           key={showtime.id}
+          id={showtime.id}
           handleSubmit={handleShowTimeClick}
           text={showtime.start_time.split(" ")[1]} />
       )
     })
   }
-
 
   // load Movies
   const loadMovies = (dataShowtime) => {
