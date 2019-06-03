@@ -34,7 +34,6 @@ const styles = (theme) => ({
 
   },
   btnBook: {
-    color: '#fff',
     border: "1px solid #fff",
     display: "inline-block",
     fontSize: "14px",

@@ -14,7 +14,7 @@ function asyncTheaterList() {
 export function* actionTheaterList() {
     const response = yield call(asyncTheaterList);
 
-    yield put(actions.TheaterListAsync(response.data.payload))
+    yield put(actions.TheaterListAsync(response.data))
 }
 
 // Add

@@ -14,7 +14,7 @@ function asyncMovieList() {
 export function* actionMovieList() {
     const response = yield call(asyncMovieList);
 
-    yield put(actions.MovieListAsync(response.data.payload))
+    yield put(actions.MovieListAsync(response.data))
 }
 
 // Add

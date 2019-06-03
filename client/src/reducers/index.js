@@ -50,12 +50,18 @@ function User(state = initialState, action) {
     }
 }
 
+let cinemas = []
 function CinemaCpanel(state = initialState, action) {
     switch (action.type) {
         case TYPE.CINEMA_LIST_ASYNC:
+            if (action.payload.status === 404) {
+                cinemas = []
+            } else {
+                cinemas = action.payload.payload.cinemas
+            }
             return {
                 ...state,
-                cinemas: action.payload.cinemas
+                cinemas
             }
         case TYPE.CINEMA_ADD_ASYNC:
             return {
@@ -79,12 +85,19 @@ function CinemaCpanel(state = initialState, action) {
     }
 }
 
+let theaters = [];
 function TheaterCpanel(state = initialState, action) {
     switch (action.type) {
         case TYPE.THEATER_LIST_ASYNC:
+            if (action.payload.status === 404) {
+                theaters = []
+            } else {
+                theaters = action.payload.payload.theaters
+            }
+
             return {
                 ...state,
-                theaters: action.payload.theaters
+                theaters
             }
         case TYPE.THEATER_ADD_ASYNC:
             return {
@@ -108,12 +121,18 @@ function TheaterCpanel(state = initialState, action) {
     }
 }
 
+let movies = []
 function MovieCpanel(state = initialState, action) {
     switch (action.type) {
         case TYPE.MOVIE_LIST_ASYNC:
+            if (action.payload.status === 404) {
+                movies = []
+            } else {
+                movies = action.payload.payload.movies
+            }
             return {
                 ...state,
-                movies: action.payload.movies
+                movies
             }
         case TYPE.MOVIE_ADD_ASYNC:
             return {
@@ -152,12 +171,18 @@ function MovieCpanel(state = initialState, action) {
     }
 }
 
+let showtimes = []
 function ShowtimeCpanel(state = initialState, action) {
     switch (action.type) {
         case TYPE.SHOWTIME_LIST_ASYNC:
+            if (action.payload.status === 404) {
+                showtimes = []
+            } else {
+                showtimes = action.payload.payload.showtimes
+            }
             return {
                 ...state,
-                showtimes: action.payload.showtimes
+                showtimes
             }
         case TYPE.SHOWTIME_ADD_ASYNC:
             return {

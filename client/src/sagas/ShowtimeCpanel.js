@@ -14,7 +14,7 @@ function asyncShowtimeList() {
 export function* actionShowtimeList() {
     const response = yield call(asyncShowtimeList);
 
-    yield put(actions.ShowtimeListAsync(response.data.payload))
+    yield put(actions.ShowtimeListAsync(response.data))
 }
 
 // Add

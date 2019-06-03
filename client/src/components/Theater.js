@@ -5,16 +5,12 @@ import SimpleSelect from './helper/SimpleSelect'
 import SmallButton from './helper/SmallButton'
 import Navbar from './head/Navbar'
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import Card from '@material-ui/core/Card'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
 import ListItemText from '@material-ui/core/ListItemText'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import Typography from '@material-ui/core/Typography'
 import Timelapse from '@material-ui/icons/Timelapse'
-import Avatar from '@material-ui/core/Avatar'
 
 const styles = theme => ({
   root: {
@@ -83,7 +79,7 @@ const Theater = (props) => {
   // get showtime by theater id || time
   useEffect(() => {
     setDataShowtime([])
-    
+
     actions.ShowtimesByTheater(values)
   }, [values])
 
@@ -163,7 +159,7 @@ const Theater = (props) => {
           })}
         </List>
       )
-    } 
+    }
   }
 
   // get Showtimes by movie
