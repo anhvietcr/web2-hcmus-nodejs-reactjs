@@ -71,7 +71,7 @@ const Theater = (props) => {
 
       setValues({
         date: "2019-06-01",
-        theater_id: 3 //TheaterCpanel.theaters[0].id
+        theater_id: TheaterCpanel.theaters[0].id
       });
     }
   }, [TheaterCpanel])
