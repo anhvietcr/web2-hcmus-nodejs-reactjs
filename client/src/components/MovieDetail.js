@@ -132,7 +132,6 @@ const MovieDetail = (props) => {
     if (dataCinemas.length) {
       const { id, address } = dataCinemas[0]
 
-      console.log(dataCinemas[0])
       setComboboxId(id)
       getLatLng(address)
     }
@@ -163,9 +162,6 @@ const MovieDetail = (props) => {
       poster = <iframe className={classes.moviePoster} src={dataMovie.trailer}></iframe>
     } else {
       poster = <img className={classes.moviePoster} src={dataMovie.image} alt="poster" />
-
-      //debug
-      poster = <img src="/movie.jpg" alt="poster" />
     }
     return (
       <React.Fragment>
