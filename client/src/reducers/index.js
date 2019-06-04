@@ -79,7 +79,12 @@ function CinemaCpanel(state = initialState, action) {
             return {
                 ...state,
                 payload: action.payload
-            } 
+            }
+        case TYPE.ADDRESS_TO_LATLNG_ASYNC:
+            return {
+                ...state,
+                latlng: action.payload
+            }
         default:
             return state;
     }

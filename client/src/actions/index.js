@@ -61,6 +61,13 @@ const CinemaDeleteAsync = (payload) => {
         payload
     }
 }
+const AddressToLatLngAsync = (payload) => {
+    return {
+        type: TYPE.ADDRESS_TO_LATLNG_ASYNC,
+        payload
+    }
+}
+
 
 // Theater Cpanel
 const TheaterListAsync = (payload) => {
@@ -192,6 +199,7 @@ export default {
     CinemaAddAsync,
     CinemaUpdateAsync,
     CinemaDeleteAsync,
+    AddressToLatLngAsync,
 
     TheaterListAsync,
     TheaterAddAsync,

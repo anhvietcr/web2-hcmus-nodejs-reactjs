@@ -57,3 +57,18 @@ export function* actionCinemaDelete(data) {
 
     yield put(actions.CinemaDeleteAsync(response.data))
 }
+
+// Get lat, lng by place name
+function asyncAddressToLatLng(address) {
+    let endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${address}&key=f25990252b184fddaea819c25c8d1126`
+    return axios.get(endpoint)
+        .then(response => response)
+        .catch(err => console.log(err))
+}
+
+export function* actionAddressToLatLng(data) {
+    const { payload } = data
+    const response = yield call(asyncAddressToLatLng, payload)
+
+    yield put(actions.AddressToLatLngAsync(response.data));
+}

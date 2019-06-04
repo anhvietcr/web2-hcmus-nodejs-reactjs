@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Navbar from '../components/head/Navbar'
 import SimpleSelect from './helper/SimpleSelect'
+import CustomMap from './helper/CustomMap'
 import SmallButton from './helper/SmallButton'
 import Grid from '@material-ui/core/Grid'
 import List from '@material-ui/core/List'
@@ -53,15 +54,23 @@ const styles = theme => ({
     width: "100%",
     height: '250px',
   },
+  moviePoster: {
+    width: '100%',
+    height: '350px'
+  }
 })
 
 const MovieDetail = (props) => {
   const { actions, classes } = props
-  const { ShowtimeCpanel } = actions
+  const { ShowtimeCpanel, CinemaCpanel } = actions
   const movie_id = actions.match.params.id;
   const [dataMovie, setDataMovie] = useState([])
   const [dataCinemas, setDataCinemas] = useState([])
   const [comboboxId, setComboboxId] = useState(0)
+  const [latlng, setLatlng] = useState({
+    lat: 0,
+    lng: 0
+  })
 
   // Get showtimes by movie id
   useEffect(() => {
@@ -76,18 +85,57 @@ const MovieDetail = (props) => {
     }
   }, [ShowtimeCpanel])
 
+  // preload combobox
+  useEffect(() => {
+    if (dataCinemas.length) {
+      const { id, address } = dataCinemas[0]
+
+      console.log(dataCinemas[0])
+      setComboboxId(id)
+      getLatLng(address)
+    }
+
+  }, [dataCinemas])
+
+  const getLatLng = (address) => {
+    actions.getLatLng(address)
+  }
+
+  useEffect(() => {
+    console.log(CinemaCpanel)
+    if(CinemaCpanel.latlng) {
+      if (CinemaCpanel.latlng.results.length) {
+        const { lat, lng } = CinemaCpanel.latlng.results[0].geometry
+        setLatlng({
+          lat,
+          lng
+        })
+      }
+    }
+  }, [CinemaCpanel])
+
   // load area movie
   const movieDetailArea = () => {
+
+    let poster = null;
+    if (dataMovie.trailer) {
+      poster = <iframe className={classes.moviePoster} src={dataMovie.trailer}></iframe>
+    } else {
+      poster = <img className={classes.moviePoster} src={dataMovie.image} alt="poster"/>
+
+      //debug
+      poster = <img src="/movie.jpg" alt="poster"/>
+    }
     return (
       <React.Fragment>
         <Grid item xs={6} sm={6} md={6} lg={6}>
-          <img src="/movie.jpg" alt="movie trailer" />
+          {poster}
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6}>
           <h3>{dataMovie.name}</h3>
           <h6>{dataMovie.introduce}</h6>
           <label>{dataMovie.opening_day}</label>
-          <label>{dataMovie.minute_time} phut</label>
+          <label>{dataMovie.minute_time} phút</label>
         </Grid>
       </React.Fragment>
     )
@@ -104,12 +152,33 @@ const MovieDetail = (props) => {
     })
   }
 
-  const cinemaCombobox = () => {
+  const cinemaMap = () => {
+    if (!comboboxId) {
+      return (
+        <label></label>
+      )
+    } else {
+      return (
+        <>
+        <CustomMap
+          lat={latlng.lat}
+          lng={latlng.lng}
+        />
+        </>
+      )
+    }
+  }
 
+  const cinemaCombobox = () => {
+    if (!comboboxId) {
+      return (
+        <p>Không tìm thấy cụm rạp.</p>
+      )
+    } else {
       return (
         <SimpleSelect
           label={{
-            label: 'Cum Rap',
+            label: 'Cụm Rạp',
             name_id: 'cinema_id'
           }}
           defaultValue={comboboxId}
@@ -117,10 +186,17 @@ const MovieDetail = (props) => {
           handleChange={handleChangeCombobox}
         />
       )
+    }
   }
   const handleChangeCombobox = (e) => {
-    console.log(e.target.value)
-    setComboboxId(e.target.value)
+    const { value } = e.target
+    setComboboxId(value);
+
+    // get address
+    let cinema = dataCinemas.filter(cinema => cinema.id === value)[0];
+
+    console.log(cinema)
+    actions.getLatLng(cinema.address)
   }
 
   // load area cinemas
@@ -128,10 +204,10 @@ const MovieDetail = (props) => {
     return (
       <React.Fragment>
         <Grid item sm={12} xs={12} md={6} lg={6}>
-          {theaterArea(1)}
+          {theaterArea(comboboxId)}
         </Grid>
         <Grid item sm={12} xs={12} md={6} lg={6}>
-          {cinemaArea(1)}
+          {cinemaArea(comboboxId)}
         </Grid>
       </React.Fragment>
     )
@@ -144,7 +220,7 @@ const MovieDetail = (props) => {
 
     if (typeof cinema === 'undefined' || !dataCinemas.length) {
       return (
-        <p>Khong tim thay suat chieu trong cum rap</p>
+        <p>Không tìm thấy suất chiếu trong rạp</p>
       )
     }
 
@@ -196,10 +272,10 @@ const MovieDetail = (props) => {
     return (
       <Grid container spacing={8}>
         <Grid item sm={12} xs={12} md={12} lg={12}>
-          {dataCinemas.length && cinemaCombobox()}
+          {cinemaCombobox()}
         </Grid>
         <Grid item sm={12} xs={12} md={12} lg={12}>
-          <p>Cinema map</p>
+          {cinemaMap()}
         </Grid>
       </Grid>
     )

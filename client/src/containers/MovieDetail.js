@@ -13,15 +13,17 @@ class MovieDetailContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { ShowtimeCpanel } = state
+    const { ShowtimeCpanel, CinemaCpanel } = state
 
     return {
-        ShowtimeCpanel
+        ShowtimeCpanel,
+        CinemaCpanel
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getShowTimesByMovie: (payload) => {dispatch({type: TYPE.SHOWTIME_BY_MOVIE, payload})}
+    getShowTimesByMovie: (payload) => {dispatch({type: TYPE.SHOWTIME_BY_MOVIE, payload})},
+    getLatLng: (payload) => {dispatch({type: TYPE.ADDRESS_TO_LATLNG, payload})}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovieDetailContainer)

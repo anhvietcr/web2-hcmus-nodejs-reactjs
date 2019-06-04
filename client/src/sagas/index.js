@@ -42,6 +42,8 @@ function* CustomSaga() {
   yield takeLatest(TYPE.CINEMA_ADD, CinemaCpanel.actionCinemaAdd)
   yield takeLatest(TYPE.CINEMA_UPDATE, CinemaCpanel.actionCinemaUpdate)
   yield takeLatest(TYPE.CINEMA_DELETE, CinemaCpanel.actionCinemaDelete)
+  yield takeLatest(TYPE.ADDRESS_TO_LATLNG, CinemaCpanel.actionAddressToLatLng)
+
 
   yield takeLatest(TYPE.THEATER_LIST, TheaterCpanel.actionTheaterList)
   yield takeLatest(TYPE.THEATER_ADD, TheaterCpanel.actionTheaterAdd)
