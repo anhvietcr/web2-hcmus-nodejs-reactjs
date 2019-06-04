@@ -12,14 +12,14 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
 import Timelapse from '@material-ui/icons/Timelapse'
 import { NavLink } from 'react-router-dom'
-
+import DateRange from '@material-ui/icons/DateRange'
 
 
 const styles = theme => ({
   root: {
     // width: '100%',
     margin: '0px 10%',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#f5f6f7',
     borderRadius: '14px',
     border: '1px solid #fafbfc'
   },
@@ -60,6 +60,17 @@ const styles = theme => ({
     padding: '5px 0px',
     fontWeight: '600',
     color: '#999999'
+  },
+  movieName: {
+    textTransform: 'uppercase'
+  },
+  comboboxArea: {
+    border: "1px dotted #000",
+    margin: '10px 0px',
+    backgroundColor: '#f5f6f7'
+  },
+  theaterPaper: {
+    backgroundColor: '#f5f6f7'
   }
 })
 
@@ -148,6 +159,7 @@ const Theater = (props) => {
                               component="span"
                               variant="h5"
                               color="textPrimary"
+                              className={classes.movieName}
                             >
                               <NavLink to={`/movie/detail/${movie.id}`}>{movie.name}</NavLink>
                             </Typography>
@@ -157,10 +169,12 @@ const Theater = (props) => {
                               color="textPrimary"
                               className={classes.inline}
                             >
-                            <span className={classes.itemIcon}>
-                               <Timelapse className={classes.smallicon} /> {movie.minute_time + " phút"}
-                               {" — " + movie.introduce.slice(0, 100)}
-                            </span>
+                              <span className={classes.itemIcon}>
+                                <DateRange className={classes.smallbtn} /><label>Ngày khỏi chiếu: </label>{movie.opening_day}
+                                <br />
+                                <Timelapse className={classes.smallicon} /> {movie.minute_time + " phút"}
+                                {" — " + movie.introduce.slice(0, 100)}
+                              </span>
                             </Typography>
                           </React.Fragment>
                         }
@@ -187,19 +201,21 @@ const Theater = (props) => {
   return (
     <React.Fragment>
       <Navbar />
-      <SimpleSelect
-        handleChange={handleChangeValues}
-        dataCombobox={dataTheater}
-        values={values}
-        setValues={setValues}
-        defaultValue={values.theater_id}
-        label={lableDatas}
-      />
-      <section>
-        {dataShowtime.id && loadMovies(dataShowtime)}
-      </section>
-
-
+      <div className={classes.theaterPaper}>
+        <section className={classes.comboboxArea}>
+          <SimpleSelect
+            handleChange={handleChangeValues}
+            dataCombobox={dataTheater}
+            values={values}
+            setValues={setValues}
+            defaultValue={values.theater_id}
+            label={lableDatas}
+          />
+        </section>
+        <section>
+          {dataShowtime.id && loadMovies(dataShowtime)}
+        </section>
+      </div>
     </React.Fragment>
   )
 }
