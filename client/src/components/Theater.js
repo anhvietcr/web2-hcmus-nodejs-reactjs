@@ -11,6 +11,9 @@ import Divider from '@material-ui/core/Divider'
 import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
 import Timelapse from '@material-ui/icons/Timelapse'
+import { NavLink } from 'react-router-dom'
+
+
 
 const styles = theme => ({
   root: {
@@ -36,6 +39,14 @@ const styles = theme => ({
   list: {
     display: 'inline-block',
     position: 'relative',
+
+    "& a": {
+      textDecoration: "none",
+      color: '#0c0c0c'
+    },
+    "& a:hover": {
+      color: "#ff0000"
+    }
   },
   imgLeft: {
     width: "100%",
@@ -132,7 +143,7 @@ const Theater = (props) => {
                               variant="h5"
                               color="textPrimary"
                             >
-                              {movie.name}
+                              <NavLink to={`/movie/detail/${movie.id}`}>{movie.name}</NavLink>
                             </Typography>
                             <Typography
                               component="span"

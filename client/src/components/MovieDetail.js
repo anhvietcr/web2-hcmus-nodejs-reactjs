@@ -102,7 +102,6 @@ const MovieDetail = (props) => {
   }
 
   useEffect(() => {
-    console.log(CinemaCpanel)
     if(CinemaCpanel.latlng) {
       if (CinemaCpanel.latlng.results.length) {
         const { lat, lng } = CinemaCpanel.latlng.results[0].geometry

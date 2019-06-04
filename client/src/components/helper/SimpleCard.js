@@ -15,34 +15,39 @@ const styles = theme => ({
     maxHeight: '300px',
     padding: theme.spacing.unit,
     margin: theme.spacing.unit,
-    overFlowY: 'scroll'
+    overFlowY: 'scroll',
   },
+  ahref: {
+    textDecoration: 'none'
+  }
 });
 
 const SimpleCard = (props) => {
   const { classes, label } = props
 
   return (
-    <Card className={classes.card}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="140"
-          image="/movie.jpg"
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {label.name}
-          </Typography>
-          <Divider />
-          <Typography variant="body2" color="textSecondary" component="p">
-            {label.introduce}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+    <a href={`/movie/detail/${label.id}`} className={classes.ahref}>
+      <Card className={classes.card} href={'/home'}>
+        <CardActionArea>
+          <CardMedia
+            component="img"
+            alt="Contemplative Reptile"
+            height="140"
+            image="/movie.jpg"
+            title="Contemplative Reptile"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {label.name}
+            </Typography>
+            <Divider />
+            <Typography variant="body2" color="textSecondary" component="p">
+              {label.introduce}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </a>
   );
 }
 
