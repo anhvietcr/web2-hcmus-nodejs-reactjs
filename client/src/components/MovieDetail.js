@@ -10,12 +10,15 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
 import ListItemText from '@material-ui/core/ListItemText'
-import Typography from '@material-ui/core/Typography'
 import Timelapse from '@material-ui/icons/Timelapse'
+import Typography from '@material-ui/core/Typography'
+import AttachMoney from '@material-ui/icons/AttachMoney'
+import Description from '@material-ui/icons/Description'
+import DateRange from '@material-ui/icons/DateRange'
 
 const styles = theme => ({
   root: {
-    backgroundColor: '#fafafa'
+    backgroundColor: '#f5f6f7'
   },
   left: {
     position: 'relative',
@@ -33,8 +36,27 @@ const styles = theme => ({
   },
   movieDetail: {
     display: 'block',
-    backgroundColor: '#ccc',
-    position: 'relative'
+    position: 'relative',
+    backgroundColor: '#f5f6f7'
+  },
+  movieContent: {
+    listStyleType: 'none',
+    textAlign: 'left',
+    padding: "0px 10px 10px 10px",
+
+    "& li": {
+      padding: '10px 0px',
+      fontSize: '20px',
+      fontWeight: 500,
+      minHeight: '60px',
+
+      "& h2": {
+        color: '#000',
+        textTransform: 'uppercase',
+        padding: 0,
+        margin: 0,
+      }
+    },
   },
   smallbtn: {
     margin: "15px 0px 0px 0px",
@@ -46,9 +68,12 @@ const styles = theme => ({
   divider: {
     marginTop: '10px'
   },
-  list: {
+  itemList: {
     display: 'inline-block',
     position: 'relative',
+    borderLeft: "3px solid #000",
+    margin: "0px 5px",
+    backgroundColor: "#f5f6f7"
   },
   imgLeft: {
     width: "100%",
@@ -57,6 +82,23 @@ const styles = theme => ({
   moviePoster: {
     width: '100%',
     height: '350px'
+  },
+  cinemaArea: {
+    borderLeft: '1px dotted #000',
+    backgroundColor: '#f5f6f7'
+  },
+  theaterName: {
+    backgroundColor: '#ff6060de',
+    borderLeft: '5px solid #000',
+    width: 'fit-content',
+    padding: '5px 20px',
+    minWidth: '320px'
+  },
+  itemIcon: {
+    display: "flex",
+    padding: '5px 0px',
+    fontWeight: '600',
+    color: '#999999'
   }
 })
 
@@ -102,7 +144,7 @@ const MovieDetail = (props) => {
   }
 
   useEffect(() => {
-    if(CinemaCpanel.latlng) {
+    if (CinemaCpanel.latlng) {
       if (CinemaCpanel.latlng.results.length) {
         const { lat, lng } = CinemaCpanel.latlng.results[0].geometry
         setLatlng({
@@ -120,10 +162,10 @@ const MovieDetail = (props) => {
     if (dataMovie.trailer) {
       poster = <iframe className={classes.moviePoster} src={dataMovie.trailer}></iframe>
     } else {
-      poster = <img className={classes.moviePoster} src={dataMovie.image} alt="poster"/>
+      poster = <img className={classes.moviePoster} src={dataMovie.image} alt="poster" />
 
       //debug
-      poster = <img src="/movie.jpg" alt="poster"/>
+      poster = <img src="/movie.jpg" alt="poster" />
     }
     return (
       <React.Fragment>
@@ -131,10 +173,12 @@ const MovieDetail = (props) => {
           {poster}
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6}>
-          <h3>{dataMovie.name}</h3>
-          <h6>{dataMovie.introduce}</h6>
-          <label>{dataMovie.opening_day}</label>
-          <label>{dataMovie.minute_time} phút</label>
+          <ul className={classes.movieContent}>
+            <li><h2>{dataMovie.name}</h2></li>
+            <li><Description className={classes.smallbtn} /><label>Giới thiệu: </label>{dataMovie.introduce}</li>
+            <li><DateRange className={classes.smallbtn} /><label>Ngày khỏi chiếu: </label>{dataMovie.opening_day}</li>
+            <li><Timelapse className={classes.smallicon} /><label>Thời gian: </label>{dataMovie.minute_time} phút</li>
+          </ul>
         </Grid>
       </React.Fragment>
     )
@@ -158,12 +202,10 @@ const MovieDetail = (props) => {
       )
     } else {
       return (
-        <>
         <CustomMap
           lat={latlng.lat}
           lng={latlng.lng}
         />
-        </>
       )
     }
   }
@@ -175,26 +217,31 @@ const MovieDetail = (props) => {
       )
     } else {
       return (
-        <SimpleSelect
-          label={{
-            label: 'Cụm Rạp',
-            name_id: 'cinema_id'
-          }}
-          defaultValue={comboboxId}
-          dataCombobox={dataCinemas}
-          handleChange={handleChangeCombobox}
-        />
+        <div className={classes.cinemaArea}>
+          <SimpleSelect
+            label={{
+              label: 'Cụm Rạp',
+              name_id: 'cinema_id'
+            }}
+            defaultValue={comboboxId}
+            dataCombobox={dataCinemas}
+            handleChange={handleChangeCombobox}
+          />
+        </div>
       )
     }
   }
   const handleChangeCombobox = (e) => {
     const { value } = e.target
+
+    // valid combobox value
+    if (comboboxId === value) return;
+
+    // selected combobox
     setComboboxId(value);
 
-    // get address
+    // get lat, lng from address
     let cinema = dataCinemas.filter(cinema => cinema.id === value)[0];
-
-    console.log(cinema)
     actions.getLatLng(cinema.address)
   }
 
@@ -229,7 +276,7 @@ const MovieDetail = (props) => {
         {
           theaters.map((theater) => {
             return (
-              <ListItem alignItems="flex-start" key={theater.id} className={classes.list}>
+              <ListItem alignItems="flex-start" key={theater.id} className={classes.itemList}>
                 <Grid container spacing={8}>
                   <Grid item sm={12} xs={12} md={12} lg={12}>
                     <ListItemText
@@ -239,6 +286,7 @@ const MovieDetail = (props) => {
                             component="span"
                             variant="h5"
                             color="textPrimary"
+                            className={classes.theaterName}
                           >
                             {theater.name}
                           </Typography>
@@ -248,9 +296,11 @@ const MovieDetail = (props) => {
                             color="textPrimary"
                             className={classes.inline}
                           >
-                            <Timelapse className={classes.smallicon} /> {dataMovie.minute_time + " phút"}
+                          <span className={classes.itemIcon}>
+                            <AttachMoney className={classes.smallicon} /> {theater.showtimes[0].price + " VND"}
+                            {" — " + theater.type}
+                          </span>
                           </Typography>
-                          {" — " + theater.type}
                         </React.Fragment>
                       }
                     />

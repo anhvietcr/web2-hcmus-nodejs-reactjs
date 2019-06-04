@@ -36,7 +36,7 @@ const styles = theme => ({
     margin: "15px 0px 0px 0px",
     bottom: 0,
   },
-  list: {
+  itemList: {
     display: 'inline-block',
     position: 'relative',
 
@@ -54,6 +54,12 @@ const styles = theme => ({
   },
   divider: {
     marginTop: '10px'
+  },
+  itemIcon: {
+    display: "inline-block",
+    padding: '5px 0px',
+    fontWeight: '600',
+    color: '#999999'
   }
 })
 
@@ -128,7 +134,7 @@ const Theater = (props) => {
           {dataShowtime.movies.map((movie) => {
             if (movie.showtimes.length) {
               return (
-                <ListItem alignItems="flex-start" key={movie.id} className={classes.list}>
+                <ListItem alignItems="flex-start" key={movie.id} className={classes.itemList}>
                   <Grid container spacing={8}>
                     <Grid item sm={12} xs={12} md={4} lg={4}>
                       <img alt="Remy Sharp" src="/movie.jpg" className={classes.imgLeft} />
@@ -151,9 +157,11 @@ const Theater = (props) => {
                               color="textPrimary"
                               className={classes.inline}
                             >
-                              <Timelapse className={classes.smallicon} /> {movie.minute_time + " phút"}
+                            <span className={classes.itemIcon}>
+                               <Timelapse className={classes.smallicon} /> {movie.minute_time + " phút"}
+                               {" — " + movie.introduce.slice(0, 100)}
+                            </span>
                             </Typography>
-                            {" — " + movie.introduce.slice(0, 100)}
                           </React.Fragment>
                         }
                       />
@@ -168,6 +176,10 @@ const Theater = (props) => {
             }
           })}
         </List>
+      )
+    } else {
+      return (
+        <p>Không tìm thấy phim và suất chiếu trong rạp {dataShowtime.name}</p>
       )
     }
   }
