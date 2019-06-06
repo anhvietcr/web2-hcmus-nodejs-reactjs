@@ -1,18 +1,6 @@
 import { combineReducers } from 'redux'
 import * as TYPE from '../constants/actionTypes'
 
-function QuanLyVe(state = [], action) {
-    switch (action.type) {
-        case TYPE.DAT_VE_ASYNC: 
-            return {
-                ...state,
-                data: action.data
-            }
-        default:
-            return state;
-    }
-}
-
 let initialState = {
     status: 0,
     payload: {
@@ -225,7 +213,6 @@ function ShowtimeCpanel(state = initialState, action) {
 }
 
 const rootReducer = combineReducers({
-    QuanLyVe,
     Auth,
     User,
     CinemaCpanel,

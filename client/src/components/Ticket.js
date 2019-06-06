@@ -1,23 +1,44 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
+import Navbar from './head/Navbar'
 
 const styles = theme => ({
-    root: {
-        backgroundColor: 'red'
-    }
+	root: {
+		backgroundColor: 'red'
+	}
 })
 
-const Book = (props) => {
-    const { classes , match } = props
+const Ticket = (props) => {
+	const { classes, actions } = props
+	const	{ LocalStorage } = actions
+	
+	useEffect(() => {
 
-    return (
-        <p className={classes.root}>{match.params.id}</p>
-    )
+		let localState = localStorage.getItem('localState')
+		localState = JSON.parse(localState);
+
+		if (!localState || !localState.user_id) {
+			actions.history.push('/auth/login');
+		}
+		
+	}, []);
+
+
+	return (
+		<React.Fragment>
+			<Navbar />
+			<div className={classes.root}>
+				<p className={classes.root}>{actions.match.params.id}</p>
+			</div>
+		</React.Fragment>
+	)
 }
 
-Book.propTypes = {
-    classes: PropTypes.object.isRequired,
+Ticket.propTypes = {
+	classes: PropTypes.object.isRequired,
+	actions: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(Book)
+export default withStyles(styles)(Ticket)
+

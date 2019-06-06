@@ -14,14 +14,8 @@ function asyncUserUpdateInfo(payload) {
 }
 export function* actionUserUpdateInfo(payload) {
     console.log("post update information data: ", payload);
+    const response = yield call(asyncUserUpdateInfo, payload);
 
-    // const response = yield call(asyncUserUpdateInfo, payload);
-    const response = {
-        status: 200,
-        payload: {
-
-        }
-    }
     yield put(actions.UserUpdateInfoAsync(response))
 }
 

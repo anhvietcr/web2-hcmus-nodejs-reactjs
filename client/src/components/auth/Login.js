@@ -100,17 +100,44 @@ const Login = (props) => {
         email: TYPE.REQUIRE_EMAIL, 
         password: TYPE.REQUIRE_PASSW, 
     });
-    
+
+    useEffect(() => {
+        // First load localstorage
+        let localState = localStorage.getItem('localState');
+        
+        if (localState) {
+            localState = JSON.parse(localState);
+
+            if (localState.user_id) {
+                actions.history.push('/');
+            }
+
+            if (localState.state === 'pending') {
+                actions.history.push('/auth/pending')
+            }
+        }
+    }, [])
+
     useEffect(() => {
         if (submitted && actions.Auth.user) {
             if (actions.Auth.user.status === 200) {
-                if (actions.Auth.payload.role !== 0) {
-                    actions.history.push('/cpanel')
-                } else {
-                    actions.history.push('/user')
-                }
 
-                console.log(actions.Auth.user)
+                // set localStorage
+                const { payload } = actions.Auth.user;
+                let localState = localStorage.getItem('localState');
+
+                let user = {
+                    ...localState,
+                    user_id: payload.id,
+                    user_email: payload.email,
+                    user_fullname: payload.fullname,
+                    user_phone: payload.phone,
+                    user_role: payload.role
+                }
+                localStorage.setItem('localState', JSON.stringify(user))
+
+                // navigation
+                actions.history.goBack();
             }
         }
     }, [submitted, actions.Auth.user])

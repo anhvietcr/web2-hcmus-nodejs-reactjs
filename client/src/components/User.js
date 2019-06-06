@@ -15,6 +15,7 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import NearMe from '@material-ui/icons/NearMe'
 import Divider from '@material-ui/core/Divider'
+import Navbar from './head/Navbar';
 
 const styles = theme => ({
     root: {
@@ -113,6 +114,15 @@ const User = (props) => {
         repassword: TYPE.REQUIRE_REPASSW, 
     });
     const [dataHistory, setDataHistory] = useState([])
+
+    useEffect(() => {
+        let localState = JSON.parse(localStorage.getItem('localState'))
+
+        if (!localState || !localState.user_id) {
+            actions.history.push('/')
+        } 
+    }, [])
+
 
     useEffect(() => {
         if (submitted && actions.User.status) {
@@ -222,7 +232,9 @@ const User = (props) => {
     }
 
     return (
-        <Grid container className={classes.root} spacing={16}>
+        <React.Fragment>
+            <Navbar />
+            <Grid container className={classes.root} spacing={16}>
             <Alert 
                 count={alert.count}
                 open={alert.open}
@@ -362,6 +374,7 @@ const User = (props) => {
                 </Paper>
             </Grid>
         </Grid>        
+        </React.Fragment>
     );
 }
 

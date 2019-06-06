@@ -1,12 +1,5 @@
 import * as TYPE from '../constants/actionTypes'
 
-const DatveAsync = (data) => {
-    return {
-        type: TYPE.DAT_VE_ASYNC,
-        data
-    }
-}
-
 const SignInAsync = (payload) => {
     return {
         type: TYPE.SIGN_IN_ASYNC,
@@ -188,7 +181,6 @@ const ShowtimeByMovie = (payload) => {
 }
 
 export default {
-    DatveAsync,
     SignInAsync,
     SignUpAsync,
     

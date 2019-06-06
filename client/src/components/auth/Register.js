@@ -107,13 +107,40 @@ const Register = (props) => {
     });
     
     useEffect(() => {
-        if (submitted) {
-            console.log("response: ", actions.Auth)
-            if (actions.Auth.status === 200) {
+        // get localState
+        let localState = localStorage.getItem('localState')
+
+        if (localState) {
+            localState = JSON.parse(localState);
+
+            if (localState.user_id) {
                 actions.history.push('/')
             }
+
+            if (localState.state === 'pending') {
+                actions.history.push('/auth/pending')
+            }
         }
-    })
+    }, []);
+
+    useEffect(() => {
+        if (submitted && actions.Auth.user) {
+            if (actions.Auth.user.status === 200) {
+
+                let localState = localStorage.getItem('localState');
+                let user = {
+                    ...localState,
+                    state: "pending",
+                    user_email: values.email,
+                    user_fullname: values.fullname
+                }
+                localStorage.setItem('localState', JSON.stringify(user))
+
+                // navigation
+                actions.history.push('/auth/pending')
+            }
+        }
+    }, [submitted, actions.Auth.user])
 
     const handleChange = (e) => {
         const {value, name} = e.target;

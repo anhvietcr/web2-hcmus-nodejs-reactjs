@@ -13,12 +13,12 @@ class RegisterContainer extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        Auth: state.Auth
+        Auth: state.Auth,
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    SignUp: (payload) => {dispatch({type: TYPE.SIGN_UP, payload})}
+    SignUp: (payload) => {dispatch({type: TYPE.SIGN_UP, payload})},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterContainer)

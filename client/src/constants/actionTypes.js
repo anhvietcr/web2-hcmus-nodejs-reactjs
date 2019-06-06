@@ -26,9 +26,6 @@ export const BTN_UPDATE = 'Sửa'
 export const BTN_DELETE = 'Xóa'
 export const BTN_ADD_NEW = 'Thêm mới'
 
-export const DAT_VE = 'DAT_VE'
-export const DAT_VE_ASYNC = 'DAT_VE_ASYNC'
-
 export const SIGN_IN = 'SIGN_IN'
 export const SIGN_IN_ASYNC = 'SIGN_IN_ASYNC'
 export const SIGN_UP = 'SIGN_UP'
