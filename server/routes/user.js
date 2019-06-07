@@ -119,7 +119,7 @@ router.get('/register', jsonParser, async function (req, res) {
     {
         let respone = {
             status:403,
-            message:"Lỗi tìm kiếm chuỗi mã hóa"
+            message:"Lỗi tìm kiếm chuỗi mã hóa vui lòng đăng ký lại"
         };
         res.json(respone);
     }
@@ -149,7 +149,7 @@ router.get('/register', jsonParser, async function (req, res) {
             {
                 let response = {
                     status: 409,
-                    message:"Không thể insert xuống CSDL"
+                    message:"Không thể insert xuống CSDL vui lòng đăng ký lại"
                 };
                 res.json(response);
             }
@@ -200,7 +200,7 @@ router.post('/login',jsonParser, async function (req, res) {
             payload: {
 
             },
-            message:"Không tồn tại email"
+            message:"Không tồn tại email vui lòng kiểm tra lại"
         };
         res.json(response);
         return;
@@ -212,7 +212,7 @@ router.post('/login',jsonParser, async function (req, res) {
             payload: {
 
             },
-            message:"Sai password"
+            message:"Sai password vui lòng kiểm tra lại"
         };
         res.json(response);
         return;
@@ -260,7 +260,7 @@ router.get('/profile',jsonParser, async function f(req, res) {
     if (!user) {
         let response = {
             status: 403,
-            message: "Không tồn tại ID User"
+            message: "Không tồn tại tài khoản người dùng, vui lòng đăng nhập lại"
         };
         res.json(response);
         return;
@@ -284,7 +284,7 @@ router.put('/profile',jsonParser, async function (req, res) {
     if (!temp) {
         let response = {
             status: 403,
-            message: "Không tồn tại email"
+            message: "Không tồn tại email vui lòng đăng nhập lại"
         };
         res.json(response);
         return;
@@ -303,7 +303,7 @@ router.put('/profile',jsonParser, async function (req, res) {
     if (password !== repassword) {
         let response = {
             status: 403,
-            message: "Password không khớp nhau"
+            message: "Password không khớp nhau vui lòng kiểm tra lại"
         };
         res.json(response);
         return;
@@ -357,7 +357,7 @@ router.post('/forget-password',jsonParser, async function (req, res) {
     if (!user || user == "") {
         let respone = {
             status: 403,
-            message: "email không tồn tại!"
+            message: "email không tồn tại vui lòng kiểm tra lại!"
 
         };
         res.json(respone);
@@ -371,7 +371,7 @@ router.post('/forget-password',jsonParser, async function (req, res) {
     if(!verify){
         let respone = {
             status:403,
-            message:"Không insert được csdl xuống"
+            message:"Lỗi không insert được"
         };
         res.json(respone);
         return;
@@ -432,7 +432,7 @@ router.get('/verify',async function (req,res) {
             } else {
                 let respone = {
                     status: 408,
-                    message: "Chuỗi mã đã hết hạn!"
+                    message: "Chuỗi mã đã hết hạn vui lòng nhập lại email!"
                 };
                 res.json(respone);
             }
