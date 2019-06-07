@@ -30,7 +30,7 @@ router.put('/', async (req, res, next) => {
 router.delete('/', async (req, res, next) => {
     next();
 });
-
+//
 // {
 //     "payload": {
 //     "fullname": "Loi hai",
@@ -131,34 +131,40 @@ router.get('/register', jsonParser, async function (req, res) {
         //set time in 10 minute
         if (dt <= 600000 && register.done == false) {
             //Nếu xác nhận được thì trả về email => Hiển thị form user/veryfile để cập nhật mật khẩu mới
-            User.create({
+            var user = await  User.create({
                 email: register.email,
                 fullname: register.fullname,
                 password: register.password,
                 role:0
-            }).then(function (user) {
-                //res.json(user)
-                if(!user)
-                {
-                    let response = {
-                        status: 409,
-                        message:"Không thể insert xuống CSDL"
-                    };
-                    res.json(response);
+            });
+            const v = await Register.update({
+                done: true
+            }, {
+                where: {
+                    code: code
                 }
-                else{
-                    let response = {
-                        status: 200,
-                        payload:{
-                            userId:user.id,
-                            email:user.email,
-                            fullname:user.fullname,
-                            role:user.role
-                        }
-                    };
-                    res.json(response);
-                }
-             });
+            });
+            //res.json(user)
+            if(!user || !v)
+            {
+                let response = {
+                    status: 409,
+                    message:"Không thể insert xuống CSDL"
+                };
+                res.json(response);
+            }
+            else{
+                let response = {
+                    status: 200,
+                    payload:{
+                        userId:user.id,
+                        email:user.email,
+                        fullname:user.fullname,
+                        role:user.role
+                    }
+                };
+                res.json(response);
+            }
         }
         else {
             let respone = {
