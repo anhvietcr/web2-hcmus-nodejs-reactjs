@@ -138,32 +138,27 @@ const Register = (props) => {
     useEffect(() => {
         if (submitted && actions.Auth.user) {
             if (actions.Auth.user.status === 200) {
-
-                setAlert({
-                    count: alert.count + 1,
-                    open: true,
-                    message: TYPE.MESSAGE_SUCCESS,
-                    variant: "success"
-                });
-                
                 let localState = localStorage.getItem('localState');
                 let user = {
                     ...localState,
                     state: "pending",
-                    user_email: values.email,
-                    user_fullname: values.fullname
+                    user_email: values.email
                 }
                 localStorage.setItem('localState', JSON.stringify(user))
 
                 // navigation
                 actions.history.push('/auth/pending')
-            } else {
+            }
+
+            if (actions.Auth.user.status) {
                 setAlert({
                     count: alert.count + 1,
                     open: true,
                     message: "Đăng ký thất bại",
                     variant: "error"
                 })
+
+                actions.Auth.user.status = 0
             }
         }
     }, [submitted, actions.Auth.user])
@@ -229,6 +224,12 @@ const Register = (props) => {
     return (
         <Grid container className={classes.root} spacing={16}>
             <Grid item xs={12} md={12} lg={12} xl={12}>
+                <Alert
+                    count={alert.count}
+                    open={alert.open}
+                    message={alert.message}
+                    variant={alert.variant}
+                />
                 <Paper className={classes.paper}>
                     <Typography component="h2" variant="headline" gutterBottom align="left" className={classes.social}>
                         Đăng ký

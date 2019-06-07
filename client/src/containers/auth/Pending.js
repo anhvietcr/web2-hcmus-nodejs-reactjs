@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Pending from '../../components/auth/Pending';
 import { connect } from 'react-redux'
+import * as TYPE from '../../constants/actionTypes'
 
 class PendingContainer extends Component {
 
@@ -12,9 +13,11 @@ class PendingContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  
+  Auth: state.Auth
 })
 
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+  VerifySignUpAsync: (payload) => {dispatch({type: TYPE.VERIFY_SIGN_UP, payload})}
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(PendingContainer)

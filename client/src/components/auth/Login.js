@@ -210,14 +210,13 @@ const Login = (props) => {
 
     return (
         <Grid container className={classes.root} spacing={16}>
-            <Alert
-                count={alert.count}
-                open={alert.open}
-                message={alert.message}
-                variant={alert.variant}
-            />
-            
             <Grid item xs={12} md={12} lg={12} xl={12}>
+                <Alert
+                    count={alert.count}
+                    open={alert.open}
+                    message={alert.message}
+                    variant={alert.variant}
+                />
                 <Paper className={classes.paper}>
                     <Typography component="h2" variant="headline" gutterBottom align="left" className={classes.social}>
                         Đăng nhập

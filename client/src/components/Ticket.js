@@ -11,7 +11,6 @@ const styles = theme => ({
 
 const Ticket = (props) => {
 	const { classes, actions } = props
-	const	{ LocalStorage } = actions
 	
 	useEffect(() => {
 
