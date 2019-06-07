@@ -6,17 +6,21 @@ const SignInAsync = (payload) => {
         payload
     }
 } 
-
 const SignUpAsync = (payload) => {
     return {
         type: TYPE.SIGN_UP_ASYNC,
         payload
     }
 }
-
 const VerifySignUpAsync = (payload) => {
     return {
         type: TYPE.VERIFY_SIGN_UP_ASYNC,
+        payload
+    }
+}
+const ForgotPasswordAsync = (payload) => {
+    return {
+        type: TYPE.FORGOT_PASSWORD_ASYNC,
         payload
     }
 }
@@ -191,6 +195,7 @@ export default {
     SignInAsync,
     SignUpAsync,
     VerifySignUpAsync,
+    ForgotPasswordAsync,
     
     UserUpdateInfoAsync,
     UserHistoryAsync,

@@ -46,3 +46,19 @@ export function* actionVerifySignUp(data) {
 
     yield put(actions.VerifySignUpAsync(response.data))
 }
+
+// Forgot password
+function asyncForgotPassword(payload) {
+    return axios.post(END_POINT + 'user/forget-password', {payload})
+        .then(response => response)
+        .catch(err => console.log(err))
+}
+
+export function* actionForgotPassword(data) {
+    const {payload} = data;
+    const response = yield call(asyncForgotPassword, payload)
+
+    console.log(response.data)
+
+    yield put(actions.ForgotPasswordAsync(response.data))
+}
