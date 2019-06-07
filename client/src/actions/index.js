@@ -25,6 +25,13 @@ const ForgotPasswordAsync = (payload) => {
     }
 }
 
+const ChangePasswordAsync = (payload) => {
+    return {
+        type: TYPE.CHANGE_PASSWORD_ASYNC,
+        payload
+    }
+} 
+
 // User Cpanel
 const UserUpdateInfoAsync = (payload) => {
     return {
@@ -196,6 +203,7 @@ export default {
     SignUpAsync,
     VerifySignUpAsync,
     ForgotPasswordAsync,
+    ChangePasswordAsync,
     
     UserUpdateInfoAsync,
     UserHistoryAsync,

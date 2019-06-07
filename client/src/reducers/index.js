@@ -29,6 +29,11 @@ function Auth(state = initialState, action) {
                 ...state,
                 password: action.payload
             }
+        case TYPE.CHANGE_PASSWORD_ASYNC:
+            return {
+                ...state,
+                password: action.payload
+            }
         default:
             return state;
     }

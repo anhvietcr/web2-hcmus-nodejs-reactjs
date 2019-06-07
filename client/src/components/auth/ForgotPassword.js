@@ -10,7 +10,10 @@ import Alert from '../helper/Alert'
 import { 
   REQUIRE_EMAIL, 
   REQUIRE_TYPE_EMAIL,
-  MESSAGE_SUCCESS
+  MESSAGE_SUCCESS,
+  REQUIRE_PASSW,
+  REQUIRE_PASS_CONFIRM,
+  REQUIRE_REPASSW,
 } from '../../constants/actionTypes'
 
 const styles = theme => ({
@@ -39,7 +42,12 @@ const styles = theme => ({
 
 const ForgotPassword = (props) => {
   const { actions, classes } = props
-  const [email, setEmail] = useState("")
+  const [code, setCode] = useState(null);
+  const [values, setValues] = useState({
+    email: '',
+    password: '',
+    repassword: ''
+  })
   const [alert, setAlert] = useState({
     count: 0,
     open: false,
@@ -58,15 +66,53 @@ const ForgotPassword = (props) => {
     }
   }, [])
 
-  const handleChange = (e) => {
-    const {value} = e.target
+  useEffect(() => {
+    console.log(actions.Auth)
 
-    setEmail(value)
+    if (actions.Auth.password && code) {
+      if (actions.Auth.password.status === 200) {
+        console.log('thanh cong');
+        setAlert({
+          count: alert.count + 1,
+          open: true,
+          message: actions.Auth.password.message + '. Chuyển hướng sau 3s',
+          variant: "success"
+        })
+
+        actions.history.push('/auth/login')
+      } 
+
+      if (actions.Auth.password.status) {
+        setAlert({
+          count: alert.count + 1,
+          open: true,
+          message: actions.Auth.password.message,
+          variant: "error"
+        })
+      }
+
+      if (actions.Auth.password.status === 408) {
+
+      }
+    }
+
+  }, [actions.Auth])
+
+  
+  useEffect(() => {
+    setCode(actions.match.params.code)
+  }, [actions.match.params.code])
+
+  const handleChange = (e) => {
+    const {value, name} = e.target
+
+    setValues((values) => ({...values, [name]: value}))
   }
 
+  // Send request server and save email
   const handleSubmit = () => {
 
-    if (!email) {
+    if (!values.email) {
       setAlert({
         count: alert.count + 1,
         open: true,
@@ -77,8 +123,7 @@ const ForgotPassword = (props) => {
     }
 
     // Email is incorrect format
-    if (!/[a-z0-9._+-]+@[a-z0-9]{2,5}(\.[a-z0-9]{2,4}){1,2}/i.test(email)) {
-      setEmail('')
+    if (!/[a-z0-9._+-]+@[a-z0-9]{2,5}(\.[a-z0-9]{2,4}){1,2}/i.test(values.email)) {
 
       setAlert({
         count: alert.count + 1,
@@ -96,15 +141,104 @@ const ForgotPassword = (props) => {
       variant: "success"
     })
 
-    console.log(email)
+    actions.ForgotPassword({email: values.email});
+
+    let localState = JSON.parse(localStorage.getItem('localState'))
+
+    let info = {
+      ...localState,
+      pending_email: values.email
+    }
+    localStorage.setItem('localState', JSON.stringify(info))
   }
 
-  const showComponent = () => {
-    let code = actions.match.params.code;
+  // Renew pasword
+  const handleChangePassword = () => {
+    if (!values.password) {
+      setAlert({
+        count: alert.count + 1,
+        open: true,
+        message: REQUIRE_PASSW,
+        variant: "error"
+      })
+      return false;
+    }
 
+    if (!values.repassword) {
+      setAlert({
+        count: alert.count + 1,
+        open: true,
+        message: REQUIRE_REPASSW,
+        variant: "error"
+      })
+      return false;
+    }
+
+    if (values.password !== values.repassword) {
+      setAlert({
+        count: alert.count + 1,
+        open: true,
+        message: REQUIRE_PASS_CONFIRM,
+        variant: "error"
+      })
+      return false;
+    }
+
+    let localState = JSON.parse(localStorage.getItem('localState'))
+    if (localState) {
+      let payload = {
+        code,
+        email: localState.pending_email,
+        newpassword: values.password,
+        renewpassword: values.repassword
+      }
+
+      actions.ChangePassword(payload);
+    }
+  }
+
+
+  const showComponent = () => {
     if (code) {
+      // obsolete code ?  
+
       return (
-        <div>{code}</div>
+        <form className={classes.form}>
+          <TextField
+              required
+              id="outlined-password-input"
+              label="Mật khẩu"
+              className={classes.textField}
+              type="password"
+              name="password"
+              autoComplete="current-password"
+              margin="normal"
+              variant="outlined"
+              value={values.password}                            
+              onChange={handleChange}
+              />
+          <TextField
+              required
+              id="outlined-repassword-input"
+              label="Mật khẩu *nhập lại"
+              className={classes.textField}
+              type="password"
+              name="repassword"
+              margin="normal"
+              variant="outlined"
+              value={values.repassword}
+              onChange={handleChange}
+              />
+          <Button 
+              variant="contained" 
+              color="inherit" 
+              className={classNames(classes.button, classes.signinButton)}
+              onClick={handleChangePassword}
+              >
+              Thay đổi
+              <NearMe className={classes.rightIcon} />
+          </Button>
+      </form>
       )
     } else {
       return (

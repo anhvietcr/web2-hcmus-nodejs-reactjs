@@ -62,3 +62,17 @@ export function* actionForgotPassword(data) {
 
     yield put(actions.ForgotPasswordAsync(response.data))
 }
+
+// Forgot with change password
+function asyncChangePassword(payload) {
+    return axios.put(END_POINT + 'user/verify', {payload})
+        .then(response => response)
+        .catch(err => console.log(err))
+}
+
+export function* actionChangePassword(data) {
+    const {payload} = data;
+    const response = yield call(asyncChangePassword, payload)
+
+    yield put(actions.ChangePasswordAsync(response.data))
+}

@@ -16,6 +16,7 @@ function* CustomSaga() {
   yield takeLatest(TYPE.SIGN_UP, Auth.actionSignUp);
   yield takeLatest(TYPE.VERIFY_SIGN_UP, Auth.actionVerifySignUp)
   yield takeLatest(TYPE.FORGOT_PASSWORD, Auth.actionForgotPassword)
+  yield takeLatest(TYPE.CHANGE_PASSWORD, Auth.actionChangePassword)
 
   yield takeLatest(TYPE.USER_UPDATE_INFO, User.actionUserUpdateInfo);
   yield takeLatest(TYPE.USER_HISTORY, User.actionUserHistory);

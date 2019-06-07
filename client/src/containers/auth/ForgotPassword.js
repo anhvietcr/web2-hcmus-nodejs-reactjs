@@ -19,6 +19,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     ForgotPassword: (payload) => {dispatch({type: TYPE.FORGOT_PASSWORD, payload})},
+    ChangePassword: (payload) => {dispatch({type: TYPE.CHANGE_PASSWORD, payload})}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPasswordContainer)
