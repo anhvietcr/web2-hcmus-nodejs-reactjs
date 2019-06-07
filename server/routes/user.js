@@ -91,7 +91,7 @@ router.post('/register', jsonParser, async function (req, res) {
             return;
         }
     });
-    var contain = `Bấm vào link <a href = \`http://localhost:5000/user/register?code=${code}\`> này </a> để xác nhận đăng ký`;
+    var contain = `Bấm vào link <a href = \`http://localhost:3000/auth/verify/${code}\`> này </a> để xác nhận đăng ký`;
     console.log(contain);
     const info = await sendmail(email, 'Quên mật khẩu', 'Bạn có quên mật khẩu', '<h1>Đăng ký tài khoản</h1>'+contain);
     // res.send(info);
@@ -376,7 +376,7 @@ router.post('/forget-password',jsonParser, async function (req, res) {
         res.json(respone);
         return;
     }
-    var contain = `Bấm vào link <a href = \`http://localhost:5000/user/verify?code=${code}\`> này </a> để khôi phục mật khẩu`;
+    var contain = `Bấm vào link <a href = \`http://localhost:3000/auth/verify/${code}\`> này </a> để khôi phục mật khẩu`;
     //console.log(contain);
     const info = await sendmail(email, 'Quên mật khẩu', 'Bạn có quên mật khẩu', '<h1>Bạn có quên mật khẩu</h1>'+contain);
     // res.send(info);
