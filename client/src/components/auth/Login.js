@@ -255,7 +255,7 @@ const Login = (props) => {
                             required
                             id="outlined-email-input"
                             label="Email"
-                            className={classNames(classes.textField)}
+                            className={classes.textField}
                             type="email"
                             name="email"
                             autoComplete="email"
@@ -269,7 +269,7 @@ const Login = (props) => {
                             required
                             id="outlined-password-input"
                             label="Mật khẩu"
-                            className={classNames(classes.textField)}
+                            className={classes.textField}
                             type="password"
                             name="password"
                             autoComplete="current-password"
@@ -302,7 +302,7 @@ const Login = (props) => {
                                 align="left"
                                 className={classNames(classes.caption, classes.link)}
                                 onClick={() => {
-                                    actions.history.push("/user/forgotpassword")
+                                    actions.history.push("/auth/forgot-password")
                                 }}>
                                 Quên mật khẩu? 
                             </Typography>

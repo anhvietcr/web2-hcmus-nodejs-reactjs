@@ -15,7 +15,9 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import NearMe from '@material-ui/icons/NearMe'
 import Divider from '@material-ui/core/Divider'
-import Navbar from './head/Navbar';
+import Navbar from './head/Navbar'
+import SettingsPhone from '@material-ui/icons/SettingsPhone'
+import Mail from '@material-ui/icons/Mail'
 
 const styles = theme => ({
     root: {
@@ -85,6 +87,7 @@ const styles = theme => ({
 
 const User = (props) => {
     const {actions, classes} = props;
+    const [userId, setUserId] = useState(null);
     const [alert, setAlert] = useState({
         count: 0,
         open: false,
@@ -120,7 +123,15 @@ const User = (props) => {
 
         if (!localState || !localState.user_id) {
             actions.history.push('/')
-        } 
+        } else {
+            setValues({
+                email: localState.user_email,
+                fullname: localState.user_fullname || "",
+                phone: localState.user_phone || "",
+            })
+
+            setUserId(localState.user_id)
+        }
     }, [])
 
 
@@ -132,6 +143,18 @@ const User = (props) => {
                     message: TYPE.MESSAGE_SUCCESS,
                     variant: 'success'
                 });
+
+                let localState = JSON.parse(localStorage.getItem('localState'))
+
+                if (localState) {
+                    let user = {
+                        ...localState,
+                        user_phone: values.phone,
+                        user_fullname: values.fullname,
+                    }
+
+                    localStorage.setItem('localState', JSON.stringify(user))
+                }
             } else {
                 setAlert({
                     open: true,
@@ -163,7 +186,11 @@ const User = (props) => {
         e.preventDefault();
         
         // Need fill some input
-        if (!values.email || !values.fullname || !values.phone || !values.password || !values.repassword) {
+        if (!values.email 
+            || !values.fullname 
+            || !values.phone 
+            || !values.password 
+            || !values.repassword) {
             setOnChangeValues({
                 email: true, 
                 fullname: true, 
@@ -213,7 +240,8 @@ const User = (props) => {
     }
 
     const loadHistory = () => {
-        actions.GetHistory({userId: 1});
+        setDataHistory([]);
+        actions.GetHistory({userId});
     }
 
     const showHistory = () => {
@@ -246,14 +274,14 @@ const User = (props) => {
                     <ul className={classes.information}>
                         <li className={classes.leftInformation}>
                             <Typography component="h3" variant="headline" align="left">
-                                Phan Anh Viet
+                                {values.fullname}
                             </Typography>
                             <Divider/>
                             <Typography component="h6" variant="subtitle1" gutterBottom align="left">
-                                + admin@example.com
+                                <Mail /> {values.email}
                             </Typography>
                             <Typography component="h6" variant="subtitle1" gutterBottom align="left">
-                                + 84 333 666 999
+                                <SettingsPhone />  {values.phone || "Chưa cập nhật số điện thoại"}
                             </Typography>
                         </li>
                         <li className={classes.rightInformation}>        
@@ -272,21 +300,6 @@ const User = (props) => {
                     </div>
                     <Divider />
                     <form className={classes.container}>
-                        <TextField
-                            required
-                            id="outlined-email-input"
-                            label="Email"
-                            className={classes.textField}
-                            type="email"
-                            name="email"
-                            autoComplete="email"
-                            margin="normal"
-                            variant="outlined"
-                            value={values.email}
-                            onChange={handleChange}
-                            />
-                            {onChangeValues.email && !values.email &&
-                                <Requirement message={messageFrom.email} />}
                         <TextField
                             required
                             id="outlined-fullname-input"

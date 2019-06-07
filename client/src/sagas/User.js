@@ -7,13 +7,13 @@ const END_POINT = "http://localhost:5000/"
 /****************User*****************/
 // Update information
 function asyncUserUpdateInfo(payload) {
-    return axios.post(END_POINT + 'user/update', {
+    return axios.put(END_POINT + 'user/profile', {
         payload
     }).then(response => response.data)
         .catch((e) => console.log(e));
 }
-export function* actionUserUpdateInfo(payload) {
-    console.log("post update information data: ", payload);
+export function* actionUserUpdateInfo(data) {
+    const { payload } = data
     const response = yield call(asyncUserUpdateInfo, payload);
 
     yield put(actions.UserUpdateInfoAsync(response))
