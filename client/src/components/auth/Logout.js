@@ -6,18 +6,18 @@ const Logout = props => {
     let localState = JSON.parse(localStorage.getItem('localState'))
 
     if (localState) {
-      localStorage.setItem('localState', JSON.stringify({}))
+      localStorage.removeItem('localState')
 
       setTimeout(() => {
         props.history.push('/')
-      }, 5000)
+      }, 3000)
     } else {
       props.history.push('/')
     }
   }, [])
 
   return (
-    <p>Đăng xuất thành công</p>
+    <p>Đăng xuất thành công. Tự động chuyển hướng sau 3 giây !</p>
   )
 }
 

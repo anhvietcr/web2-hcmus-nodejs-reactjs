@@ -38,8 +38,6 @@ const Navbar = (props) => {
     useEffect(() => {
         let localState = JSON.parse(localStorage.getItem('localState'));
 
-        console.log(localState)
-
         if (!localState || !localState.user_id || localState.state !== 'verify') {
             setUserComponent(
                 <React.Fragment>

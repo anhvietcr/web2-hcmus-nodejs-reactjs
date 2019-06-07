@@ -13,6 +13,8 @@ import Filter1 from '@material-ui/icons/Filter1'
 import Filter2 from '@material-ui/icons/Filter2'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
+import Alert from '../helper/Alert'
+
 
 const styles = theme => ({
     root: {
@@ -100,6 +102,12 @@ const Login = (props) => {
         email: TYPE.REQUIRE_EMAIL, 
         password: TYPE.REQUIRE_PASSW, 
     });
+    const [alert, setAlert] = useState({
+        count: 0,
+        open: false,
+        message: "",
+        variant: "success"
+    })
 
     useEffect(() => {
         // First load localstorage
@@ -116,10 +124,16 @@ const Login = (props) => {
                 actions.history.push('/auth/pending')
             }
         }
+
+        // remove cached
+        if (actions.Auth.user) {
+            actions.Auth.user = {}
+        }
     }, [])
 
     useEffect(() => {
         if (submitted && actions.Auth.user) {
+            console.log(actions.Auth.user)
             if (actions.Auth.user.status === 200) {
 
                 // set localStorage
@@ -139,6 +153,16 @@ const Login = (props) => {
 
                 // navigation
                 actions.history.goBack();
+            }
+            if (actions.Auth.user.status) {
+                setAlert({
+                    count: alert.count + 1,
+                    open: true,
+                    message: actions.Auth.user.message,
+                    variant: "error"
+                })
+
+                actions.Auth.user.status = 0
             }
         }
     }, [submitted, actions.Auth.user])
@@ -186,6 +210,13 @@ const Login = (props) => {
 
     return (
         <Grid container className={classes.root} spacing={16}>
+            <Alert
+                count={alert.count}
+                open={alert.open}
+                message={alert.message}
+                variant={alert.variant}
+            />
+            
             <Grid item xs={12} md={12} lg={12} xl={12}>
                 <Paper className={classes.paper}>
                     <Typography component="h2" variant="headline" gutterBottom align="left" className={classes.social}>

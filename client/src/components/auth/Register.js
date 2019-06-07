@@ -111,7 +111,7 @@ const Register = (props) => {
         open: false,
         message: "",
         variant: "success"
-      })
+    })
     
     useEffect(() => {
         // get localState
@@ -127,6 +127,11 @@ const Register = (props) => {
             if (localState.state === 'pending') {
                 actions.history.push('/auth/pending')
             }
+        }
+
+        // remove cached
+        if (actions.Auth.user) {
+            actions.Auth.user = {}
         }
     }, []);
 
@@ -158,7 +163,7 @@ const Register = (props) => {
                     open: true,
                     message: "Đăng ký thất bại",
                     variant: "error"
-                  })
+                })
             }
         }
     }, [submitted, actions.Auth.user])

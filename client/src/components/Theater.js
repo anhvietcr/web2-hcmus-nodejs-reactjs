@@ -170,7 +170,7 @@ const Theater = (props) => {
                               className={classes.inline}
                             >
                               <span className={classes.itemIcon}>
-                                <DateRange className={classes.smallbtn} /><label>Ngày khỏi chiếu: </label>{movie.opening_day}
+                                <DateRange className={classes.smallbtn} /><label>Ngày khởi chiếu: </label>{movie.opening_day}
                                 <br />
                                 <Timelapse className={classes.smallicon} /> {movie.minute_time + " phút"}
                                 {" — " + movie.introduce.slice(0, 100)}
