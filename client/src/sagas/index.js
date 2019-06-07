@@ -11,27 +11,7 @@ import * as User from './User'
 
 const END_POINT = "http://localhost:5000/";
 
-
-/****************Ticker*****************/
-function asyncDatveApi() {
-
-  return axios.get(END_POINT)
-    .then(response => response.data)
-    .catch((e) => console.log(e));
-}
-
-function* actionDatve(params) {
-
-  // fetch from api (async)
-  const data = yield call(asyncDatveApi);
-
-  // push back to action
-  yield put(actions.DatveAsync(data))
-}
-
-
 function* CustomSaga() {
-  yield takeLatest(TYPE.DAT_VE, actionDatve);
   yield takeLatest(TYPE.SIGN_IN, Auth.actionSignIn);
   yield takeLatest(TYPE.SIGN_UP, Auth.actionSignUp);
 

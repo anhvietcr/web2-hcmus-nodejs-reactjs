@@ -172,7 +172,7 @@ const MovieDetail = (props) => {
           <ul className={classes.movieContent}>
             <li><h2>{dataMovie.name}</h2></li>
             <li><Description className={classes.smallbtn} /><label>Giới thiệu: </label>{dataMovie.introduce}</li>
-            <li><DateRange className={classes.smallbtn} /><label>Ngày khỏi chiếu: </label>{dataMovie.opening_day}</li>
+            <li><DateRange className={classes.smallbtn} /><label>Ngày khởi chiếu: </label>{dataMovie.opening_day}</li>
             <li><Timelapse className={classes.smallicon} /><label>Thời gian: </label>{dataMovie.minute_time} phút</li>
           </ul>
         </Grid>

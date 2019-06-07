@@ -13,12 +13,12 @@ class LoginContainer extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        Auth: state.Auth
+        Auth: state.Auth,
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    SignIn: (payload) => {dispatch({type: TYPE.SIGN_IN, payload})}
+    SignIn: (payload) => {dispatch({type: TYPE.SIGN_IN, payload})},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer)

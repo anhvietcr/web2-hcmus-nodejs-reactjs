@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import Requirement from '../helper/Requirement'
+import Alert from '../helper/Alert'
 import * as TYPE from '../../constants/actionTypes'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
@@ -105,15 +106,67 @@ const Register = (props) => {
         password: TYPE.REQUIRE_PASSW, 
         repassword: TYPE.REQUIRE_REPASSW, 
     });
+    const [alert, setAlert] = useState({
+        count: 0,
+        open: false,
+        message: "",
+        variant: "success"
+    })
     
     useEffect(() => {
-        if (submitted) {
-            console.log("response: ", actions.Auth)
-            if (actions.Auth.status === 200) {
+        // get localState
+        let localState = localStorage.getItem('localState')
+
+        if (localState) {
+            localState = JSON.parse(localState);
+
+            if (localState.user_id) {
                 actions.history.push('/')
             }
+
+            if (localState.state === 'pending') {
+                actions.history.push('/auth/pending')
+            }
         }
-    })
+
+        // remove cached
+        if (actions.Auth.user) {
+            actions.Auth.user = {}
+        }
+    }, []);
+
+    useEffect(() => {
+        if (submitted && actions.Auth.user) {
+            if (actions.Auth.user.status === 200) {
+
+                setAlert({
+                    count: alert.count + 1,
+                    open: true,
+                    message: TYPE.MESSAGE_SUCCESS,
+                    variant: "success"
+                });
+                
+                let localState = localStorage.getItem('localState');
+                let user = {
+                    ...localState,
+                    state: "pending",
+                    user_email: values.email,
+                    user_fullname: values.fullname
+                }
+                localStorage.setItem('localState', JSON.stringify(user))
+
+                // navigation
+                actions.history.push('/auth/pending')
+            } else {
+                setAlert({
+                    count: alert.count + 1,
+                    open: true,
+                    message: "Đăng ký thất bại",
+                    variant: "error"
+                })
+            }
+        }
+    }, [submitted, actions.Auth.user])
 
     const handleChange = (e) => {
         const {value, name} = e.target;
