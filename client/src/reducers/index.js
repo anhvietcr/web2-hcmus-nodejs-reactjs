@@ -19,6 +19,11 @@ function Auth(state = initialState, action) {
                 ...state,
                 user: action.payload
             }
+        case TYPE.VERIFY_SIGN_UP_ASYNC:
+            return {
+                ...state,
+                user: action.payload
+            }
         default:
             return state;
     }

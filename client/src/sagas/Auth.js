@@ -32,3 +32,17 @@ export function* actionSignUp(data) {
 
     yield put(actions.SignUpAsync(response.data))
 }
+
+// Verify Sign Up
+function asyncVerifySignUp(payload) {
+    return axios.get(END_POINT + 'user/register?code=' + payload)
+        .then(response => response)
+        .catch(err => console.log(err))
+}
+
+export function* actionVerifySignUp(data) {
+    const { payload } = data;
+    const response = yield call(asyncVerifySignUp, payload)
+
+    yield put(actions.VerifySignUpAsync(response.data))
+}

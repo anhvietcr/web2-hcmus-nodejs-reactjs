@@ -14,6 +14,13 @@ const SignUpAsync = (payload) => {
     }
 }
 
+const VerifySignUpAsync = (payload) => {
+    return {
+        type: TYPE.VERIFY_SIGN_UP_ASYNC,
+        payload
+    }
+}
+
 // User Cpanel
 const UserUpdateInfoAsync = (payload) => {
     return {
@@ -183,6 +190,7 @@ const ShowtimeByMovie = (payload) => {
 export default {
     SignInAsync,
     SignUpAsync,
+    VerifySignUpAsync,
     
     UserUpdateInfoAsync,
     UserHistoryAsync,

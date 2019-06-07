@@ -14,6 +14,7 @@ const END_POINT = "http://localhost:5000/";
 function* CustomSaga() {
   yield takeLatest(TYPE.SIGN_IN, Auth.actionSignIn);
   yield takeLatest(TYPE.SIGN_UP, Auth.actionSignUp);
+  yield takeLatest(TYPE.VERIFY_SIGN_UP, Auth.actionVerifySignUp)
 
   yield takeLatest(TYPE.USER_UPDATE_INFO, User.actionUserUpdateInfo);
   yield takeLatest(TYPE.USER_HISTORY, User.actionUserHistory);

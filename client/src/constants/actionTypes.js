@@ -30,6 +30,8 @@ export const SIGN_IN = 'SIGN_IN'
 export const SIGN_IN_ASYNC = 'SIGN_IN_ASYNC'
 export const SIGN_UP = 'SIGN_UP'
 export const SIGN_UP_ASYNC = 'SIGN_UP_ASYNC'
+export const VERIFY_SIGN_UP = 'VERIFY_SIGN_UP' 
+export const VERIFY_SIGN_UP_ASYNC = 'VERIFY_SIGN_UP_ASYNC' 
 
 export const USER_UPDATE_INFO = 'USER_UPDATE_INFO'
 export const USER_UPDATE_INFO_ASYNC = 'USER_UPDATE_INFO_ASYNC'
