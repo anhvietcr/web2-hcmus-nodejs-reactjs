@@ -251,7 +251,7 @@ router.post('/logout',jsonParser, function (req, res) {
 
 
 router.get('/profile',jsonParser, async function f(req, res) {
-    const payload = req.payload;
+    const payload = req.body.payload;
     const id = payload.userId;
     //const id = 1;
     const user = await User.findOne({
@@ -275,7 +275,7 @@ router.get('/profile',jsonParser, async function f(req, res) {
     }
 });
 router.put('/profile',jsonParser, async function (req, res) {
-    const payload = req.payload;
+    const payload = req.body.payload;
     const email = payload.email;
     //const email = "phannhutrang@gmail.com";
     const temp = await User.findOne({
@@ -289,10 +289,10 @@ router.put('/profile',jsonParser, async function (req, res) {
         res.json(response);
         return;
     }
-    const password = req.body.payload.password;
-    const repassword = req.body.payload.repassword;
-    const phone = req.body.payload.phone;
-    const fullname = req.body.payload.fullname;
+    const password = payload.password;
+    const repassword = payload.repassword;
+    const phone = payload.phone;
+    const fullname = payload.fullname;
 
 
     // const password = "123456";
