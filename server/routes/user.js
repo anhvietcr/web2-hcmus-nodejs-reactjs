@@ -310,7 +310,7 @@ router.put('/profile',jsonParser, async function (req, res) {
     }
 
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const user = User.update({
+    const user =await User.update({
         password: hashedPassword,
         phone: phone,
         fullname: fullname
@@ -318,16 +318,27 @@ router.put('/profile',jsonParser, async function (req, res) {
             where: {
                 email: email
             }
-        }).then(function (user) {
-            //res.json(user)
-            let response = {
-                status: 200,
-                payload: {
-
-                }
-            };
-            res.json(response);
         });
+
+    if(user)
+    {
+        //res.json(user)
+        let response = {
+            status: 200,
+            payload: {
+
+            }
+        };
+        res.json(response);
+    }
+    else{
+        let response = {
+            status: 408,
+            message:"Lỗi không cập nhật được!"
+        };
+        res.json(response);
+    }
+
 });
 
 
