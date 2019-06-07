@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
@@ -24,6 +24,7 @@ import TheaterCpanel from '../../containers/cpanel/Theater';
 import MovieCpanel from '../../containers/cpanel/Movie';
 import ShowtimeCpanel from '../../containers/cpanel/Showtime';
 import IncomeCpanel from './Income';
+import { NavLink } from 'react-router-dom'
 
 const drawerWidth = 240;
 const styles = theme => ({ 
@@ -66,6 +67,20 @@ const styles = theme => ({
       padding: '0 8px',
       ...theme.mixins.toolbar,
       justifyContent: 'flex-end',
+
+      '& a': {
+          textDecoration: 'none',
+          fontWeight: 600,
+          textTransform: 'uppercase',
+          color: 'rgba(0, 0, 255, 0.6)',
+          border: '1px solid #f0f0f0',
+          padding: '10px',
+          width: "100%",
+        
+          "&:hover": {
+            backgroundColor: "#f5f6f7"
+          }
+      },
     },
     content: {
       flexGrow: 1,
@@ -90,7 +105,7 @@ const styles = theme => ({
         borderLeft: "4px solid #0767DB",
         borderRadius: "4px",
         backgroundColor: "#F6F9FD",
-    }
+    },
 });
 
 const getComponentActiveByPath = (path) => {
@@ -149,16 +164,28 @@ const HomeCpanel = (props) => {
     const ComponentActive = getComponentActiveByPath(pathname);
     const activeFlag = getActiveFlagByPath(pathname);
 
+    useEffect(() => {
+        let localState = JSON.parse(localStorage.getItem('localState'))
+
+        if (localState) {
+            if (localState.user_role !== 1) {
+                props.history.push('/')
+            }
+        } else {
+            props.history.push('/')
+        }
+    }, [])
     return (
         <React.Fragment>
         <div className={classes.root}>
             <CssBaseline />
+            
             <AppBar
                 position="fixed"
                 className={classNames(classes.appBar, {
                     [classes.appBarShift]: open,
                 })}
-            >
+            >  
             <Toolbar disableGutters={!open}>
                 <IconButton
                     color="inherit"
@@ -173,6 +200,7 @@ const HomeCpanel = (props) => {
                 </Typography>
             </Toolbar>
             </AppBar>
+            
             <Drawer
                 className={classes.drawer}
                 variant="persistent"
@@ -182,7 +210,10 @@ const HomeCpanel = (props) => {
                     paper: classes.drawerPaper,
                 }}
             >
+
             <div className={classes.drawerHeader}>
+                <NavLink to="/">Trang chủ</NavLink>
+
                 <IconButton onClick={() => handleDrawer(false)}>
                 {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>

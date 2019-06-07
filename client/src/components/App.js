@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Home from '../containers/Home'
+import Logout from './auth/Logout'
 import User from '../containers/User';
 import HomeCpanel from './cpanel/Home';
 import MovieSearch from '../containers/MovieSearch';
@@ -18,8 +19,9 @@ function App() {
       <Switch>
           <Route path="/auth/login" component={Login} />
           <Route path="/auth/register" component={Register} />
+          <Route path="/auth/logout" component={Logout} />
           <Route path="/auth/pending" component={Pending} />
-          <Route path="/auth/verify/:code" component={Pending} />
+          <Route path="/user/verify?code=:code" component={Pending} />
           <Route path="/ticket/:id" component={Ticket} />
           <Route path="/user" component={User} />
           <Route path="/cpanel" component={HomeCpanel} />

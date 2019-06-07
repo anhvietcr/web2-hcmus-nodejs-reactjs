@@ -132,7 +132,8 @@ const Login = (props) => {
                     user_email: payload.email,
                     user_fullname: payload.fullname,
                     user_phone: payload.phone,
-                    user_role: payload.role
+                    user_role: payload.role,
+                    state: 'verify'
                 }
                 localStorage.setItem('localState', JSON.stringify(user))
 

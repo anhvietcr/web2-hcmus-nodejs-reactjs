@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
@@ -33,12 +33,45 @@ const styles = theme => ({
 
 const Navbar = (props) => {
     const { classes } = props
+    const [userComponent, setUserComponent] = useState(null);
+
+    useEffect(() => {
+        let localState = JSON.parse(localStorage.getItem('localState'));
+
+        console.log(localState)
+
+        if (!localState || !localState.user_id || localState.state !== 'verify') {
+            setUserComponent(
+                <React.Fragment>
+                    <NavLink to="/auth/login">Đăng nhập</NavLink>
+                    <NavLink to="/auth/register">Đăng ký</NavLink>
+                </React.Fragment>
+            )
+        } else {
+            if (localState.user_role !== 0) {
+                setUserComponent(
+                    <React.Fragment>
+                        <NavLink to="/user">Cá nhân</NavLink>
+                        <NavLink to="/cpanel">Quản Lý</NavLink>
+                        <NavLink to="/auth/logout">Đăng xuất</NavLink>
+                    </React.Fragment>
+                )
+            } else {
+                setUserComponent(
+                    <React.Fragment>
+                        <NavLink to="/user">Cá nhân</NavLink>
+                        <NavLink to="/auth/logout">Đăng xuất</NavLink>
+                    </React.Fragment>
+                )
+            }
+        }
+    }, [])
 
     return (
         <ul className="nav" className={classes.root}>
             <NavLink to="/">Trang chủ</NavLink>
             <NavLink to="/theater">Rạp/Suất chiếu</NavLink>
-            <NavLink to="/cpanel">Cpanel</NavLink>
+            { userComponent }
         </ul>
     )
 }
