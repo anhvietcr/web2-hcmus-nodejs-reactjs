@@ -169,7 +169,7 @@ router.get('/register', jsonParser, async function (req, res) {
         else {
             let respone = {
                 status: 408,
-                message: "Chuỗi mã đã hết hạn!"
+                message: "Chuỗi mã đã hết hạn vui lòng đăng ký lại!"
             };
             res.json(respone);
         }
