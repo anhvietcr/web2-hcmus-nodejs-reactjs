@@ -128,6 +128,8 @@ const User = (props) => {
                 email: localState.user_email,
                 fullname: localState.user_fullname || "",
                 phone: localState.user_phone || "",
+                password: "",
+                repassword: "",
             })
 
             setUserId(localState.user_id)
