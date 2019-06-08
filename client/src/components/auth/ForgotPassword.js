@@ -67,33 +67,28 @@ const ForgotPassword = (props) => {
   }, [])
 
   useEffect(() => {
-    console.log(actions.Auth)
-
     if (actions.Auth.password && code) {
       if (actions.Auth.password.status === 200) {
-        console.log('thanh cong');
         setAlert({
           count: alert.count + 1,
           open: true,
           message: actions.Auth.password.message + '. Chuyển hướng sau 3s',
           variant: "success"
-        })
+        });
 
-        actions.history.push('/auth/login')
+        setTimeout(() => {
+          actions.history.push('/auth/login')
+        }, 3000)
+
       } 
-
-      if (actions.Auth.password.status) {
+      else if (actions.Auth.password.status) {
         setAlert({
           count: alert.count + 1,
           open: true,
           message: actions.Auth.password.message,
           variant: "error"
         })
-      }
-
-      if (actions.Auth.password.status === 408) {
-
-      }
+      } else {}
     }
 
   }, [actions.Auth])
