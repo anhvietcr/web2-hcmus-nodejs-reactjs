@@ -131,14 +131,29 @@ const Theater = (props) => {
   }
 
   const handleShowtimeClicked = (e) => {
-    // save to localstate
-    
+    const price = e.currentTarget.getAttribute('price')
+
+    // save to localstorage
+    let localState = JSON.parse(localStorage.getItem('localState'))
+    if (localState) {
+      let info = {
+        ...localState,
+        number_column: values.number_column,
+        number_row: values.number_row,
+        showtime_price: price,
+        showtime_id: e.currentTarget.id
+      }
+      localStorage.setItem('localState', JSON.stringify(info));
+    }
   }
 
   const getShowtimeByMovie = movie => {
     return movie.showtimes.map((showtime) => {
       return (
         <SmallButton
+          price={showtime.price}
+          number_colum={values.number_column}
+          number_row={values.number_row}
           handleSubmit={handleShowtimeClicked}
           key={showtime.id}
           id={showtime.id}
@@ -150,8 +165,6 @@ const Theater = (props) => {
   // load Movies
   const loadMovies = (dataShowtime) => {
     if (dataShowtime.movies.length) {
-      console.log(dataShowtime)
-
       return (
         <List className={classes.root}>
           {dataShowtime.movies.map((movie) => {

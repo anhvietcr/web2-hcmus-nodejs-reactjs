@@ -4,10 +4,6 @@ import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 
 const styles = theme => ({
-    button: {
-        padding: '10px',
-        margin: '10px 0px',
-    },
     margin: {
         margin: theme.spacing.unit,
     },
@@ -18,18 +14,24 @@ const SmallButton = (props) => {
         classes,
         text,
         handleSubmit,
-        id
+        id,
+        price,
+        number_row,
+        number_column
   } = props
-  
+
     return (
         <Button
+            price={price || 0}
+            number_column={number_column || 0}
+            number_row={number_row || 0}
             id={id}
             variant="outlined"
             size="small"
             color="primary"
             className={classes.margin}
             onClick={handleSubmit}
-            href={'/ticket/'+id}
+            // href={'/ticket/'+id}
         >
             {text}
         </Button>

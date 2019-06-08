@@ -180,10 +180,33 @@ const MovieDetail = (props) => {
     )
   }
 
-  const getShowtimes = showtimes => {
-    return showtimes.map((showtime) => {
+  const handleShowtimeClicked = (e) => {
+    const price = e.currentTarget.getAttribute('price')
+    const number_column = e.currentTarget.getAttribute('number_column')
+    const number_row = e.currentTarget.getAttribute('number_row')
+
+    // save to localstorage
+    let localState = JSON.parse(localStorage.getItem('localState'))
+    if (localState) {
+      let info = {
+        ...localState,
+        number_column: number_column,
+        number_row: number_row,
+        showtime_price: price,
+        showtime_id: e.currentTarget.id
+      }
+      localStorage.setItem('localState', JSON.stringify(info));
+    }
+  }
+
+  const getShowtimes = theater => {
+    return theater.showtimes.map((showtime) => {
       return (
         <SmallButton
+          number_column={theater.number_column}
+          number_row={theater.number_row}
+          price={showtime.price}
+          handleSubmit={handleShowtimeClicked}
           key={showtime.id}
           id={showtime.id}
           text={showtime.start_time.split(" ")[1]} />
@@ -301,7 +324,7 @@ const MovieDetail = (props) => {
                       }
                     />
                     <span className={classes.smallbtn}>
-                      {getShowtimes(theater.showtimes)}
+                      {getShowtimes(theater)}
                     </span>
                   </Grid>
                 </Grid>
