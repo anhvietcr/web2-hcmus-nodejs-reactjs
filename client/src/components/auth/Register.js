@@ -115,11 +115,9 @@ const Register = (props) => {
     
     useEffect(() => {
         // get localState
-        let localState = localStorage.getItem('localState')
+        let localState = JSON.parse(localStorage.getItem('localState'))
 
         if (localState) {
-            localState = JSON.parse(localState);
-
             if (localState.user_id) {
                 actions.history.push('/')
             }

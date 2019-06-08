@@ -84,7 +84,9 @@ const Theater = (props) => {
   const [dataShowtime, setDataShowtime] = useState([])
   const [values, setValues] = useState({
     date: '2019-06-01',
-    theater_id: 0
+    theater_id: 0,
+    number_column: 0,
+    number_row: 0,
   });
 
   // default actions
@@ -99,7 +101,9 @@ const Theater = (props) => {
 
       setValues({
         date: "2019-06-01",
-        theater_id: TheaterCpanel.theaters[0].id
+        theater_id: TheaterCpanel.theaters[0].id,
+        number_column: TheaterCpanel.theaters[0].number_column,
+        number_row: TheaterCpanel.theaters[0].number_row,
       });
     }
   }, [TheaterCpanel])
@@ -126,10 +130,16 @@ const Theater = (props) => {
     setValues((values) => ({ ...values, [name]: value }))
   }
 
+  const handleShowtimeClicked = (e) => {
+    // save to localstate
+    
+  }
+
   const getShowtimeByMovie = movie => {
     return movie.showtimes.map((showtime) => {
       return (
         <SmallButton
+          handleSubmit={handleShowtimeClicked}
           key={showtime.id}
           id={showtime.id}
           text={showtime.start_time.split(" ")[1]} />
@@ -140,6 +150,8 @@ const Theater = (props) => {
   // load Movies
   const loadMovies = (dataShowtime) => {
     if (dataShowtime.movies.length) {
+      console.log(dataShowtime)
+
       return (
         <List className={classes.root}>
           {dataShowtime.movies.map((movie) => {

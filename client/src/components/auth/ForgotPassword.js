@@ -69,6 +69,7 @@ const ForgotPassword = (props) => {
   useEffect(() => {
     if (actions.Auth.password && code) {
       if (actions.Auth.password.status === 200) {
+
         setAlert({
           count: alert.count + 1,
           open: true,

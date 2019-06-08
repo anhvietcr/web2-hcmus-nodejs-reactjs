@@ -111,11 +111,9 @@ const Login = (props) => {
 
     useEffect(() => {
         // First load localstorage
-        let localState = localStorage.getItem('localState');
+        let localState = JSON.parse(localStorage.getItem('localState'));
         
         if (localState) {
-            localState = JSON.parse(localState);
-
             if (localState.user_id) {
                 actions.history.push('/');
             }
@@ -133,23 +131,33 @@ const Login = (props) => {
 
     useEffect(() => {
         if (submitted && actions.Auth.user) {
-            console.log(actions.Auth.user)
             if (actions.Auth.user.status === 200) {
-
                 // set localStorage
                 const { payload } = actions.Auth.user;
-                let localState = localStorage.getItem('localState');
+                let localState = JSON.parse(localStorage.getItem('localState'));
 
-                let user = {
-                    ...localState,
-                    user_id: payload.id,
-                    user_email: payload.email,
-                    user_fullname: payload.fullname,
-                    user_phone: payload.phone,
-                    user_role: payload.role,
-                    state: 'verify'
+                if (localState) {
+                    let user = {
+                        ...localState,
+                        user_id: payload.id,
+                        user_email: payload.email,
+                        user_fullname: payload.fullname,
+                        user_phone: payload.phone,
+                        user_role: payload.role,
+                        state: 'verify'
+                    }
+                    localStorage.setItem('localState', JSON.stringify(user))
+                } else {
+                    let user = {
+                        user_id: payload.id,
+                        user_email: payload.email,
+                        user_fullname: payload.fullname,
+                        user_phone: payload.phone,
+                        user_role: payload.role,
+                        state: 'verify'
+                    }
+                    localStorage.setItem('localState', JSON.stringify(user))
                 }
-                localStorage.setItem('localState', JSON.stringify(user))
 
                 // navigation
                 actions.history.goBack();
