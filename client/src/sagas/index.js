@@ -6,6 +6,7 @@ import * as CinemaCpanel from './CinemaCpanel'
 import * as TheaterCpanel from './TheaterCpanel'
 import * as MovieCpanel from './MovieCpanel'
 import * as ShowtimeCpanel from './ShowtimeCpanel'
+import * as IncomeCpanel from './IncomeCpanel'
 import * as Auth from './Auth'
 import * as User from './User'
 
@@ -48,5 +49,8 @@ function* CustomSaga() {
   yield takeLatest(TYPE.SHOWTIME_BY_THEATER, ShowtimeCpanel.actionShowtimeByTheater)
   yield takeLatest(TYPE.SHOWTIME_BY_CINEMA, ShowtimeCpanel.actionShowtimeByCinema)
   yield takeLatest(TYPE.SHOWTIME_BY_MOVIE, ShowtimeCpanel.actionShowtimeByMovie)
+
+  yield takeLatest(TYPE.INCOME_BY_CINEMA, IncomeCpanel.actionGetIncomeByCinema)
+  yield takeLatest(TYPE.INCOME_BY_MOVIE, IncomeCpanel.actionGetIncomeByMovie)
 }
 export default CustomSaga

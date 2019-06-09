@@ -31,7 +31,7 @@ const SmallButton = (props) => {
             color="primary"
             className={classes.margin}
             onClick={handleSubmit}
-            // href={'/ticket/'+id}
+            href={'/ticket/'+id}
         >
             {text}
         </Button>

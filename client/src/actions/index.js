@@ -198,6 +198,21 @@ const ShowtimeByMovie = (payload) => {
     }
 }
 
+
+// Income Cpanel
+const IncomeByCinema = (payload) => {
+    return {
+        type: TYPE.INCOME_BY_CINEMA_ASYNC,
+        payload
+    }
+}
+const IncomeByMovie = (payload) => {
+    return {
+        type: TYPE.INCOME_BY_MOVIE_ASYNC,
+        payload
+    }
+}
+
 export default {
     SignInAsync,
     SignUpAsync,
@@ -234,4 +249,7 @@ export default {
     ShowtimeByTheaterAsync,
     ShowtimeByCinemaAsync,
     ShowtimeByMovie,
+
+    IncomeByCinema,
+    IncomeByMovie
 }

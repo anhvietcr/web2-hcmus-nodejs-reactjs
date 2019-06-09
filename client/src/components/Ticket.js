@@ -69,7 +69,7 @@ function getStepContent(stepIndex, classes) {
 						margin="normal"
 						variant="filled"
 						type="number"
-						inputProps={{ 'aria-label': 'bare' }}
+						inputProps={{ min: "1", max: "10", step: "1" }}
 					/>
 				<Fab color="primary" aria-label="Add" className={classes.fab}
 					name="add"

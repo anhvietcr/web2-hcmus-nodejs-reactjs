@@ -227,13 +227,31 @@ function ShowtimeCpanel(state = initialState, action) {
     }
 }
 
+function IncomeCpanel(state = initialState, action) {
+    switch (action.type) {
+        case TYPE.INCOME_BY_CINEMA_ASYNC:
+            return {
+                ...state,
+                income_cinema: action.payload
+            }
+        case TYPE.INCOME_BY_MOVIE_ASYNC:
+            return {
+                ...state,
+                income_movie: action.payload
+            }
+        default:
+            return state;
+    }
+}
+
 const rootReducer = combineReducers({
     Auth,
     User,
     CinemaCpanel,
     TheaterCpanel,
     MovieCpanel,
-    ShowtimeCpanel
+    ShowtimeCpanel,
+    IncomeCpanel
 });
 
 export default rootReducer
