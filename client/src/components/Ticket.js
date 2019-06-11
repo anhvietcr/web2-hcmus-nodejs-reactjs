@@ -90,7 +90,7 @@ function GetStyleChair(x, y, dataChairsBooked, dataUserChairs) {
 }
 
 function GeneralChairsMap(props) {
-  const { row, column } = props
+  const { row, column, number_chair } = props
   const [dataChairsBooked, setDataChairsBooked] = useState([
     [0, 0],
     [2, 1],
@@ -129,7 +129,7 @@ function GeneralChairsMap(props) {
               ...dataUserChairs,
               [x, y]
             ]
-            setDataUserChairs(userBooked.slice(-3))
+            setDataUserChairs(userBooked.slice(-number_chair))
 
             console.log(x, " ", y);
           }
@@ -163,12 +163,17 @@ function GeneralChairsMap(props) {
 function getStepContent(stepIndex, classes) {
 
   let localState = JSON.parse(localStorage.getItem('localState'))
+  let update = {
+    ...localState,
+    number_chair: 1
+  }
+  localStorage.setItem('localState', JSON.stringify(update))
 
   const handleChangeNumberChair = (e) => {
     const { value } = e.target
     let update = {
       ...localState,
-      number_chair: value || 0
+      number_chair: value || 1
     }
     localStorage.setItem('localState', JSON.stringify(update))
   }
@@ -181,7 +186,7 @@ function getStepContent(stepIndex, classes) {
 					<TextField
 						id="filled-bare"
 						className={classes.textField}
-						defaultValue="1"
+						defaultValue={localState.number_chair || 1}
 						margin="normal"
 						variant="filled"
 						type="number"
@@ -201,6 +206,7 @@ function getStepContent(stepIndex, classes) {
             <React.Fragment>
               <Typography className={classes.screen}>Màn hình</Typography>
               <GeneralChairsMap 
+                number_chair={localState.number_chair}
                 row={localState.number_row} 
                 column={localState.number_column} 
               />
