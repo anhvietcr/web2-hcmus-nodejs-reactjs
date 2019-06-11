@@ -2,6 +2,12 @@ const Sequelize = require('sequelize');
 const db = require('./db')
 
 const Booking = db.define("Booking", {
+  id: {
+    primaryKey: true,
+    type: Sequelize.UUID,
+    allowNull: false,
+    unique: true
+  },
   user_id: {
     type: Sequelize.INTEGER,
     allowNull: false,

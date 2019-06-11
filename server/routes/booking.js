@@ -7,38 +7,84 @@ const Cinema = require('../models/cinema');
 const Router = require('express-promise-router');
 const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
+const uuidv1 = require('uuid/v1');
 let router = new Router();
 
-// {
-//     "payload": {
+// "payload": {
 //     "user_id": 1,
-//         "showtime_id":1,
-//         "bookingtime": "2018-11-07 15:03:16.532+00",
-//         "totalprice": 200000
+//     "showtime_id":1,
+//     "arraylocation": [{"x": 6,"y":1},{"x":0,"y": 0}]
 // }
 // }
-
 router.post('/',jsonParser,async (req,res)=>{
+    //get uuid
+    var generateidbooking=uuidv1();
+    //get date
+    var day = new Date();
+    var dd = String(day.getDate()).padStart(2, '0');
+    var mm = String(day.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy =day.getFullYear();
+    const today = mm + '/' + dd + '/' + yyyy;
+    console.log(today);
+    //create booking
     const payload = req.body.payload;
+    const uid=generateidbooking;
     const user_id = payload.user_id;
     const showtim_id = payload.showtime_id;
-    const bookingtime = payload.bookingtime;
-    const totalprice = payload.totalprice;
+    const bookingtime = today;
+    const arraylocation = payload.arraylocation;
+    //find ticket price
+    const price = await Showtime.findOne({
+        where: {id: showtim_id}
+    });
+    //tatol price
+    const totalprice=price.price*arraylocation.length;
+    //console.log(arraylocation[0].x);
+    //create tickets
+    const booking_id = uid;
+    //var chair_id  ;
+    //var address_x ;
+    //var address_y ;
+    var i;
+    var status = 200;
+    var message = '';
+    for(i=0;i<arraylocation.length;i++)
+    {
+        let tickets= await Ticket.create({
+            booking_id: booking_id,
+            chair_id: arraylocation[i].x+""+arraylocation[i].y,
+            address_x: arraylocation[i].x,
+            address_y: arraylocation[i].y,
+            price: price.price
+        });
+        if (!tickets)
+        {
+            let response = {
+                payload: {
+                    status: 404,
+                    message: "can't create ticket",
+                }
+            };
+            res.json(response);
+        }
+    }
+    //create booking for client
     const booking = await Booking.create({
+        id: uid,
         user_id: user_id,
         showtime_id: showtim_id,
         bookingtime: bookingtime,
-        totalprice: totalprice
+        totalprice: totalprice,
     }).then(function (booking) {
         //res.json(user)
         let response = {
             payload: {
                 status: 200,
-                booking: booking
+                booking: booking,
+                arraylocation: arraylocation
             }
         };
         res.json(response);
     });
 });
-
 module.exports = router;
