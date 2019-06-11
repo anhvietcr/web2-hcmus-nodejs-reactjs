@@ -8,7 +8,6 @@ import StepLabel from '@material-ui/core/StepLabel'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
-import Fab from '@material-ui/core/Fab'
 
 const styles = theme => ({
 	root: {
@@ -45,7 +44,6 @@ const styles = theme => ({
     padding: 20,
     margin: '0 auto',
 
-
     "& > *": {
       border: '1px dotted #ccc',
       fontWeight: 600,
@@ -61,10 +59,12 @@ let rowTitle = ['1','2','3','4','5','6','7','8','9','10',
 let columnTitle = ['A','B','C','D','E','F','G','H','I','J',
 'K','L','M','N','O','P','Q','R','S','T','U','V', 'W','X','Y','Z'];  
 
+// select step
 function getSteps() {
   return ['Chọn số lượng ghế', 'Vị trí ghế ngồi', 'Xác nhận thanh toán'];
 }
 
+// check chair was booked
 function isBooked(x, y, dataChairsBooked) {
   for (let i = 0; i < dataChairsBooked.length; i++) {
     if (dataChairsBooked[i][0] === x && dataChairsBooked[i][1] === y) {
@@ -74,7 +74,7 @@ function isBooked(x, y, dataChairsBooked) {
   return false;
 }
 
-
+// set chair's style
 function GetStyleChair(x, y, dataChairsBooked, dataUserChairs) {
   if (isBooked(x, y, dataChairsBooked)) {
     return "#ccc"
@@ -89,8 +89,23 @@ function GetStyleChair(x, y, dataChairsBooked, dataUserChairs) {
   }
 }
 
+function getListUserChair(dataUserChairs) {  
+  let userChair = [];
+  for (let i = 0; i < dataUserChairs.length; i++) {
+    let chair = dataUserChairs[i]
+
+    userChair.push(
+      <span 
+        style={{border: '1px solid green', padding: '3px'}}>
+      {columnTitle[chair[0]]+rowTitle[chair[1]]}
+      </span>)
+  }
+  return userChair
+}
+
+// general a map chairs
 function GeneralChairsMap(props) {
-  const { row, column, number_chair } = props
+  const { row, column, number_chair, classes } = props
   const [dataChairsBooked, setDataChairsBooked] = useState([
     [0, 0],
     [2, 1],
@@ -98,20 +113,9 @@ function GeneralChairsMap(props) {
   ]);
   const [dataUserChairs, setDataUserChairs] = useState([]);
 
-  useEffect(() => {
-    console.log('updated: ', dataUserChairs)
-  }, [dataUserChairs])
-
-
   const Cell = (props) => {
     const { x, y } = props;
-    
-    let bg = "";
-    if (isBooked(x, y, dataChairsBooked)) {
-      bg = '#ccc'
-    } else {
-      bg = '#fff'
-    }
+    let userBooked = [];
 
     return (
       <Button
@@ -125,13 +129,11 @@ function GeneralChairsMap(props) {
           if (isBooked(x, y, dataChairsBooked) || isBooked(x, y, dataUserChairs)) {
             return false;
           } else {
-            let userBooked = [
+            userBooked = [
               ...dataUserChairs,
               [x, y]
             ]
             setDataUserChairs(userBooked.slice(-number_chair))
-
-            console.log(x, " ", y);
           }
         }}
       >{columnTitle[x] + "" + rowTitle[y]}</Button>
@@ -157,73 +159,81 @@ function GeneralChairsMap(props) {
     return matrix;
   }
 
-  return (<Matrix />)
+  return (
+    <React.Fragment>
+      <Matrix />
+      <section className={classes.chair_info}>
+        <Typography>Số ghế: {number_chair}</Typography>
+        <Typography>Đã chọn: {getListUserChair(dataUserChairs)}</Typography>
+      </section>
+    </React.Fragment>
+  )
 }
 
+// change step content
 function getStepContent(stepIndex, classes) {
 
   let localState = JSON.parse(localStorage.getItem('localState'))
-  let update = {
-    ...localState,
-    number_chair: 1
+
+
+  const setNumberChair = (value) => {
+    let update = {
+      ...localState,
+      number_chair: value
+    }
+    localStorage.setItem('localState', JSON.stringify(update))
+
+    return value
   }
-  localStorage.setItem('localState', JSON.stringify(update))
+
 
   const handleChangeNumberChair = (e) => {
     const { value } = e.target
-    let update = {
-      ...localState,
-      number_chair: value || 1
-    }
-    localStorage.setItem('localState', JSON.stringify(update))
+    setNumberChair(value)
   }
 
-  switch (stepIndex) {
-    case 0:
-      return (
-				<React.Fragment>
-					
-					<TextField
-						id="filled-bare"
-						className={classes.textField}
-						defaultValue={localState.number_chair || 1}
-						margin="normal"
-						variant="filled"
-						type="number"
-            inputProps={{ min: "1", max: "10", step: "1" }}
-            onChange={handleChangeNumberChair}
-					/>
-				</React.Fragment>
-			)
-    case 1:
-
-        if (!localState) {
+  if (!localState) {
+    return (
+      <p>Không khớp dữ liệu</p>
+    )
+  } else { 
+    switch (stepIndex) {
+      case 0:
           return (
-            <p>Không khớp dữ liệu</p>
+            <React.Fragment>
+              <TextField
+                id="filled-bare"
+                className={classes.textField}
+                defaultValue={localState.number_chair || setNumberChair(1)}
+                margin="normal"
+                variant="filled"
+                type="number"
+                inputProps={{ min: "1", max: "10", step: "1" }}
+                onChange={handleChangeNumberChair}
+              />
+            </React.Fragment>
           )
-        } else {
+      case 1:
           return (
             <React.Fragment>
               <Typography className={classes.screen}>Màn hình</Typography>
-              <GeneralChairsMap 
+              <GeneralChairsMap
+              classes={classes}
                 number_chair={localState.number_chair}
                 row={localState.number_row} 
                 column={localState.number_column} 
               />
-              <section className={classes.chair_info}>
-                <Typography>Số ghế: {localState.number_chair}</Typography>
-                <Typography>Đã chọn: ABC</Typography>
-              </section>
             </React.Fragment>
           )
-        }
-    case 2:
-      return 'Xem lại quá trình đặt vé';
-    default:
-      return 'Ủa lỗi gì vậy :(';
+      case 2:
+        return 'Xem lại quá trình đặt vé';
+      default:
+        return 'Ủa lỗi gì vậy :(';
+    }
   }
 }
 
+// General main content
 const Ticket = (props) => {
 	const { classes, actions } = props
   const [activeStep, setActiveStep] = React.useState(0);
