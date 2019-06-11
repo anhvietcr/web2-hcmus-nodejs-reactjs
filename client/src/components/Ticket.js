@@ -9,9 +9,6 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Fab from '@material-ui/core/Fab'
-import AddIcon from '@material-ui/icons/Add'
-import RemoveIcon from '@material-ui/icons/Remove'
-
 
 const styles = theme => ({
 	root: {
@@ -23,6 +20,7 @@ const styles = theme => ({
   instructions: {
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit * 5,
+    textAlign: 'center',
 	},
 	textField: {
     marginLeft: theme.spacing.unit,
@@ -31,37 +29,96 @@ const styles = theme => ({
 	},
 	fab: {
 		marginTop: theme.spacing.unit * 2,
-	}
+  },
+  screen: {
+    padding: 20,
+    backgroundColor: '#f5f6f7',
+    width: '320px',
+    margin: '0 auto',
+    marginBottom: 20,
+    textTransform: 'uppercase',
+    fontWeight: 600,
+  },
+  chair_info: {
+    display: 'inline-flex',
+    textTransform: 'uppercase',
+    padding: 20,
+    margin: '0 auto',
+
+
+    "& > *": {
+      border: '1px dotted #ccc',
+      fontWeight: 600,
+      padding: 20,
+      minWidth: '240px',
+    }
+  }
 })
+
+let rowTitle = ['1','2','3','4','5','6','7','8','9','10',
+'11','12','13','14','15','16','17','18','19','20'];
+
+let columnTitle = ['A','B','C','D','E','F','G','H','I','J',
+'K','L','M','N','O','P','Q','R','S','T','U','V', 'W','X','Y','Z'];  
 
 function getSteps() {
   return ['Chọn số lượng ghế', 'Vị trí ghế ngồi', 'Xác nhận thanh toán'];
 }
 
+function GeneralChairsMap(props) {
+  const { row, column } = props
+  
+  const Cell = (props) => {
+    const { x, y } = props;
+
+    return (
+      <Button
+        style={{
+          border: '1px solid',
+          margin: "0px 1px 3px 1px"
+        }}
+        onClick={() => {
+          console.log(x, " ", y);
+        }}
+      >{columnTitle[x] + "" + rowTitle[y]}</Button>
+    )
+  }
+
+  const Matrix = () => {
+    let matrix = [];
+    for (let i = 0; i < row; i++) {
+      for (let j = 0; j < column; j++) {
+        if (j === column / 2) {
+          matrix.push(<span key={rowTitle[j]+i+j}> </span>)
+        }
+        matrix.push(<Cell key={columnTitle[i]+rowTitle[j]} x={i} y={j} />)
+      }
+      matrix.push(<br key={columnTitle[i]}/>)
+    }
+    return matrix;
+  }
+
+  return (<Matrix />)
+}
 
 function getStepContent(stepIndex, classes) {
 
-	const handleChangeNumber = (e) => {
-		const {name} = e.target
+  let localState = JSON.parse(localStorage.getItem('localState'))
 
-		if (name === 'sub') {
-			
-		} else {
-
-			console.log('add')
-
-		}
-	}
+  const handleChangeNumberChair = (e) => {
+    const { value } = e.target
+    let update = {
+      ...localState,
+      number_chair: value || 0
+    }
+    localStorage.setItem('localState', JSON.stringify(update))
+  }
 
   switch (stepIndex) {
     case 0:
       return (
 				<React.Fragment>
-					<Fab color="secondary" aria-label="Sub" className={classes.fab}
-						name="sub"
-						onClick={handleChangeNumber}>
-						<RemoveIcon />
-					</Fab>
+					
 					<TextField
 						id="filled-bare"
 						className={classes.textField}
@@ -69,18 +126,32 @@ function getStepContent(stepIndex, classes) {
 						margin="normal"
 						variant="filled"
 						type="number"
-						inputProps={{ min: "1", max: "10", step: "1" }}
+            inputProps={{ min: "1", max: "10", step: "1" }}
+            onChange={handleChangeNumberChair}
 					/>
-				<Fab color="primary" aria-label="Add" className={classes.fab}
-					name="add"
-					onClick={handleChangeNumber}
-				>
-					<AddIcon />
-				</Fab>
 				</React.Fragment>
 			)
     case 1:
-      return 'What is an ad group anyways?';
+
+        if (!localState) {
+          return (
+            <p>Không khớp dữ liệu</p>
+          )
+        } else {
+          return (
+            <React.Fragment>
+              <Typography className={classes.screen}>Màn hình</Typography>
+              <GeneralChairsMap 
+                row={localState.number_row} 
+                column={localState.number_column} 
+              />
+              <section className={classes.chair_info}>
+                <Typography>Số ghế: {localState.number_chair}</Typography>
+                <Typography>Đã chọn: ABC</Typography>
+              </section>
+            </React.Fragment>
+          )
+        }
     case 2:
       return 'This is the bit I really care about!';
     default:
