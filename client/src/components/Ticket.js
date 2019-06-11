@@ -48,7 +48,7 @@ const styles = theme => ({
       border: '1px dotted #ccc',
       fontWeight: 600,
       padding: 20,
-      minWidth: '240px',
+      minWidth: '240px'
     }
   }
 })
