@@ -156,6 +156,20 @@ const MovieDetail = (props) => {
 
   // load area movie
   const movieDetailArea = () => {
+    
+    // save to localstorage
+    let localState = JSON.parse(localStorage.getItem('localState'))
+    if (localState) {
+      let info = {
+        ...localState,
+        movie_name: dataMovie.name,
+        movie_opening_day: dataMovie.opening_day,
+        showtime_id: 0,
+        showtime_price: 0,
+        theater_name: ""
+      }
+      localStorage.setItem('localState', JSON.stringify(info));
+    }
 
     let poster = null;
     if (dataMovie.trailer) {
@@ -184,6 +198,7 @@ const MovieDetail = (props) => {
     const price = e.currentTarget.getAttribute('price')
     const number_column = e.currentTarget.getAttribute('number_column')
     const number_row = e.currentTarget.getAttribute('number_row')
+    const theater_name = e.currentTarget.getAttribute('theater_name')
 
     // save to localstorage
     let localState = JSON.parse(localStorage.getItem('localState'))
@@ -192,6 +207,7 @@ const MovieDetail = (props) => {
         ...localState,
         number_column: number_column,
         number_row: number_row,
+        theater_name: theater_name,
         showtime_price: price,
         showtime_id: e.currentTarget.id
       }
@@ -200,9 +216,11 @@ const MovieDetail = (props) => {
   }
 
   const getShowtimes = theater => {
+    console.log(theater)
     return theater.showtimes.map((showtime) => {
       return (
         <SmallButton
+          theater_name={theater.name}
           number_column={theater.number_column}
           number_row={theater.number_row}
           price={showtime.price}

@@ -89,6 +89,7 @@ function GetStyleChair(x, y, dataChairsBooked, dataUserChairs) {
   }
 }
 
+// list chairs user was choose
 function getListUserChair(dataUserChairs) {  
   let userChair = [];
   for (let i = 0; i < dataUserChairs.length; i++) {
@@ -96,9 +97,11 @@ function getListUserChair(dataUserChairs) {
 
     userChair.push(
       <span 
+        key={columnTitle[chair[0]]+rowTitle[chair[1]]}
         style={{border: '1px solid green', padding: '3px'}}>
       {columnTitle[chair[0]]+rowTitle[chair[1]]}
-      </span>)
+      </span>
+    )
   }
   return userChair
 }
@@ -112,6 +115,7 @@ function GeneralChairsMap(props) {
     [1, 3]
   ]);
   const [dataUserChairs, setDataUserChairs] = useState([]);
+
 
   const Cell = (props) => {
     const { x, y } = props;
@@ -144,10 +148,10 @@ function GeneralChairsMap(props) {
     let matrix = [];
     for (let i = 0; i < row; i++) {
       for (let j = 0; j < column; j++) {
+        
         if (j === column / 2) {
           matrix.push(<span key={rowTitle[j]+i+j}> </span>)
         } 
-
         matrix.push(<Cell 
           key={columnTitle[i]+rowTitle[j]} 
           x={i} 
@@ -175,7 +179,6 @@ function getStepContent(stepIndex, classes) {
 
   let localState = JSON.parse(localStorage.getItem('localState'))
 
-
   const setNumberChair = (value) => {
     let update = {
       ...localState,
@@ -185,7 +188,6 @@ function getStepContent(stepIndex, classes) {
 
     return value
   }
-
 
   const handleChangeNumberChair = (e) => {
     const { value } = e.target
@@ -218,7 +220,7 @@ function getStepContent(stepIndex, classes) {
             <React.Fragment>
               <Typography className={classes.screen}>Màn hình</Typography>
               <GeneralChairsMap
-              classes={classes}
+                classes={classes}
                 number_chair={localState.number_chair}
                 row={localState.number_row} 
                 column={localState.number_column} 
@@ -237,6 +239,7 @@ function getStepContent(stepIndex, classes) {
 const Ticket = (props) => {
 	const { classes, actions } = props
   const [activeStep, setActiveStep] = React.useState(0);
+  const [values, setValues] = useState({})
   const steps = getSteps();
 
 	// navigation
@@ -250,7 +253,6 @@ const Ticket = (props) => {
 		}
 		
 	}, []);
-
 
 	// steper controller
   function handleNext() {

@@ -105,6 +105,16 @@ const Theater = (props) => {
         number_column: TheaterCpanel.theaters[0].number_column,
         number_row: TheaterCpanel.theaters[0].number_row,
       });
+
+      // set theater name
+      let localState = JSON.parse(localStorage.getItem('localState'))
+      if (localState) {
+        let info = {
+          ...localState,
+          theater_name: TheaterCpanel.theaters[0].name,
+        }
+        localStorage.setItem('localState', JSON.stringify(info))
+      }
     }
   }, [TheaterCpanel])
 
@@ -128,10 +138,24 @@ const Theater = (props) => {
   const handleChangeValues = (e) => {
     const { name, value } = e.target
     setValues((values) => ({ ...values, [name]: value }))
+
+    // set theater name
+    let theater = dataTheater.filter((theater) => theater.id === value)[0]
+    let localState = JSON.parse(localStorage.getItem('localState'))
+    if (localState) {
+      let info = {
+        ...localState,
+        theater_name: theater.name,
+      }
+      localStorage.setItem('localState', JSON.stringify(info))
+    }
   }
 
   const handleShowtimeClicked = (e) => {
     const price = e.currentTarget.getAttribute('price')
+
+    const movie_name = e.currentTarget.getAttribute('movie_name')
+    const movie_opening_day = e.currentTarget.getAttribute('movie_opening_day')
 
     // save to localstorage
     let localState = JSON.parse(localStorage.getItem('localState'))
@@ -140,6 +164,8 @@ const Theater = (props) => {
         ...localState,
         number_column: values.number_column,
         number_row: values.number_row,
+        movie_name: movie_name,
+        movie_opening_day: movie_opening_day,
         showtime_price: price,
         showtime_id: e.currentTarget.id
       }
@@ -151,6 +177,8 @@ const Theater = (props) => {
     return movie.showtimes.map((showtime) => {
       return (
         <SmallButton
+          movie_name={movie.name}
+          movie_opening_day={movie.opening_day}
           price={showtime.price}
           number_colum={values.number_column}
           number_row={values.number_row}
