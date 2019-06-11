@@ -65,20 +65,74 @@ function getSteps() {
   return ['Chọn số lượng ghế', 'Vị trí ghế ngồi', 'Xác nhận thanh toán'];
 }
 
+function isBooked(x, y, dataChairsBooked) {
+  for (let i = 0; i < dataChairsBooked.length; i++) {
+    if (dataChairsBooked[i][0] === x && dataChairsBooked[i][1] === y) {
+      return true;
+    } 
+  }
+  return false;
+}
+
+
+function GetStyleChair(x, y, dataChairsBooked, dataUserChairs) {
+  if (isBooked(x, y, dataChairsBooked)) {
+    return "#ccc"
+  } 
+
+  if (isBooked(x, y, dataUserChairs)) {
+    return "green"
+  }
+
+  else {
+    return "#fff"
+  }
+}
+
 function GeneralChairsMap(props) {
   const { row, column } = props
-  
+  const [dataChairsBooked, setDataChairsBooked] = useState([
+    [0, 0],
+    [2, 1],
+    [1, 3]
+  ]);
+  const [dataUserChairs, setDataUserChairs] = useState([]);
+
+  useEffect(() => {
+    console.log('updated: ', dataUserChairs)
+  }, [dataUserChairs])
+
+
   const Cell = (props) => {
     const { x, y } = props;
+    
+    let bg = "";
+    if (isBooked(x, y, dataChairsBooked)) {
+      bg = '#ccc'
+    } else {
+      bg = '#fff'
+    }
 
     return (
       <Button
         style={{
+          backgroundColor: GetStyleChair(x, y, dataChairsBooked, dataUserChairs),
           border: '1px solid',
-          margin: "0px 1px 3px 1px"
+          margin: "0px 1px 3px 1px",
+          cursor: 'pointer',
         }}
         onClick={() => {
-          console.log(x, " ", y);
+          if (isBooked(x, y, dataChairsBooked) || isBooked(x, y, dataUserChairs)) {
+            return false;
+          } else {
+            let userBooked = [
+              ...dataUserChairs,
+              [x, y]
+            ]
+            setDataUserChairs(userBooked.slice(-3))
+
+            console.log(x, " ", y);
+          }
         }}
       >{columnTitle[x] + "" + rowTitle[y]}</Button>
     )
@@ -90,8 +144,13 @@ function GeneralChairsMap(props) {
       for (let j = 0; j < column; j++) {
         if (j === column / 2) {
           matrix.push(<span key={rowTitle[j]+i+j}> </span>)
-        }
-        matrix.push(<Cell key={columnTitle[i]+rowTitle[j]} x={i} y={j} />)
+        } 
+
+        matrix.push(<Cell 
+          key={columnTitle[i]+rowTitle[j]} 
+          x={i} 
+          y={j} 
+        />)
       }
       matrix.push(<br key={columnTitle[i]}/>)
     }
@@ -153,9 +212,9 @@ function getStepContent(stepIndex, classes) {
           )
         }
     case 2:
-      return 'This is the bit I really care about!';
+      return 'Xem lại quá trình đặt vé';
     default:
-      return 'Uknown stepIndex';
+      return 'Ủa lỗi gì vậy :(';
   }
 }
 
@@ -180,6 +239,11 @@ const Ticket = (props) => {
 	// steper controller
   function handleNext() {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
+
+    // send ticket data to server for next
+    if (activeStep === steps.length - 1) {
+      console.log('sended !')
+    }
   }
 
   function handleBack() {
@@ -206,7 +270,7 @@ const Ticket = (props) => {
         {activeStep === steps.length ? (
           <div>
             <Typography className={classes.instructions}>Hoàn tất quá trình đặt vé</Typography>
-            <Button onClick={handleReset}>Cấu hình lại</Button>
+            <Button onClick={handleReset}>Đặt thêm vé mới</Button>
           </div>
         ) : (
           <div>
