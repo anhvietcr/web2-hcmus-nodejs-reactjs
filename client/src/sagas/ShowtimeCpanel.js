@@ -111,7 +111,7 @@ export function* actionShowtimeByMovie(data) {
 
 // Showtime ticket (booking)
 function asyncShowtimeTicket(payload) {
-    return axios.post(END_POINT + 'booking')
+    return axios.post(END_POINT + 'booking', {payload})
         .then(response => response.data)
         .catch(err => console.log(err))
 }
@@ -127,7 +127,7 @@ export function* actionShowtimeTicket(data) {
 
 // Showtime get chairs was booked
 function asyncShowtimeChairBooked(payload) {
-    return axios.post(END_POINT + '/showtime/booked')
+    return axios.post(END_POINT + '/showtime/booked', payload)
         .then(response => response.data)
         .catch(err => console.log(err))
 }

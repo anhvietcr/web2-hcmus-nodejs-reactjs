@@ -13,6 +13,8 @@ import StepLabel from '@material-ui/core/StepLabel'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
+import Alert from './helper/Alert'
+import { REQUIRE_MIN_CHAIR } from '../constants/actionTypes'
 
 const styles = theme => ({
 	root: {
@@ -107,14 +109,11 @@ function FormatArraylocation(arr) {
   return result
 }
 
-
 // general a map chairs
 function GeneralChairsMap() {
-  const { classes } = useContext(TicketContext);
+  const { classes, dataUserChairs, setDataUserChairs } = useContext(TicketContext);
   const { row, column, number_chair, dataChairsBooked } = useContext(ChairContext);
   
-  const [dataUserChairs, setDataUserChairs] = useState([]);
-
   const Cell = (props) => {
     const { x, y } = props;
 
@@ -182,7 +181,8 @@ function StepContent() {
   // get all chairs was booked
   useEffect(() => {
     actions.GetChairsBooked();
-  }, []);
+  }, 
+  []);
   useEffect(() => {
     const { chairs } = actions.ShowtimeCpanel;
 
@@ -252,6 +252,13 @@ function StepContent() {
 const Ticket = (props) => {
   const { classes, actions } = props
   const [activeStep, setActiveStep] = React.useState(0);
+  const [dataUserChairs, setDataUserChairs] = useState([]);
+  const [alert, setAlert] = useState({
+    count: 0,
+    open: false,
+    message: "",
+    variant: "success"
+})
   const [values, setValues] = useState({
     user_id: 0,
     showtime_id: 0,
@@ -267,17 +274,37 @@ const Ticket = (props) => {
     }	
   }, []);
 
+  useEffect(() => {
+    const { ticket } = actions.ShowtimeCpanel
+    if (ticket) {
+      console.log(ticket)
+    }
+  }, [actions.ShowtimeCpanel])
+
 
 	// steper controller
   function handleNext() {
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
-
     // send ticket data to server for next
     if (activeStep === steps.length - 1) {
+      
+      if (dataUserChairs.length < 1) {
+        setAlert({
+          count: alert.count + 1,
+          open: true,
+          message: REQUIRE_MIN_CHAIR,
+          variant: "error"
+        })
+        return false;
+      }
 
-      console.log()
-      console.log('sended !')
+      values.user_id = localState.user_id;
+      values.showtime_id = localState.showtime_id
+      values.arraylocation = FormatArraylocation(dataUserChairs)
+
+      actions.Ticket(values)
     }
+
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
   }
 
   function handleBack() {
@@ -292,6 +319,12 @@ const Ticket = (props) => {
 	return (
 		<React.Fragment>
 			<Navbar />
+      <Alert
+        count={alert.count}
+        open={alert.open}
+        message={alert.message}
+        variant={alert.variant}
+      />
 			<div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map(label => (
@@ -313,6 +346,8 @@ const Ticket = (props) => {
                 actions,
                 classes,
                 activeStep,
+                dataUserChairs,
+                setDataUserChairs
                 }}>
                   <StepContent />
               </TicketContext.Provider>

@@ -10,6 +10,7 @@ export const REQUIRE_PASS_CONFIRM = 'Nhập lại mật khẩu không chính xá
 export const REQUIRE_NAME = 'Họ tên không được để trống'
 export const REQUIRE_PHONE = 'Số điện thoại không được để trống'
 export const REQUIRE_TYPE_EMAIL = 'Email không đúng định dạng'
+export const REQUIRE_MIN_CHAIR = 'Chọn ít nhất 1 ghế'
 
 export const ADD_CINEMA = 'Thêm cụm rạp'
 export const UPDATE_CINEMA = 'Sửa cụm rạp'
