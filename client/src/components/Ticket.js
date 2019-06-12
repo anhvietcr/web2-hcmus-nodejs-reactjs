@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { 
+  useState, 
+  useEffect, 
+  useContext, 
+  createContext
+} from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import Navbar from './head/Navbar'
@@ -53,6 +58,9 @@ const styles = theme => ({
   }
 })
 
+let TicketContext = createContext()
+let ChairContext = createContext()
+
 let rowTitle = ['1','2','3','4','5','6','7','8','9','10',
 '11','12','13','14','15','16','17','18','19','20'];
 
@@ -84,9 +92,7 @@ function GetStyleChair(x, y, dataChairsBooked, dataUserChairs) {
     return "green"
   }
 
-  else {
-    return "#fff"
-  }
+  return "#fff"
 }
 
 // list chairs user was choose
@@ -107,14 +113,26 @@ function getListUserChair(dataUserChairs) {
 }
 
 // general a map chairs
-function GeneralChairsMap(props) {
-  const { row, column, number_chair, classes } = props
-  const [dataChairsBooked, setDataChairsBooked] = useState([
-    [0, 0],
-    [2, 1],
-    [1, 3]
-  ]);
+function GeneralChairsMap() {
+  const { actions, classes } = useContext(TicketContext);
+  const { row, column, number_chair } = useContext(ChairContext);
+  
+  const [dataChairsBooked, setDataChairsBooked] = useState([]);
   const [dataUserChairs, setDataUserChairs] = useState([]);
+
+  
+  useEffect(() => {
+    actions.GetChairsBooked();
+  }, []);
+
+  useEffect(() => {
+    const { chairs } = actions.ShowtimeCpanel;
+
+    if (chairs) {
+      console.log(chairs)
+      setDataChairsBooked(chairs)
+    }
+  }, [actions.ShowtimeCpanel])
 
 
   const Cell = (props) => {
@@ -175,8 +193,8 @@ function GeneralChairsMap(props) {
 }
 
 // change step content
-function getStepContent(stepIndex, classes) {
-
+function StepContent() {
+  let { activeStep, classes } = useContext(TicketContext)
   let localState = JSON.parse(localStorage.getItem('localState'))
 
   const setNumberChair = (value) => {
@@ -199,7 +217,7 @@ function getStepContent(stepIndex, classes) {
       <p>Không khớp dữ liệu</p>
     )
   } else { 
-    switch (stepIndex) {
+    switch (activeStep) {
       case 0:
           return (
             <React.Fragment>
@@ -217,15 +235,14 @@ function getStepContent(stepIndex, classes) {
           )
       case 1:
           return (
-            <React.Fragment>
-              <Typography className={classes.screen}>Màn hình</Typography>
-              <GeneralChairsMap
-                classes={classes}
-                number_chair={localState.number_chair}
-                row={localState.number_row} 
-                column={localState.number_column} 
-              />
-            </React.Fragment>
+              <ChairContext.Provider value={{
+                number_chair: localState.number_chair,
+                row: localState.number_row,
+                column: localState.number_column
+                }}>
+                  <Typography className={classes.screen}>Màn hình</Typography>
+                  <GeneralChairsMap />
+              </ChairContext.Provider>
           )
       case 2:
         return 'Xem lại quá trình đặt vé';
@@ -237,22 +254,21 @@ function getStepContent(stepIndex, classes) {
 
 // General main content
 const Ticket = (props) => {
-	const { classes, actions } = props
+  const { classes, actions } = props
   const [activeStep, setActiveStep] = React.useState(0);
   const [values, setValues] = useState({})
   const steps = getSteps();
 
 	// navigation
 	useEffect(() => {
-
 		let localState = localStorage.getItem('localState')
 		localState = JSON.parse(localState);
 
 		if (!localState || !localState.user_id) {
 			actions.history.push('/auth/login');
-		}
-		
-	}, []);
+    }	
+  }, []);
+
 
 	// steper controller
   function handleNext() {
@@ -292,7 +308,15 @@ const Ticket = (props) => {
           </div>
         ) : (
           <div>
-            <section className={classes.instructions}>{getStepContent(activeStep, classes)}</section>
+            <section className={classes.instructions}>
+              <TicketContext.Provider value={{
+                actions,
+                classes,
+                activeStep,
+                }}>
+                  <StepContent />
+              </TicketContext.Provider>
+            </section>
             <div>
               <Button
                 disabled={activeStep === 0}

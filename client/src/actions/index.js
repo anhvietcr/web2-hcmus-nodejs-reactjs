@@ -191,22 +191,33 @@ const ShowtimeByCinemaAsync = (payload) => {
         payload
     }
 }
-const ShowtimeByMovie = (payload) => {
+const ShowtimeByMovieAsync = (payload) => {
     return {
         type: TYPE.SHOWTIME_BY_MOVIE_ASYNC,
         payload
     }
 }
-
+const ShowtimeTicketAsync = (payload) => {
+    return {
+        type: TYPE.SHOWTIME_TICKET_ASYNC,
+        payload
+    }
+}
+const ShowtimeChairBookedAsync = (payload) => {
+    return {
+        type: TYPE.SHOWTIME_CHAIR_BOOKED_ASYNC,
+        payload
+    }
+}
 
 // Income Cpanel
-const IncomeByCinema = (payload) => {
+const IncomeByCinemaAsync = (payload) => {
     return {
         type: TYPE.INCOME_BY_CINEMA_ASYNC,
         payload
     }
 }
-const IncomeByMovie = (payload) => {
+const IncomeByMovieAsync = (payload) => {
     return {
         type: TYPE.INCOME_BY_MOVIE_ASYNC,
         payload
@@ -248,8 +259,10 @@ export default {
     ShowtimeDeleteAsync,
     ShowtimeByTheaterAsync,
     ShowtimeByCinemaAsync,
-    ShowtimeByMovie,
+    ShowtimeByMovieAsync,
+    ShowtimeTicketAsync,
+    ShowtimeChairBookedAsync,
 
-    IncomeByCinema,
-    IncomeByMovie
+    IncomeByCinemaAsync,
+    IncomeByMovieAsync
 }

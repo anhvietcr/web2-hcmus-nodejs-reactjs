@@ -14,10 +14,13 @@ class TicketContainer extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    ShowtimeCpanel: state.ShowtimeCpanel
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
+  Ticket: (payload) => {dispatch({type: TYPE.SHOWTIME_TICKET, payload})},
+  GetChairsBooked: (payload) => {dispatch({type: TYPE.SHOWTIME_CHAIR_BOOKED, payload})}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TicketContainer)
