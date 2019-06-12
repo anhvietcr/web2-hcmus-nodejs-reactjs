@@ -3,7 +3,6 @@ import React, {
   useEffect, 
   useContext, 
   createContext,
-  useMemo
 } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
@@ -94,6 +93,20 @@ function getListUserChair(items) {
   })
 }
 
+// format arraylocation for server
+function FormatArraylocation(arr) {
+  // [[0, 1], [2, 3]] => [{x: 0, y: 1}, {x: 2, y: 3}]
+  let result = [];
+  
+  arr.map((item) => {
+    result.push({
+      x: item[0],
+      y: item[1]
+    })
+  })
+  return result
+}
+
 
 // general a map chairs
 function GeneralChairsMap() {
@@ -104,7 +117,6 @@ function GeneralChairsMap() {
 
   const Cell = (props) => {
     const { x, y } = props;
-    let userBooked = [];
 
     return (
       <Button
@@ -120,7 +132,7 @@ function GeneralChairsMap() {
           if (isSelected(x, y, dataChairsBooked) || isSelected(x, y, dataUserChairs)) {
             return false;
           } else {
-            userBooked = [
+            let userBooked = [
               ...dataUserChairs,
               [x, y]
             ]
@@ -136,8 +148,8 @@ function GeneralChairsMap() {
     for (let i = 0; i < row; i++) {
       for (let j = 0; j < column; j++) {
         
-        if (j === column / 2) {
-          matrix.push(<span key={rowTitle[j]+i+j}> </span>)
+        if (j === Math.floor(column / 2)) {
+          matrix.push(<span key={rowTitle[j]+i+j}>&nbsp;&nbsp;&nbsp;</span>)
         } 
         matrix.push(<Cell 
           key={columnTitle[i]+rowTitle[j]} 
@@ -240,14 +252,16 @@ function StepContent() {
 const Ticket = (props) => {
   const { classes, actions } = props
   const [activeStep, setActiveStep] = React.useState(0);
-  const [values, setValues] = useState({})
+  const [values, setValues] = useState({
+    user_id: 0,
+    showtime_id: 0,
+    arraylocation: null
+  })
   const steps = getSteps();
+  let localState = JSON.parse(localStorage.getItem('localState'))
 
 	// navigation
 	useEffect(() => {
-		let localState = localStorage.getItem('localState')
-		localState = JSON.parse(localState);
-
 		if (!localState || !localState.user_id) {
 			actions.history.push('/auth/login');
     }	
@@ -260,6 +274,8 @@ const Ticket = (props) => {
 
     // send ticket data to server for next
     if (activeStep === steps.length - 1) {
+
+      console.log()
       console.log('sended !')
     }
   }
