@@ -187,7 +187,6 @@ const MovieCpanel = (props) => {
   const [dataTables, setDataTables] = useState([]);
   const [dataFilter, setDataFilter] = useState(dataTables);
   const [openDialog, setOpenDialog] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
   
   const [isChoose, setChoose] = useState({
     add: false,
@@ -198,7 +197,7 @@ const MovieCpanel = (props) => {
     id: 0,
     name: '',
     minute_time: '',
-    opening_day: '',
+    opening_day: TYPE.DEFAULT_DATE,
     introduce: '',
     trailer: '',
     image: ''
@@ -247,7 +246,7 @@ const MovieCpanel = (props) => {
         id: 0,
         name: '',
         minute_time: '',
-        opening_day: '',
+        opening_day: TYPE.DEFAULT_DATE,
         introduce: '',
         trailer: '',
         image: ''
@@ -344,7 +343,7 @@ const MovieCpanel = (props) => {
         id: 0,
         name: '',
         minute_time: '',
-        opening_day: '',
+        opening_day: TYPE.DEFAULT_DATE,
         introduce: '',
         trailer: '',
         image: ''
