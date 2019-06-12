@@ -12,13 +12,23 @@ import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
 import Alert from './helper/Alert'
 import { REQUIRE_MIN_CHAIR } from '../constants/actionTypes'
+import List from '@material-ui/icons/List'
+import Input from '@material-ui/core/Input'
+import IconButton from '@material-ui/core/IconButton'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import SkipNext from '@material-ui/icons/SkipNext'
 
 const styles = theme => ({
 	root: {
     width: '90%',
+    margin: "0 auto",
+  },
+  input: {
+    padding: "10px 0px 5px",
+    fontSize: 30,
+    margin: "0 auto",
   },
   button: {
     marginRight: theme.spacing.unit,
@@ -27,7 +37,18 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit * 5,
     textAlign: 'center',
-	},
+    border: '1px dotted #ccc',
+    padding: 5,
+    backgroundColor: 'rgba(240, 251, 242, 0.46)',
+  },
+  success: {
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit * 5,
+    textAlign: 'center',
+    border: '1px dotted #ccc',
+    backgroundColor: 'rgba(240, 251, 242, 0.46)',
+    padding: 10,
+  },
 	textField: {
     marginLeft: theme.spacing.unit,
 		marginRight: theme.spacing.unit,
@@ -38,7 +59,7 @@ const styles = theme => ({
   },
   screen: {
     padding: 20,
-    backgroundColor: '#f5f6f7',
+    backgroundColor: '#e0e0e0',
     width: '320px',
     margin: '0 auto',
     marginBottom: 20,
@@ -56,6 +77,33 @@ const styles = theme => ({
       fontWeight: 600,
       padding: 20,
       minWidth: '240px'
+    }
+  },
+  ticket_info: {
+    backgroundColor: 'rgba(202, 247, 195, 0.22)',
+    border: '1px dotted #ccc',
+    width: '320px',
+    textAlign: 'left',
+    margin: '0 auto',
+    fontWeight: 400,
+
+    "& ul": {
+      listStyleType: 'none',
+      padding: 0,
+
+      "& li": {
+        padding: 10,
+        display: 'flex',
+      },
+      "& span": {
+        display: 'inline-block',
+        textTransform: 'uppercase',
+        fontWeight: 500,
+        marginLeft: 5,
+      },
+      "& svg": {
+        marginRight: 5
+      }
     }
   }
 })
@@ -128,15 +176,28 @@ function GeneralChairsMap() {
           cursor: 'pointer',
         }}
         onClick={() => {
-          if (isSelected(x, y, dataChairsBooked) || isSelected(x, y, dataUserChairs)) {
+
+          // was selected
+          if (isSelected(x, y, dataChairsBooked)) {
             return false;
-          } else {
-            let userBooked = [
-              ...dataUserChairs,
-              [x, y]
-            ]
-            setDataUserChairs(userBooked.slice(-number_chair))
+          } 
+          
+          // unselect
+          if (isSelected(x, y, dataUserChairs)) {
+            let removeSlected = 
+              dataUserChairs
+              .filter(item => item[0] !== x || item[1] !== y)
+
+            setDataUserChairs(removeSlected);
+            return true;
           }
+
+          // select free chair
+          let userBooked = [
+            ...dataUserChairs,
+            [x, y]
+          ]
+          setDataUserChairs(userBooked.slice(-number_chair))
         }}
       >{columnTitle[x] + "" + rowTitle[y]}</Button>
     )
@@ -174,7 +235,7 @@ function GeneralChairsMap() {
 
 // change step content
 function StepContent() {
-  const { activeStep, classes, actions } = useContext(TicketContext)
+  const { activeStep, classes, actions, dataUserChairs } = useContext(TicketContext)
   const [dataChairsBooked, setDataChairsBooked] = useState([]);
   let localState = JSON.parse(localStorage.getItem('localState'))
 
@@ -216,15 +277,21 @@ function StepContent() {
       case 0:
           return (
             <React.Fragment>
-              <TextField
-                id="filled-bare"
-                className={classes.textField}
-                defaultValue={localState.number_chair || setNumberChair(1)}
-                margin="normal"
-                variant="filled"
+              <Input
                 type="number"
                 inputProps={{ min: "1", max: "10", step: "1" }}
+                placeholder={"Số lượng ghế"}
+                className={classes.input}
+                inputProps={{
+                  'aria-label': 'Description',
+                }}
+                defaultValue={localState.number_chair || setNumberChair(1)}
                 onChange={handleChangeNumberChair}
+                endAdornment={<InputAdornment position="end">
+                <IconButton className={classes.iconButton} aria-label="Search">
+                  <SkipNext />
+                </IconButton>
+                </InputAdornment>}
               />
             </React.Fragment>
           )
@@ -241,7 +308,19 @@ function StepContent() {
               </ChairContext.Provider>
           )
       case 2:
-        return 'Xem lại quá trình đặt vé';
+        return (
+          <section className={classes.ticket_info}>
+              <ul>
+                <li><List />Tên phim: <span>{localState.movie_name}</span></li>
+                <li><List />Khởi chiếu: <span>{localState.movie_opening_day}</span></li>
+                <li><List />Rạp: <span>{localState.theater_name}</span></li>
+                <li><List />Giá vé: <span>{localState.showtime_price}</span></li>
+                <li><List />Ghế: <span>{dataUserChairs.length}</span></li>
+                <li><List />Mã ghế: <span>{getListUserChair(dataUserChairs)}</span></li>
+                <li><List />Tổng tiền: <span>{dataUserChairs.length * localState.showtime_price}</span>&nbsp;VNĐ</li>
+              </ul>
+          </section>
+        )
       default:
         return 'Ủa lỗi gì vậy :(';
     }
@@ -285,7 +364,7 @@ const Ticket = (props) => {
 	// steper controller
   function handleNext() {
     // send ticket data to server for next
-    if (activeStep === steps.length - 1) {
+    if (activeStep >= steps.length - 2) {
       
       if (dataUserChairs.length < 1) {
         setAlert({
@@ -336,7 +415,7 @@ const Ticket = (props) => {
       <div>
         {activeStep === steps.length ? (
           <div>
-            <Typography className={classes.instructions}>Hoàn tất quá trình đặt vé</Typography>
+            <Typography className={classes.success}>Hoàn tất quá trình đặt vé</Typography>
             <Button onClick={handleReset}>Đặt thêm vé mới</Button>
           </div>
         ) : (
