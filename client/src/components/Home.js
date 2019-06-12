@@ -98,7 +98,7 @@ const Home = (props) => {
           <h2>movie news</h2>
         </div>
         <section className={classes.movies}>
-          <Grid container spacing={8}>
+          <Grid container>
             {dataMoviesNew.length > 0 && showMovies(dataMoviesNew)}
           </Grid>
         </section>
@@ -106,7 +106,7 @@ const Home = (props) => {
           <h3>movie trend</h3>
         </div>
         <section className={classes.movies}>
-          <Grid container spacing={8}>
+          <Grid container>
             {dataMoviesTrend.length > 0 && showMovies(dataMoviesTrend)}
           </Grid>
         </section>

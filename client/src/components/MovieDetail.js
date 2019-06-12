@@ -216,7 +216,6 @@ const MovieDetail = (props) => {
   }
 
   const getShowtimes = theater => {
-    console.log(theater)
     return theater.showtimes.map((showtime) => {
       return (
         <SmallButton
@@ -314,7 +313,7 @@ const MovieDetail = (props) => {
           theaters.map((theater) => {
             return (
               <ListItem alignItems="flex-start" key={theater.id} className={classes.itemList}>
-                <Grid container spacing={8}>
+                <Grid container>
                   <Grid item sm={12} xs={12} md={12} lg={12}>
                     <ListItemText
                       primary={
@@ -356,7 +355,7 @@ const MovieDetail = (props) => {
 
   const cinemaArea = (cinema_id) => {
     return (
-      <Grid container spacing={8}>
+      <Grid container>
         <Grid item sm={12} xs={12} md={12} lg={12}>
           {cinemaCombobox()}
         </Grid>
@@ -370,11 +369,11 @@ const MovieDetail = (props) => {
   return (
     <section className={classes.root}>
       <Navbar />
-      <Grid container spacing={8}>
+      <Grid container>
         {dataMovie.id && movieDetailArea()}
       </Grid>
       <Divider className={classes.divider} />
-      <Grid container spacing={8}>
+      <Grid container>
         {mainArea()}
       </Grid>
     </section>
