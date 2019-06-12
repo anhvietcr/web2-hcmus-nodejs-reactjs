@@ -2,7 +2,8 @@ import React, {
   useState, 
   useEffect, 
   useContext, 
-  createContext
+  createContext,
+  useMemo
 } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
@@ -72,68 +73,34 @@ function getSteps() {
   return ['Chọn số lượng ghế', 'Vị trí ghế ngồi', 'Xác nhận thanh toán'];
 }
 
-// check chair was booked
-function isBooked(x, y, dataChairsBooked) {
-  for (let i = 0; i < dataChairsBooked.length; i++) {
-    if (dataChairsBooked[i][0] === x && dataChairsBooked[i][1] === y) {
-      return true;
-    } 
-  }
-  return false;
-}
-
-// set chair's style
-function GetStyleChair(x, y, dataChairsBooked, dataUserChairs) {
-  if (isBooked(x, y, dataChairsBooked)) {
-    return "#ccc"
-  } 
-
-  if (isBooked(x, y, dataUserChairs)) {
-    return "green"
-  }
-
-  return "#fff"
+// check chair was selected
+function isSelected(x, y, items) {
+  return items.some(item => item[0] === x && item[1] === y)
 }
 
 // list chairs user was choose
-function getListUserChair(dataUserChairs) {  
-  let userChair = [];
-  for (let i = 0; i < dataUserChairs.length; i++) {
-    let chair = dataUserChairs[i]
+function getListUserChair(items) {  
+  let present = null;
 
-    userChair.push(
+  return items.map((item) => {
+    present = columnTitle[item[0]]+rowTitle[item[1]];
+    return (
       <span 
-        key={columnTitle[chair[0]]+rowTitle[chair[1]]}
-        style={{border: '1px solid green', padding: '3px'}}>
-      {columnTitle[chair[0]]+rowTitle[chair[1]]}
+        key={present}
+        style={{border: '1px solid green', padding: '3px'}}
+      >{present}
       </span>
     )
-  }
-  return userChair
+  })
 }
+
 
 // general a map chairs
 function GeneralChairsMap() {
-  const { actions, classes } = useContext(TicketContext);
-  const { row, column, number_chair } = useContext(ChairContext);
+  const { classes } = useContext(TicketContext);
+  const { row, column, number_chair, dataChairsBooked } = useContext(ChairContext);
   
-  const [dataChairsBooked, setDataChairsBooked] = useState([]);
   const [dataUserChairs, setDataUserChairs] = useState([]);
-
-  
-  useEffect(() => {
-    actions.GetChairsBooked();
-  }, []);
-
-  useEffect(() => {
-    const { chairs } = actions.ShowtimeCpanel;
-
-    if (chairs) {
-      console.log(chairs)
-      setDataChairsBooked(chairs)
-    }
-  }, [actions.ShowtimeCpanel])
-
 
   const Cell = (props) => {
     const { x, y } = props;
@@ -142,13 +109,15 @@ function GeneralChairsMap() {
     return (
       <Button
         style={{
-          backgroundColor: GetStyleChair(x, y, dataChairsBooked, dataUserChairs),
+          backgroundColor: isSelected(x, y, dataChairsBooked) ? "#ccc" 
+            : isSelected(x, y, dataUserChairs) ? "green" 
+            : "#fff",
           border: '1px solid',
           margin: "0px 1px 3px 1px",
           cursor: 'pointer',
         }}
         onClick={() => {
-          if (isBooked(x, y, dataChairsBooked) || isBooked(x, y, dataUserChairs)) {
+          if (isSelected(x, y, dataChairsBooked) || isSelected(x, y, dataUserChairs)) {
             return false;
           } else {
             userBooked = [
@@ -194,9 +163,23 @@ function GeneralChairsMap() {
 
 // change step content
 function StepContent() {
-  let { activeStep, classes } = useContext(TicketContext)
+  const { activeStep, classes, actions } = useContext(TicketContext)
+  const [dataChairsBooked, setDataChairsBooked] = useState([]);
   let localState = JSON.parse(localStorage.getItem('localState'))
 
+  // get all chairs was booked
+  useEffect(() => {
+    actions.GetChairsBooked();
+  }, []);
+  useEffect(() => {
+    const { chairs } = actions.ShowtimeCpanel;
+
+    if (chairs) {
+      setDataChairsBooked(chairs)
+    }
+  }, [actions.ShowtimeCpanel])
+
+  // update number chair user want booked
   const setNumberChair = (value) => {
     let update = {
       ...localState,
@@ -238,7 +221,8 @@ function StepContent() {
               <ChairContext.Provider value={{
                 number_chair: localState.number_chair,
                 row: localState.number_row,
-                column: localState.number_column
+                column: localState.number_column,
+                dataChairsBooked
                 }}>
                   <Typography className={classes.screen}>Màn hình</Typography>
                   <GeneralChairsMap />
