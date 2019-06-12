@@ -3,7 +3,7 @@ const db = require('./db')
 
 const Ticket = db.define("Ticket", {
   booking_id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     allowNull: true,
   },
   chair_id: {
