@@ -93,7 +93,7 @@ router.post('/register', jsonParser, async function (req, res) {
     });
     var contain = `Bấm vào link <a href = \`http://localhost:3000/auth/verify/${code}\`> này </a> để xác nhận đăng ký`;
     console.log(contain);
-    const info = await sendmail(email, 'Quên mật khẩu', 'Bạn có quên mật khẩu', '<h1>Đăng ký tài khoản</h1>'+contain);
+    const info = await sendmail(email, 'Xác nhận đăng ký', '', '<h1>Đăng ký tài khoản</h1>'+contain);
     // res.send(info);
     let respone = {
         status:200,

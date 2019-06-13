@@ -1,5 +1,6 @@
 export const END_POINT = "http://localhost:5000/"
 export const OPENCAGEDATA_KEY = "f25990252b184fddaea819c25c8d1126"
+export const DEFAULT_DATE = '01/01/2019 10:10'
 
 export const MESSAGE_SUCCESS = 'Xử lý thành công'
 export const MESSAGE_ERROR = 'Xử lý thất bại'
