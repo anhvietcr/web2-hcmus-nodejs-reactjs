@@ -1,6 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects'
-import axios from 'axios'
-import actions from '../actions'
+import { takeLatest } from 'redux-saga/effects'
 import * as TYPE from '../constants/actionTypes'
 import * as CinemaCpanel from './CinemaCpanel'
 import * as TheaterCpanel from './TheaterCpanel'
@@ -9,8 +7,6 @@ import * as ShowtimeCpanel from './ShowtimeCpanel'
 import * as IncomeCpanel from './IncomeCpanel'
 import * as Auth from './Auth'
 import * as User from './User'
-
-const END_POINT = "http://localhost:5000/";
 
 function* CustomSaga() {
   yield takeLatest(TYPE.SIGN_IN, Auth.actionSignIn);
@@ -49,6 +45,8 @@ function* CustomSaga() {
   yield takeLatest(TYPE.SHOWTIME_BY_THEATER, ShowtimeCpanel.actionShowtimeByTheater)
   yield takeLatest(TYPE.SHOWTIME_BY_CINEMA, ShowtimeCpanel.actionShowtimeByCinema)
   yield takeLatest(TYPE.SHOWTIME_BY_MOVIE, ShowtimeCpanel.actionShowtimeByMovie)
+  yield takeLatest(TYPE.SHOWTIME_TICKET, ShowtimeCpanel.actionShowtimeTicket)
+  yield takeLatest(TYPE.SHOWTIME_CHAIR_BOOKED, ShowtimeCpanel.actionShowtimeChairBooked)
 
   yield takeLatest(TYPE.INCOME_BY_CINEMA, IncomeCpanel.actionGetIncomeByCinema)
   yield takeLatest(TYPE.INCOME_BY_MOVIE, IncomeCpanel.actionGetIncomeByMovie)

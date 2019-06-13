@@ -6,7 +6,16 @@ const Logout = props => {
     let localState = JSON.parse(localStorage.getItem('localState'))
 
     if (localState) {
-      localStorage.removeItem('localState')
+      let info = {
+        ...localState,
+        user_email: null,
+        user_fullname: null,
+        user_id: null,
+        user_phone: null,
+        user_role: null
+      }
+      localStorage.setItem('localState', JSON.stringify(info))
+      // localStorage.removeItem('localState')
 
       setTimeout(() => {
         props.history.push('/')

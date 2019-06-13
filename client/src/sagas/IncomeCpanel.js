@@ -1,14 +1,13 @@
 import { call, put } from 'redux-saga/effects'
 import axios from 'axios'
 import actions from '../actions'
-
-const END_POINT = "http://localhost:5000/"
+import { END_POINT } from '../constants/actionTypes'
 
 /****************Income Cpanel*****************/
 // Income by Cinema
 function asyncGetIncomeByCinema(payload) {
   return axios.get(END_POINT + 'income/cinema')
-    .then(response => response)
+    .then(response => response.data)
     .catch(err => console.log(err))
 }
 
@@ -16,8 +15,7 @@ export function* actionGetIncomeByCinema(data) {
   const { payload } = data
   // let response = yield call(asyncGetIncomeByCinema, payload);
 
-  let response = {
-    data: [
+  let response = [
       ['1/5/2019', 1], 
       ['2/5/2019', 3], 
       ['3/5/2019', 5], 
@@ -45,15 +43,14 @@ export function* actionGetIncomeByCinema(data) {
       ['25/5/2019', 15], 
       ['26/5/2019', 30], 
   ]
-  }
 
-  yield put(actions.IncomeByCinema(response.data))
+  yield put(actions.IncomeByCinemaAsync(response))
 }
 
 // Income by Movie
 function asyncGetIncomeByMovie(payload) {
   return axios.get(END_POINT + 'income/movie')
-    .then(response => response)
+    .then(response => response.data)
     .catch(err => console.log(err))
 }
 
@@ -61,8 +58,7 @@ export function* actionGetIncomeByMovie(data) {
   const { payload } = data
   // let response = yield call(asyncGetIncomeByMovie, data);
 
-  let response = {
-    data: [
+  let response = [
       ['1/5/2019', 1], 
       ['2/5/2019', 3], 
       ['3/5/2019', 5], 
@@ -90,7 +86,6 @@ export function* actionGetIncomeByMovie(data) {
       ['25/5/2019', 15], 
       ['26/5/2019', 30], 
   ]
-  }
 
-  yield put(actions.IncomeByMovie(response.data))
+  yield put(actions.IncomeByMovieAsync(response))
 }

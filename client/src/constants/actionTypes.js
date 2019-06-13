@@ -1,3 +1,7 @@
+export const END_POINT = "http://localhost:5000/"
+export const OPENCAGEDATA_KEY = "f25990252b184fddaea819c25c8d1126"
+export const DEFAULT_DATE = '01/01/2019 10:10'
+
 export const MESSAGE_SUCCESS = 'Xử lý thành công'
 export const MESSAGE_ERROR = 'Xử lý thất bại'
 export const REQUIRE_EMAIL = 'Email không được trống'
@@ -7,6 +11,7 @@ export const REQUIRE_PASS_CONFIRM = 'Nhập lại mật khẩu không chính xá
 export const REQUIRE_NAME = 'Họ tên không được để trống'
 export const REQUIRE_PHONE = 'Số điện thoại không được để trống'
 export const REQUIRE_TYPE_EMAIL = 'Email không đúng định dạng'
+export const REQUIRE_MIN_CHAIR = 'Chọn ít nhất 1 ghế'
 
 export const ADD_CINEMA = 'Thêm cụm rạp'
 export const UPDATE_CINEMA = 'Sửa cụm rạp'
@@ -96,6 +101,11 @@ export const SHOWTIME_BY_CINEMA = 'SHOWTIME_BY_CINEMA'
 export const SHOWTIME_BY_CINEMA_ASYNC = 'SHOWTIME_BY_CINEMA_ASYNC'
 export const SHOWTIME_BY_MOVIE = 'SHOWTIME_BY_MOVIE'
 export const SHOWTIME_BY_MOVIE_ASYNC = 'SHOWTIME_BY_MOVIE_ASYNC'
+export const SHOWTIME_TICKET = 'SHOWTIME_TICKET'
+export const SHOWTIME_TICKET_ASYNC = 'SHOWTIME_TICKET_ASYNC'
+export const SHOWTIME_CHAIR_BOOKED = 'SHOWTIME_CHAIR_BOOKED'
+export const SHOWTIME_CHAIR_BOOKED_ASYNC = 'SHOWTIME_CHAIR_BOOKED_ASYNC'
+
 
 export const INCOME_BY_CINEMA = 'INCOME_BY_CINEMA'
 export const INCOME_BY_CINEMA_ASYNC = 'INCOME_BY_CINEMA_ASYNC'

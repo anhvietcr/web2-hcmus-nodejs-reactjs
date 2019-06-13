@@ -6,6 +6,8 @@ import { withStyles } from '@material-ui/core/styles'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
 import Divider from '@material-ui/core/Divider'
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
 const styles = theme => ({
   dialogFrom: {
@@ -53,7 +55,8 @@ const MovieDialog = (props) => {
                 setValues={setValues}
               />
             )
-          } else {
+          }
+          else {
             return false;
           }
         })}

@@ -211,8 +211,8 @@ const ShowtimeCpanel = (props) => {
   const [values, setValues] = useState({
     id: 0,
     price: '',
-    end_time: '',
-    start_time: '',
+    end_time: TYPE.DEFAULT_DATE,
+    start_time: TYPE.DEFAULT_DATE,
     movie_id: 0,
     theater_id: 0,
   })
@@ -266,8 +266,8 @@ const ShowtimeCpanel = (props) => {
       setValues({
         id: 0,
         price: '',
-        end_time: '',
-        start_time: '',
+        end_time: TYPE.DEFAULT_DATE,
+        start_time: TYPE.DEFAULT_DATE,
         movie_id: 0,
         theater_id: 0,
       })
@@ -359,8 +359,8 @@ const ShowtimeCpanel = (props) => {
       setValues({
         id: 0,
         price: '',
-        end_time: '',
-        start_time: '',
+        end_time: TYPE.DEFAULT_DATE,
+        start_time: TYPE.DEFAULT_DATE,
         movie_id: 0,
         theater_id: 0,
       })

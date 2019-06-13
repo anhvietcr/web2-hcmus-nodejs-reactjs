@@ -222,6 +222,16 @@ function ShowtimeCpanel(state = initialState, action) {
                 ...state,
                 showtimes_movie: action.payload
             }
+        case TYPE.SHOWTIME_TICKET_ASYNC:
+            return {
+                ...state,
+                ticket: action.payload
+            }
+        case TYPE.SHOWTIME_CHAIR_BOOKED_ASYNC:
+            return {
+                ...state,
+                chairs: action.payload
+            }
         default:
             return state;
     }

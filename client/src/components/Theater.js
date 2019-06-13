@@ -148,6 +148,8 @@ const Theater = (props) => {
         theater_name: theater.name,
       }
       localStorage.setItem('localState', JSON.stringify(info))
+      setValues((values) => ({ ...values, number_column: theater.number_column }))
+      setValues((values) => ({ ...values, number_row: theater.number_row }))
     }
   }
 
@@ -180,8 +182,6 @@ const Theater = (props) => {
           movie_name={movie.name}
           movie_opening_day={movie.opening_day}
           price={showtime.price}
-          number_colum={values.number_column}
-          number_row={values.number_row}
           handleSubmit={handleShowtimeClicked}
           key={showtime.id}
           id={showtime.id}
