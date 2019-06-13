@@ -87,4 +87,52 @@ router.post('/',jsonParser,async (req,res)=>{
         res.json(response);
     });
 });
+router.post('/chairordered',jsonParser,async (req,res)=>{
+    const payload = req.body.payload;
+    const theater_id = payload.theater_id;
+    const showtime_id = payload.showtime_id;
+    const chairordered = await Ticket.findAll({
+        raw: true,
+        include: [ {
+            model: Booking,
+            where: {
+                showtime_id: showtime_id
+            },
+            raw: true,
+            as: 'booking',
+            include: [{
+                model: Showtime,
+                raw: true,
+                as:'showtime',
+                where:{
+                    theater_id: theater_id,
+                    id: showtime_id
+                }
+            }]
+        }]
+    });
+    if (chairordered){
+        var arraylocation=[];
+        for(var i=0;i<chairordered.length;i++){
+            arraylocation.push({"x": chairordered[i].address_x,"y": chairordered[i].address_y});
+        }
+        let response = {
+            payload: {
+                status: 200,
+                message: "sucess",
+                arraylocation: arraylocation
+            }
+        };
+        res.json(response);
+    }
+    else{
+        let response = {
+            payload: {
+                status: 404,
+                message: "not found"
+            }
+        };
+        res.json(response);
+    }
+});
 module.exports = router;
