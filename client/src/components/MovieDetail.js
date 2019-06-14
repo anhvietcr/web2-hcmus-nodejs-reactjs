@@ -43,9 +43,10 @@ const styles = theme => ({
     listStyleType: 'none',
     textAlign: 'left',
     padding: "0px 10px 10px 10px",
+    borderLeft: "1px dotted #000",
 
     "& li": {
-      padding: '10px 0px',
+      padding: '5px 10px',
       fontSize: '20px',
       fontWeight: 500,
       minHeight: '60px',
@@ -81,7 +82,7 @@ const styles = theme => ({
   },
   moviePoster: {
     width: '100%',
-    height: '350px'
+    height: '490px'
   },
   cinemaArea: {
     borderLeft: '1px dotted #000',
@@ -181,15 +182,15 @@ const MovieDetail = (props) => {
     return (
       <React.Fragment>
         <Grid item xs={6} sm={6} md={6} lg={6}>
-          {poster}
-        </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={6}>
           <ul className={classes.movieContent}>
             <li><h2>{dataMovie.name}</h2></li>
             <li><Description className={classes.smallbtn} /><label>Giới thiệu: </label>{dataMovie.introduce}</li>
             <li><DateRange className={classes.smallbtn} /><label>Ngày khởi chiếu: </label>{dataMovie.opening_day}</li>
             <li><Timelapse className={classes.smallicon} /><label>Thời gian: </label>{dataMovie.minute_time} phút</li>
           </ul>
+        </Grid>
+        <Grid item xs={6} sm={6} md={6} lg={6}>
+          {poster}
         </Grid>
       </React.Fragment>
     )
@@ -312,6 +313,10 @@ const MovieDetail = (props) => {
 
     const { theaters } = cinema;
     return (
+      <React.Fragment>
+      <Grid xs={6} sm={6} md={6} lg={6}>
+        {cinemaCombobox()}
+      </Grid>
       <List className={classes.root}>
         {
           theaters.map((theater) => {
@@ -354,15 +359,14 @@ const MovieDetail = (props) => {
             )
           })}
       </List>
+      </React.Fragment>
     )
   }
 
   const cinemaArea = (cinema_id) => {
     return (
       <Grid container>
-        <Grid item sm={12} xs={12} md={12} lg={12}>
-          {cinemaCombobox()}
-        </Grid>
+
         <Grid item sm={12} xs={12} md={12} lg={12}>
           {cinemaMap()}
         </Grid>
