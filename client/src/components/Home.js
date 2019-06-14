@@ -71,7 +71,7 @@ const Home = (props) => {
         <Grid item sm={6} xs={6} md={4} lg={3} key={movie.id}>
           <CardFilm
             id={movie.id}
-            image="movie.jpg"
+            image={movie.image}
             mainText={movie.name}
             href={'/movie/detail/'}
           />

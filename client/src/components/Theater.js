@@ -203,7 +203,7 @@ const Theater = (props) => {
                 <ListItem alignItems="flex-start" key={movie.id} className={classes.itemList}>
                   <Grid container spacing={8}>
                     <Grid item sm={12} xs={12} md={4} lg={4}>
-                      <img alt="Remy Sharp" src="/movie.jpg" className={classes.imgLeft} />
+                      <img alt="Remy Sharp" src={movie.image} className={classes.imgLeft} />
                     </Grid>
 
                     <Grid item sm={12} xs={12} md={8} lg={8}>

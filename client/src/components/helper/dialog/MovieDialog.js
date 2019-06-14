@@ -58,10 +58,8 @@ const MovieDialog = (props) => {
           else if (label.display && label.type === 'image') {
             return (
               <ImageUpload 
-                label={{
-                  label: 'Hình ảnh',
-                  name: 'image'
-                }}
+                key={label.id}
+                label={label}
                 values={values}
                 setValues={setValues}
               />

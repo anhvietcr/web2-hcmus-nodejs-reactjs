@@ -33,9 +33,8 @@ const ImageUpload = (props) => {
   }
 
   const handleUpload = e => {
-    console.log("image was selected: ", image);
+    const taskUpload = storage.storage.ref(`images/${image.name}`).put(image);
 
-    const taskUpload = storage.ref(`images/${image}`).put(image);
     taskUpload.on('state_changed', 
       (snapshot) => {
         // process uploading
@@ -47,7 +46,7 @@ const ImageUpload = (props) => {
       }, 
       () => {
         //complete
-        storage.ref('images').child(image.name).getDownloadURL().then(url => {
+        storage.storage.ref('images').child(image.name).getDownloadURL().then(url => {
           console.log("url image upload: ", url)
 
           setValues((values) => ({...values, image: url}))

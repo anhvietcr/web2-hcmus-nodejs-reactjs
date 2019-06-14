@@ -122,6 +122,7 @@ const BodyTable = (props) => {
             <TableCell align="left">{row.opening_day}</TableCell>
             <TableCell align="left">{row.introduce}</TableCell>
             <TableCell align="left">{row.trailer}</TableCell>
+            <TableCell align="left">{row.image}</TableCell>
             <TableCell align="right">
               <Tooltip
                 title="Edit"
@@ -323,9 +324,10 @@ const MovieCpanel = (props) => {
         opening_day: values.opening_day,
         introduce: values.introduce,
         trailer: values.trailer,
-        image: ''
+        image: values.image
       }
       
+      console.log(values)
 
       actions.Update(payload);
     } else {
@@ -336,7 +338,7 @@ const MovieCpanel = (props) => {
           opening_day: values.opening_day,
           introduce: values.introduce,
           trailer: values.trailer,
-          image: ''
+          image: values.image
       }
       actions.Add(payload);
 
