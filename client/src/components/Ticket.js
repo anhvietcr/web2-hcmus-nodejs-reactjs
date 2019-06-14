@@ -376,11 +376,14 @@ const Ticket = (props) => {
         return false;
       }
 
-      values.user_id = localState.user_id;
-      values.showtime_id = localState.showtime_id
-      values.arraylocation = FormatArraylocation(dataUserChairs)
-
-      actions.Ticket(values)
+      // done step, send to server
+      if (activeStep >= steps.length - 1) {
+        values.user_id = localState.user_id;
+        values.showtime_id = localState.showtime_id
+        values.arraylocation = FormatArraylocation(dataUserChairs)
+  
+        actions.Ticket(values)
+      }
     }
 
     setActiveStep(prevActiveStep => prevActiveStep + 1);
