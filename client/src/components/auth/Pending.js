@@ -29,10 +29,8 @@ const Pending = (props) => {
         actions.history.push('/')
       } else {
         if (code === undefined) {
-          console.log(localState.state)
           // it's not verify
           if (localState.state === 'pending') {
-          console.log("here")
 
             setMessage("Vui lòng xác nhận email để hoàn thành quá trình đăng ký")
     
@@ -80,7 +78,6 @@ const Pending = (props) => {
       } 
 
       if (actions.Auth.user.status !== 200) {
-        console.log("here 2")
         setMessage(actions.Auth.user.message)
         // actions.Auth.user = {}
       }

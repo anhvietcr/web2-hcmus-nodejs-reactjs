@@ -49,7 +49,8 @@ const lableDatas = [
   { id: 2, label: 'Ngày chiếu', name: 'opening_day', type: 'textbox', display: true, align: 'left' },
   { id: 3, label: 'Giới thiệu', name: 'introduce', type: 'textbox', display: true, align: 'left' },
   { id: 4, label: 'Link Trailer', name: 'trailer', type: 'textbox', display: true, align: 'left' },
-  { id: 5, label: 'Thao tác', name: 'actions', type: 'icons', display: true, align: 'right' },
+  { id: 5, label: 'Hình ảnh', name: 'image', type: 'image', display: true, align: 'left' },
+  { id: 6, label: 'Thao tác', name: 'actions', type: 'icons', display: true, align: 'right' },
 ]
 
 const ToolbarTable = (props) => {

@@ -6,8 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
 import Divider from '@material-ui/core/Divider'
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
+import ImageUpload from '../ImageUpload'
 
 const styles = theme => ({
   dialogFrom: {
@@ -51,6 +50,18 @@ const MovieDialog = (props) => {
               <CustomTextField
                 key={label.id}
                 label={label}
+                values={values}
+                setValues={setValues}
+              />
+            )
+          }
+          else if (label.display && label.type === 'image') {
+            return (
+              <ImageUpload 
+                label={{
+                  label: 'Hình ảnh',
+                  name: 'image'
+                }}
                 values={values}
                 setValues={setValues}
               />

@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Button from '@material-ui/core/Button'
-import { storage } from '../firebase'
+import storage from '../firebase'
 
 const styles = theme => ({
   formControl: {
@@ -13,7 +13,7 @@ const styles = theme => ({
   },
 })
 
-const CustomSelect = (props) => {
+const ImageUpload = (props) => {
   const [image, setImage] = useState(null)
   const {
     classes,
@@ -50,7 +50,7 @@ const CustomSelect = (props) => {
         storage.ref('images').child(image.name).getDownloadURL().then(url => {
           console.log("url image upload: ", url)
 
-          setValues((values) => ({...values, url}))
+          setValues((values) => ({...values, image: url}))
 
         })
       });
@@ -75,8 +75,8 @@ const CustomSelect = (props) => {
   )
 }
 
-CustomSelect.propTypes = {
+ImageUpload.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(CustomSelect)
+export default withStyles(styles)(ImageUpload)
