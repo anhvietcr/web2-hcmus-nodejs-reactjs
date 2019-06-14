@@ -38,7 +38,7 @@ const CardHistory = (props) => {
            <CardHeader
                 avatar={
                     <Avatar aria-label="Recipe">
-                    {avatarText}
+                    {avatarText.slice(0, 2)}
                     </Avatar>
                 }
                 title={title}
