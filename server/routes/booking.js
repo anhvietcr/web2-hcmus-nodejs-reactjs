@@ -16,29 +16,29 @@ let router = new Router();
 //     "arraylocation": [{"x": 6,"y":1},{"x":0,"y": 0}]
 // }
 // }
-router.post('/',jsonParser,async (req,res)=>{
+router.post('/', jsonParser, async (req, res) => {
     //get uuid
-    var generateidbooking=uuidv1();
+    var generateidbooking = uuidv1();
     //get date
     var day = new Date();
     var dd = String(day.getDate()).padStart(2, '0');
     var mm = String(day.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy =day.getFullYear();
+    var yyyy = day.getFullYear();
     const today = mm + '/' + dd + '/' + yyyy;
     console.log(today);
     //create booking
     const payload = req.body.payload;
-    const uid=generateidbooking;
+    const uid = generateidbooking;
     const user_id = payload.user_id;
     const showtim_id = payload.showtime_id;
     const bookingtime = today;
     const arraylocation = payload.arraylocation;
     //find ticket price
     const price = await Showtime.findOne({
-        where: {id: showtim_id}
+        where: { id: showtim_id }
     });
     //tatol price
-    const totalprice=price.price*arraylocation.length;
+    const totalprice = price.price * arraylocation.length;
     //console.log(arraylocation[0].x);
     //create tickets
     const booking_id = uid;
@@ -48,52 +48,72 @@ router.post('/',jsonParser,async (req,res)=>{
     var i;
     var status = 200;
     var message = '';
-    for(i=0;i<arraylocation.length;i++)
-    {
-        let tickets= await Ticket.create({
-            booking_id: booking_id,
-            chair_id: arraylocation[i].x+""+arraylocation[i].y,
-            address_x: arraylocation[i].x,
-            address_y: arraylocation[i].y,
-            price: price.price
-        });
-        if (!tickets)
-        {
-            let response = {
-                payload: {
-                    status: 404,
-                    message: "can't create ticket",
-                }
-            };
-            res.json(response);
-        }
-    }
-    //create booking for client
     const booking = await Booking.create({
         id: uid,
         user_id: user_id,
         showtime_id: showtim_id,
         bookingtime: bookingtime,
         totalprice: totalprice,
-    }).then(function (booking) {
-        //res.json(user)
+    });
+    if (booking) {
+        var list = [];
+        var success = true;
+        for (i = 0; i < arraylocation.length; i++) {
+            var tickets = await Ticket.create({
+                booking_id: booking_id,
+                chair_id: arraylocation[i].x + "" + arraylocation[i].y,
+                address_x: arraylocation[i].x,
+                address_y: arraylocation[i].y,
+                price: price.price
+            });
+            if (!tickets) {
+                success = false;
+                break;
+                //res.json(response);
+            }
+            else {
+                list.push(tickets);
+            }
+        }
+        if(success){
+            let response = {
+                payload: {
+                    status: 200,
+                    message: "sucess",
+                    tickets: list
+                }
+            }
+            res.json(response);
+        }
+        else{
+            let response = {
+                payload: {
+                    status: 404,
+                    message: "fail to create ticket"
+                }
+            }
+            res.json(response);
+        }
+    }
+    else {
         let response = {
             payload: {
-                status: 200,
-                booking: booking,
-                arraylocation: arraylocation
+                status: 404,
+                message: "can't create booking"
             }
         };
         res.json(response);
-    });
+    }
+    //create booking for client
+
 });
-router.post('/chairordered',jsonParser,async (req,res)=>{
+router.post('/chairordered', jsonParser, async (req, res) => {
     const payload = req.body.payload;
     const theater_id = payload.theater_id;
     const showtime_id = payload.showtime_id;
     const chairordered = await Ticket.findAll({
         raw: true,
-        include: [ {
+        include: [{
             model: Booking,
             where: {
                 showtime_id: showtime_id
@@ -103,18 +123,18 @@ router.post('/chairordered',jsonParser,async (req,res)=>{
             include: [{
                 model: Showtime,
                 raw: true,
-                as:'showtime',
-                where:{
+                as: 'showtime',
+                where: {
                     theater_id: theater_id,
                     id: showtime_id
                 }
             }]
         }]
     });
-    if (chairordered){
-        var arraylocation=[];
-        for(var i=0;i<chairordered.length;i++){
-            arraylocation.push({"x": chairordered[i].address_x,"y": chairordered[i].address_y});
+    if (chairordered) {
+        var arraylocation = [];
+        for (var i = 0; i < chairordered.length; i++) {
+            arraylocation.push({ "x": chairordered[i].address_x, "y": chairordered[i].address_y });
         }
         let response = {
             payload: {
@@ -125,7 +145,7 @@ router.post('/chairordered',jsonParser,async (req,res)=>{
         };
         res.json(response);
     }
-    else{
+    else {
         let response = {
             payload: {
                 status: 404,
@@ -135,4 +155,5 @@ router.post('/chairordered',jsonParser,async (req,res)=>{
         res.json(response);
     }
 });
+
 module.exports = router;
