@@ -120,28 +120,19 @@ export function* actionShowtimeTicket(data) {
     const { payload } = data
     const response = yield call(asyncShowtimeTicket, payload)
 
-    console.log(response)
-
     yield put(actions.ShowtimeTicketAsync(response))
 }
 
 // Showtime get chairs was booked
 function asyncShowtimeChairBooked(payload) {
-    return axios.post(END_POINT + '/showtime/booked', payload)
+    return axios.post(END_POINT + 'booking/chairordered', {payload})
         .then(response => response.data)
         .catch(err => console.log(err))
 }
 
 export function* actionShowtimeChairBooked(data) {
     const { payload } = data
-    // const response = yield call(asyncShowtimeChairBooked, payload)
-    // console.log(response)
-
-    const response = [
-        [0, 0],
-        [2, 1],
-        [1, 3]
-    ];
-      
+    const response = yield call(asyncShowtimeChairBooked, payload)
+    
     yield put(actions.ShowtimeChairBookedAsync(response))
 }

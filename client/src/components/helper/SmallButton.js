@@ -19,6 +19,7 @@ const SmallButton = (props) => {
         number_row,
         number_column,
         theater_name,
+        theater_id,
         movie_name,
         movie_opening_day
   } = props
@@ -28,6 +29,7 @@ const SmallButton = (props) => {
             movie_opening_day={movie_opening_day || ""}
             movie_name={movie_name || ""}
             theater_name={theater_name || ""}
+            theater_id={theater_id || 0}
             price={price || 0}
             number_column={number_column || 0}
             number_row={number_row || 0}

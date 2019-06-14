@@ -166,7 +166,8 @@ const MovieDetail = (props) => {
         movie_opening_day: dataMovie.opening_day,
         showtime_id: 0,
         showtime_price: 0,
-        theater_name: ""
+        theater_name: "",
+        theater_id: 0,
       }
       localStorage.setItem('localState', JSON.stringify(info));
     }
@@ -199,6 +200,7 @@ const MovieDetail = (props) => {
     const number_column = e.currentTarget.getAttribute('number_column')
     const number_row = e.currentTarget.getAttribute('number_row')
     const theater_name = e.currentTarget.getAttribute('theater_name')
+    const theater_id = e.currentTarget.getAttribute('theater_id')
 
     // save to localstorage
     let localState = JSON.parse(localStorage.getItem('localState'))
@@ -208,6 +210,7 @@ const MovieDetail = (props) => {
         number_column: number_column,
         number_row: number_row,
         theater_name: theater_name,
+        theater_id: theater_id,
         showtime_price: price,
         showtime_id: e.currentTarget.id
       }
@@ -220,6 +223,7 @@ const MovieDetail = (props) => {
       return (
         <SmallButton
           theater_name={theater.name}
+          theater_id={theater.id}
           number_column={theater.number_column}
           number_row={theater.number_row}
           price={showtime.price}

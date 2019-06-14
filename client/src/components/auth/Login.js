@@ -160,7 +160,8 @@ const Login = (props) => {
                 }
 
                 // navigation
-                actions.history.goBack();
+                //actions.history.goBack();
+                actions.history.push('/')
             }
             if (actions.Auth.user.status) {
                 setAlert({

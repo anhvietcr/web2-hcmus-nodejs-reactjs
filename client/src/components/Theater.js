@@ -112,6 +112,7 @@ const Theater = (props) => {
         let info = {
           ...localState,
           theater_name: TheaterCpanel.theaters[0].name,
+          theater_id: TheaterCpanel.theaters[0].id,
         }
         localStorage.setItem('localState', JSON.stringify(info))
       }
@@ -146,6 +147,7 @@ const Theater = (props) => {
       let info = {
         ...localState,
         theater_name: theater.name,
+        theater_id: theater.id,
       }
       localStorage.setItem('localState', JSON.stringify(info))
       setValues((values) => ({ ...values, number_column: theater.number_column }))
