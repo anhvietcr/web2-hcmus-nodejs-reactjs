@@ -44,7 +44,7 @@ router.delete('/', async (req, res, next) => {
 router.post('/register', jsonParser, async function (req, res) {
     const payload = req.body.payload;
     const password = payload.password;
-    const email = payload.email;
+    const email = payload.email.toLowerCase();
     const repassword = payload.repassword;
     const fullname = payload.fullname;
 
@@ -91,7 +91,7 @@ router.post('/register', jsonParser, async function (req, res) {
             return;
         }
     });
-    var contain = `Bấm vào link <a href = \`http://localhost:3000/auth/verify/${code}\`> này </a> để xác nhận đăng ký`;
+    var contain = `Bấm vào link <a href = \`https://web2ck.herokuapp.com/auth/verify/${code}\`> này </a> để xác nhận đăng ký`;
     console.log(contain);
     const info = await sendmail(email, 'Xác nhận đăng ký', '', '<h1>Đăng ký tài khoản</h1>'+contain);
     // res.send(info);
@@ -186,7 +186,7 @@ router.get('/register', jsonParser, async function (req, res) {
 
 router.post('/login',jsonParser, async function (req, res) {
     const payload = req.body.payload;
-    const email = payload.email;
+    const email = payload.email.toLowerCase();
     const password = payload.password;
     //const email = "phanthinhutrang@gmail.com";
     //const password = "123456";
@@ -276,7 +276,7 @@ router.get('/profile',jsonParser, async function f(req, res) {
 });
 router.put('/profile',jsonParser, async function (req, res) {
     const payload = req.body.payload;
-    const email = payload.email;
+    const email =  payload.email.toLowerCase();
     //const email = "phannhutrang@gmail.com";
     const temp = await User.findOne({
         where: { email },
@@ -360,7 +360,7 @@ router.post('/forget-password',jsonParser, async function (req, res) {
     let code = Math.random().toString(36).substring(2);
 
     const payload = req.body.payload;
-    const email = payload.email;
+    const email = payload.email.toLowerCase();
 
     const user = await User.findOne({
         where: {email: email}
@@ -387,7 +387,7 @@ router.post('/forget-password',jsonParser, async function (req, res) {
         res.json(respone);
         return;
     }
-    var contain = `Bấm vào link <a href = \`http://localhost:3000/auth/forgot-password/${code}\`> này </a> để khôi phục mật khẩu`;
+    var contain = `Bấm vào link <a href = \`https://web2ck.herokuapp.com/auth/forgot-password/${code}\`> này </a> để khôi phục mật khẩu`;
     //console.log(contain);
     const info = await sendmail(email, 'Quên mật khẩu', 'Bạn có quên mật khẩu', '<h1>Bạn có quên mật khẩu</h1>'+contain);
     // res.send(info);
@@ -467,7 +467,7 @@ router.get('/verify',async function (req,res) {
 router.put('/verify',jsonParser, async function (req, res) {
 
     const payload = req.body.payload;
-    const email = payload.email;
+    const email = payload.email.toLowerCase();
     const code = payload.code;
     const newpassword = payload.newpassword;
     const renewpassword = payload.renewpassword;
