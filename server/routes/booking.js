@@ -8,6 +8,7 @@ const Router = require('express-promise-router');
 const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 const uuidv1 = require('uuid/v1');
+const moment = require('moment');
 let router = new Router();
 
 // "payload": {
@@ -24,8 +25,8 @@ router.post('/', jsonParser, async (req, res) => {
     var dd = String(day.getDate()).padStart(2, '0');
     var mm = String(day.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = day.getFullYear();
-    const today = mm + '/' + dd + '/' + yyyy;
-    console.log(today);
+    const today = dd + '/' + mm + '/' + yyyy;
+    //const today = moment().toDate();
     //create booking
     const payload = req.body.payload;
     const uid = generateidbooking;
@@ -75,7 +76,7 @@ router.post('/', jsonParser, async (req, res) => {
                 list.push(tickets);
             }
         }
-        if(success){
+        if (success) {
             let response = {
                 payload: {
                     status: 200,
@@ -85,7 +86,7 @@ router.post('/', jsonParser, async (req, res) => {
             }
             res.json(response);
         }
-        else{
+        else {
             let response = {
                 payload: {
                     status: 404,

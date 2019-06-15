@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/nguyenkha/LTW2_01#readme",
   "dependencies": {
-    "concurrently": "^4.1.0",
-    "moment": "^2.24.0"
+    "concurrently": "^4.1.0"
   }
 }
