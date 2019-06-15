@@ -8,7 +8,7 @@ const Cinema = db.define("Cinema", {
     allowNull: false,
   },
   address: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: true
   },
   image: {
