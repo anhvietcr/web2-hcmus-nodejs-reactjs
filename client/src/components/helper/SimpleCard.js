@@ -33,7 +33,7 @@ const SimpleCard = (props) => {
             component="img"
             alt="Contemplative Reptile"
             height="140"
-            image="/movie.jpg"
+            image={label.images}
             title="Contemplative Reptile"
           />
           <CardContent>
