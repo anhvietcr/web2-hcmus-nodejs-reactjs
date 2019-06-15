@@ -120,9 +120,9 @@ const BodyTable = (props) => {
             <TableCell align="left">{row.name}</TableCell>
             <TableCell align="left">{row.minute_time}</TableCell>
             <TableCell align="left">{row.opening_day}</TableCell>
-            <TableCell align="left">{row.introduce}</TableCell>
-            <TableCell align="left">{row.trailer}</TableCell>
-            <TableCell align="left">{row.image}</TableCell>
+            <TableCell align="left">{row.introduce.slice(0, 15) + "..."}</TableCell>
+            <TableCell align="left">{row.trailer.slice(0, 15) + "..."}</TableCell>
+            <TableCell align="left">{row.image.slice(0, 15) + "..."}</TableCell>
             <TableCell align="right">
               <Tooltip
                 title="Edit"
