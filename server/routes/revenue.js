@@ -8,10 +8,7 @@ const Router = require('express-promise-router');
 const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 var sequelize = require('sequelize');
-//const moment = require('moment');
-const Moment = require('moment');
-const MomentRange = require('moment-range');
-const moment = MomentRange.extendMoment(Moment);
+const moment = require('moment');
 let router = new Router();
 
 
