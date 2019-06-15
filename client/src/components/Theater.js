@@ -112,6 +112,7 @@ const Theater = (props) => {
         let info = {
           ...localState,
           theater_name: TheaterCpanel.theaters[0].name,
+          theater_id: TheaterCpanel.theaters[0].id,
         }
         localStorage.setItem('localState', JSON.stringify(info))
       }
@@ -146,6 +147,7 @@ const Theater = (props) => {
       let info = {
         ...localState,
         theater_name: theater.name,
+        theater_id: theater.id,
       }
       localStorage.setItem('localState', JSON.stringify(info))
       setValues((values) => ({ ...values, number_column: theater.number_column }))
@@ -201,7 +203,7 @@ const Theater = (props) => {
                 <ListItem alignItems="flex-start" key={movie.id} className={classes.itemList}>
                   <Grid container spacing={8}>
                     <Grid item sm={12} xs={12} md={4} lg={4}>
-                      <img alt="Remy Sharp" src="/movie.jpg" className={classes.imgLeft} />
+                      <img alt="Remy Sharp" src={movie.image} className={classes.imgLeft} />
                     </Grid>
 
                     <Grid item sm={12} xs={12} md={8} lg={8}>

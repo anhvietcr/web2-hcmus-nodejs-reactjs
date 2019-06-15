@@ -49,7 +49,8 @@ const lableDatas = [
   { id: 2, label: 'Ngày chiếu', name: 'opening_day', type: 'textbox', display: true, align: 'left' },
   { id: 3, label: 'Giới thiệu', name: 'introduce', type: 'textbox', display: true, align: 'left' },
   { id: 4, label: 'Link Trailer', name: 'trailer', type: 'textbox', display: true, align: 'left' },
-  { id: 5, label: 'Thao tác', name: 'actions', type: 'icons', display: true, align: 'right' },
+  { id: 5, label: 'Hình ảnh', name: 'image', type: 'image', display: true, align: 'left' },
+  { id: 6, label: 'Thao tác', name: 'actions', type: 'icons', display: true, align: 'right' },
 ]
 
 const ToolbarTable = (props) => {
@@ -119,8 +120,9 @@ const BodyTable = (props) => {
             <TableCell align="left">{row.name}</TableCell>
             <TableCell align="left">{row.minute_time}</TableCell>
             <TableCell align="left">{row.opening_day}</TableCell>
-            <TableCell align="left">{row.introduce}</TableCell>
-            <TableCell align="left">{row.trailer}</TableCell>
+            <TableCell align="left">{row.introduce.slice(0, 15) + "..."}</TableCell>
+            <TableCell align="left">{row.trailer.slice(0, 15) + "..."}</TableCell>
+            <TableCell align="left">{row.image.slice(0, 15) + "..."}</TableCell>
             <TableCell align="right">
               <Tooltip
                 title="Edit"
@@ -322,9 +324,10 @@ const MovieCpanel = (props) => {
         opening_day: values.opening_day,
         introduce: values.introduce,
         trailer: values.trailer,
-        image: ''
+        image: values.image
       }
       
+      console.log(values)
 
       actions.Update(payload);
     } else {
@@ -335,7 +338,7 @@ const MovieCpanel = (props) => {
           opening_day: values.opening_day,
           introduce: values.introduce,
           trailer: values.trailer,
-          image: ''
+          image: values.image
       }
       actions.Add(payload);
 

@@ -18,37 +18,24 @@ import DateRange from '@material-ui/icons/DateRange'
 
 const styles = theme => ({
   root: {
-    backgroundColor: '#f5f6f7'
-  },
-  left: {
-    position: 'relative',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0
-  },
-  right: {
-    position: 'relative',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0
+    backgroundColor: '#f5f6f7',
   },
   movieDetail: {
     display: 'block',
     position: 'relative',
-    backgroundColor: '#f5f6f7'
   },
   movieContent: {
     listStyleType: 'none',
     textAlign: 'left',
     padding: "0px 10px 10px 10px",
+    borderLeft: "5px solid #959595",
+    marginLeft: 5,
 
     "& li": {
-      padding: '10px 0px',
-      fontSize: '20px',
+      padding: '5px 10px',
+      fontSize: 20,
       fontWeight: 500,
-      minHeight: '60px',
+      minHeight: 60,
 
       "& h2": {
         color: '#000',
@@ -66,14 +53,18 @@ const styles = theme => ({
     display: 'inline',
   },
   divider: {
-    marginTop: '10px'
+    margin: '5px'
+  },
+  theaterStyle: {
+    marginRight: 5
   },
   itemList: {
     display: 'inline-block',
     position: 'relative',
-    borderLeft: "3px solid #000",
-    margin: "0px 5px",
-    backgroundColor: "#f5f6f7"
+    borderLeft: "3px solid #959595",
+    backgroundColor: "#f5f6f7",
+    boxShadow: "0px 1px 3px 0px #bec1db",
+
   },
   imgLeft: {
     width: "100%",
@@ -81,24 +72,40 @@ const styles = theme => ({
   },
   moviePoster: {
     width: '100%',
-    height: '350px'
+    height: '490px'
   },
   cinemaArea: {
-    borderLeft: '1px dotted #000',
+    borderLeft: '1px dotted #959595',
     backgroundColor: '#f5f6f7'
   },
-  theaterName: {
+  theaterNameHighline: {
     backgroundColor: '#ff6060de',
+    borderLeft: '5px solid #959595',
+    width: 'fit-content',
+    padding: '5px 20px',
+    borderRadius: 5,
+    minWidth: '320px',
+  },
+  showtimeTitleHighline: {
+    backgroundColor: '#eec07b',
     borderLeft: '5px solid #000',
     width: 'fit-content',
     padding: '5px 20px',
-    minWidth: '320px'
+    width: 120,
+    padding: "15px 5px",
+    borderLeft: "5px solid #959595",
+    display: "inline-flex",
+    marginTop: 5,
+    borderRadius: 5,
   },
   itemIcon: {
     display: "flex",
     padding: '5px 0px',
     fontWeight: '600',
     color: '#999999'
+  },
+  centerHead: {
+    margin: '0 5px'
   }
 })
 
@@ -166,7 +173,8 @@ const MovieDetail = (props) => {
         movie_opening_day: dataMovie.opening_day,
         showtime_id: 0,
         showtime_price: 0,
-        theater_name: ""
+        theater_name: "",
+        theater_id: 0,
       }
       localStorage.setItem('localState', JSON.stringify(info));
     }
@@ -179,16 +187,22 @@ const MovieDetail = (props) => {
     }
     return (
       <React.Fragment>
-        <Grid item xs={6} sm={6} md={6} lg={6}>
-          {poster}
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <section className={classes.centerHead}>
+            {poster}
+          </section>
+          <Divider className={classes.divider} />
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6}>
           <ul className={classes.movieContent}>
             <li><h2>{dataMovie.name}</h2></li>
-            <li><Description className={classes.smallbtn} /><label>Giới thiệu: </label>{dataMovie.introduce}</li>
             <li><DateRange className={classes.smallbtn} /><label>Ngày khởi chiếu: </label>{dataMovie.opening_day}</li>
             <li><Timelapse className={classes.smallicon} /><label>Thời gian: </label>{dataMovie.minute_time} phút</li>
+            <li><Description className={classes.smallbtn} /><label>Giới thiệu: </label>{dataMovie.introduce}</li>
           </ul>
+        </Grid>
+        <Grid item xs={6} sm={6} md={6} lg={6}>
+          {theaterArea(comboboxId)}
         </Grid>
       </React.Fragment>
     )
@@ -199,6 +213,7 @@ const MovieDetail = (props) => {
     const number_column = e.currentTarget.getAttribute('number_column')
     const number_row = e.currentTarget.getAttribute('number_row')
     const theater_name = e.currentTarget.getAttribute('theater_name')
+    const theater_id = e.currentTarget.getAttribute('theater_id')
 
     // save to localstorage
     let localState = JSON.parse(localStorage.getItem('localState'))
@@ -208,6 +223,7 @@ const MovieDetail = (props) => {
         number_column: number_column,
         number_row: number_row,
         theater_name: theater_name,
+        theater_id: theater_id,
         showtime_price: price,
         showtime_id: e.currentTarget.id
       }
@@ -220,6 +236,7 @@ const MovieDetail = (props) => {
       return (
         <SmallButton
           theater_name={theater.name}
+          theater_id={theater.id}
           number_column={theater.number_column}
           number_row={theater.number_row}
           price={showtime.price}
@@ -281,20 +298,6 @@ const MovieDetail = (props) => {
     actions.getLatLng(cinema.address)
   }
 
-  // load area cinemas
-  const mainArea = () => {
-    return (
-      <React.Fragment>
-        <Grid item sm={12} xs={12} md={6} lg={6}>
-          {theaterArea(comboboxId)}
-        </Grid>
-        <Grid item sm={12} xs={12} md={6} lg={6}>
-          {cinemaArea(comboboxId)}
-        </Grid>
-      </React.Fragment>
-    )
-  }
-
   const theaterArea = (cinema_id) => {
     let cinema = dataCinemas.filter((cinema) => {
       return cinema.id === cinema_id
@@ -308,61 +311,60 @@ const MovieDetail = (props) => {
 
     const { theaters } = cinema;
     return (
-      <List className={classes.root}>
-        {
-          theaters.map((theater) => {
-            return (
-              <ListItem alignItems="flex-start" key={theater.id} className={classes.itemList}>
-                <Grid container>
-                  <Grid item sm={12} xs={12} md={12} lg={12}>
-                    <ListItemText
-                      primary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="h5"
-                            color="textPrimary"
-                            className={classes.theaterName}
-                          >
-                            {theater.name}
-                          </Typography>
-                          <Typography
-                            component="span"
-                            variant="subheading"
-                            color="textPrimary"
-                            className={classes.inline}
-                          >
-                          <span className={classes.itemIcon}>
-                            <AttachMoney className={classes.smallicon} /> {theater.showtimes[0].price + " VND"}
-                            {" — " + theater.type}
-                          </span>
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                    <span className={classes.smallbtn}>
-                      {getShowtimes(theater)}
-                    </span>
+      <React.Fragment>
+        {cinemaCombobox()}
+        <List className={classes.theaterStyle}>
+          {
+            theaters.map((theater) => {
+              return (
+                <ListItem alignItems="flex-start" key={theater.id} className={classes.itemList}>
+                  <Grid container>
+                    <Grid item sm={12} xs={12} md={12} lg={12}>
+                      <ListItemText
+                        primary={
+                          <React.Fragment>
+                            <Typography
+                              component="span"
+                              variant="h5"
+                              color="textPrimary"
+                              className={classes.theaterNameHighline}
+                            >
+                              {theater.name}
+                            </Typography>
+                            <Typography
+                              component="span"
+                              variant="subheading"
+                              color="textPrimary"
+                              className={classes.inline}
+                            >
+                            <span className={classes.itemIcon}>
+                              <AttachMoney className={classes.smallicon} /> {theater.showtimes[0].price + " VND"}
+                              {" — " + theater.type}
+                            </span>
+                            </Typography>
+                          </React.Fragment>
+                        }
+                      />
+                      <span className={classes.smallbtn}>
+                        <Typography
+                          component="span"
+                          variant="h5"
+                          color="textPrimary"
+                          className={classes.showtimeTitleHighline}
+                        >
+                          {"Suất chiếu"}
+                        </Typography>
+                        {getShowtimes(theater)}
+                      </span>
+                    </Grid>
                   </Grid>
-                </Grid>
-                <Divider className={classes.divider} />
-              </ListItem>
-            )
-          })}
-      </List>
-    )
-  }
-
-  const cinemaArea = (cinema_id) => {
-    return (
-      <Grid container>
-        <Grid item sm={12} xs={12} md={12} lg={12}>
-          {cinemaCombobox()}
-        </Grid>
-        <Grid item sm={12} xs={12} md={12} lg={12}>
-          {cinemaMap()}
-        </Grid>
-      </Grid>
+                  <Divider className={classes.divider} />
+                </ListItem>
+              )
+            })}
+        </List>
+        
+      </React.Fragment>
     )
   }
 
@@ -371,10 +373,8 @@ const MovieDetail = (props) => {
       <Navbar />
       <Grid container>
         {dataMovie.id && movieDetailArea()}
-      </Grid>
-      <Divider className={classes.divider} />
-      <Grid container>
-        {mainArea()}
+    
+        {cinemaMap()}
       </Grid>
     </section>
   )

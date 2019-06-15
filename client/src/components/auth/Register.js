@@ -136,7 +136,7 @@ const Register = (props) => {
     useEffect(() => {
         if (submitted && actions.Auth.user) {
             if (actions.Auth.user.status === 200) {
-                let localState = localStorage.getItem('localState');
+                let localState = JSON.parse(localStorage.getItem('localState'));
                 let user = {
                     ...localState,
                     state: "pending",

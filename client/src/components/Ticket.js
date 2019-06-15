@@ -157,6 +157,18 @@ function FormatArraylocation(arr) {
   return result
 }
 
+function FormatGetArrayLocation(arr) {
+  //[{x: "0", y: "1"}, {x: "2", y: "3"}] => [[0, 1], [2, 3]]
+  let result = [];
+  arr.map((item) => {
+    let temp = [];
+    temp.push(parseInt(item.x))
+    temp.push(parseInt(item.y))
+    result.push(temp)
+  });
+  return result;
+}
+
 // general a map chairs
 function GeneralChairsMap() {
   const { classes, dataUserChairs, setDataUserChairs } = useContext(TicketContext);
@@ -241,14 +253,25 @@ function StepContent() {
 
   // get all chairs was booked
   useEffect(() => {
-    actions.GetChairsBooked();
+    let localState = JSON.parse(localStorage.getItem('localState'))
+
+    if (localState) {
+      let payload = {
+        theater_id: localState.theater_id,
+        showtime_id: localState.showtime_id
+      }
+      actions.GetChairsBooked(payload);
+    }
   }, 
   []);
   useEffect(() => {
     const { chairs } = actions.ShowtimeCpanel;
 
     if (chairs) {
-      setDataChairsBooked(chairs)
+      const { arraylocation } = chairs.payload
+      let beauLocation = FormatGetArrayLocation(arraylocation)
+
+      setDataChairsBooked(beauLocation)
     }
   }, [actions.ShowtimeCpanel])
 

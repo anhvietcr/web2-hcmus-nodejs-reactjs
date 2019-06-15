@@ -15,7 +15,7 @@ const Movie = db.define("Movie", {
     allowNull: true,
   },
   introduce: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: true,
   },
   opening_day: {
