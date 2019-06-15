@@ -14,7 +14,7 @@ import Filter2 from '@material-ui/icons/Filter2'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Alert from '../helper/Alert'
-
+import Navbar from '../head/Navbar'
 
 const styles = theme => ({
     root: {
@@ -22,9 +22,8 @@ const styles = theme => ({
         display: "flex",
         flexWrap: "wrap",
         boxSizing: "border-box",
-        marginTop: "5%",
+        marginTop: 10,
         width: '100%',
-        backgroundColor: "#fcfcfc"
     },
     control: {
         padding: theme.spacing.unit * 3
@@ -34,13 +33,13 @@ const styles = theme => ({
         flexDirection: "column",
         border: "1px solid #DFE3E8",
         borderRadius: 4,
-        boxShadow: "none",
         color: "#12161B",
         transition: "box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#fff",
         width: '420px',
         margin: '0 auto',
-        padding: "5px 10px"
+        padding: "5px 10px",
+        boxShadow: '0px 1px 9px 3px #e7e7e7',
     },
     container: {
         display: 'block',
@@ -218,6 +217,8 @@ const Login = (props) => {
     }
 
     return (
+        <React.Fragment>
+        <Navbar />
         <Grid container className={classes.root} spacing={16}>
             <Grid item xs={12} md={12} lg={12} xl={12}>
                 <Alert
@@ -331,7 +332,8 @@ const Login = (props) => {
                     </Grid>
                 </Paper>
             </Grid>
-        </Grid>        
+        </Grid>    
+        </React.Fragment>    
     );
 }
 

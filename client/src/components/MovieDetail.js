@@ -294,7 +294,7 @@ const MovieDetail = (props) => {
     setComboboxId(value);
 
     // get lat, lng from address
-    let cinema = dataCinemas.filter(cinema => cinema.id === value)[0];
+    let cinema = dataCinemas.filter(cinema => cinema.id === value)[0] || null;
     actions.getLatLng(cinema.address)
   }
 

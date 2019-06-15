@@ -237,17 +237,29 @@ function ShowtimeCpanel(state = initialState, action) {
     }
 }
 
+let income_cinema = []
+let income_movie = []
 function IncomeCpanel(state = initialState, action) {
     switch (action.type) {
         case TYPE.INCOME_BY_CINEMA_ASYNC:
+            if (action.payload.payload.status === 404) {
+                income_cinema = []
+            } else {
+                income_cinema = action.payload.payload.arrayrevenue
+            }
             return {
                 ...state,
-                income_cinema: action.payload
+                income_cinema
             }
         case TYPE.INCOME_BY_MOVIE_ASYNC:
+            if (action.payload.status === 404) {
+                income_movie = []
+            } else {
+                income_movie = action.payload.payload.arrayrevenue
+            }
             return {
                 ...state,
-                income_movie: action.payload
+                income_movie
             }
         default:
             return state;

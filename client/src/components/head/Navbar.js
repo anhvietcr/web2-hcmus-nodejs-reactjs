@@ -8,7 +8,6 @@ const styles = theme => ({
         backgroundColor: '#fff',
         listStyleType: 'none',
         display: 'flex',
-        fontSize: '18px',
         padding: '0',
         margin: '0',
         fontSize: '15px',

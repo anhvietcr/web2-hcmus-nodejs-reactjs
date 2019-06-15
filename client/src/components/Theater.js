@@ -99,22 +99,24 @@ const Theater = (props) => {
     if (TheaterCpanel.theaters) {
       setDataTheater(TheaterCpanel.theaters);
 
-      setValues({
-        date: "2019-06-01",
-        theater_id: TheaterCpanel.theaters[0].id,
-        number_column: TheaterCpanel.theaters[0].number_column,
-        number_row: TheaterCpanel.theaters[0].number_row,
-      });
+      if (TheaterCpanel.theaters.length) {
+        setValues({
+          date: "2019-06-01",
+          theater_id: TheaterCpanel.theaters[0].id || null,
+          number_column: TheaterCpanel.theaters[0].number_column || null,
+          number_row: TheaterCpanel.theaters[0].number_row || null,
+        });
 
-      // set theater name
-      let localState = JSON.parse(localStorage.getItem('localState'))
-      if (localState) {
-        let info = {
-          ...localState,
-          theater_name: TheaterCpanel.theaters[0].name,
-          theater_id: TheaterCpanel.theaters[0].id,
+        // set theater info in localStorage
+        let localState = JSON.parse(localStorage.getItem('localState'))
+        if (localState) {
+          let info = {
+            ...localState,
+            theater_name: TheaterCpanel.theaters[0].name || null,
+            theater_id: TheaterCpanel.theaters[0].id || null,
+          }
+          localStorage.setItem('localState', JSON.stringify(info))
         }
-        localStorage.setItem('localState', JSON.stringify(info))
       }
     }
   }, [TheaterCpanel])
@@ -141,7 +143,7 @@ const Theater = (props) => {
     setValues((values) => ({ ...values, [name]: value }))
 
     // set theater name
-    let theater = dataTheater.filter((theater) => theater.id === value)[0]
+    let theater = dataTheater.filter((theater) => theater.id === value)[0] || null;
     let localState = JSON.parse(localStorage.getItem('localState'))
     if (localState) {
       let info = {
