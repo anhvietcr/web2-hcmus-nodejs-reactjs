@@ -14,11 +14,13 @@ class TicketContainer extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    MovieCpanel: state.MovieCpanel,
     ShowtimeCpanel: state.ShowtimeCpanel
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
+  MovieUpdateView: (payload) => {dispatch({type: TYPE.MOVIE_UPDATE_VIEW, payload})},
   Ticket: (payload) => {dispatch({type: TYPE.SHOWTIME_TICKET, payload})},
   GetChairsBooked: (payload) => {dispatch({type: TYPE.SHOWTIME_CHAIR_BOOKED, payload})}
 })

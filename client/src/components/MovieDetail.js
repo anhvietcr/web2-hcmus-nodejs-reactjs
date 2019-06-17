@@ -170,6 +170,7 @@ const MovieDetail = (props) => {
       let info = {
         ...localState,
         movie_name: dataMovie.name,
+        movie_id: dataMovie.id,
         movie_opening_day: dataMovie.opening_day,
         showtime_id: 0,
         showtime_price: 0,

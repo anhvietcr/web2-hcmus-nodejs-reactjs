@@ -151,7 +151,12 @@ const MovieSearchKeyword = (payload) => {
         payload
     }
 }
-
+const MovieUpdateView = (payload) => {
+    return {
+        type: TYPE.MOVIE_UPDATE_VIEW_ASYNC,
+        payload
+    }
+}
 
 
 // Showtime Cpanel
@@ -252,6 +257,7 @@ export default {
     MovieListNewAsync,
     MovieListTrendAsync,
     MovieSearchKeyword,
+    MovieUpdateView,
 
     ShowtimeListAsync,
     ShowtimeAddAsync,

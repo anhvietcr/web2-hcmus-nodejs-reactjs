@@ -1,5 +1,5 @@
-export const END_POINT = "https://ltweb2-01.herokuapp.com/"
-// export const END_POINT = "http://localhost:5000/"
+// export const END_POINT = "https://ltweb2-01.herokuapp.com/"
+export const END_POINT = "http://localhost:5000/"
 export const OPENCAGEDATA_KEY = "f25990252b184fddaea819c25c8d1126"
 export const DEFAULT_DATE = '01/01/2019 10:10'
 
@@ -87,6 +87,8 @@ export const MOVIE_LIST_TREND = 'MOVIE_LIST_TREND'
 export const MOVIE_LIST_TREND_ASYNC = 'MOVIE_LIST_TREND_ASYNC'
 export const MOVIE_SEARCH_KEYWORD = 'MOVIE_SEARCH_KEYWORD'
 export const MOVIE_SEARCH_KEYWORD_ASYNC = 'MOVIE_SEARCH_KEYWORD_ASYNC'
+export const MOVIE_UPDATE_VIEW = 'MOVIE_UPDATE_VIEW'
+export const MOVIE_UPDATE_VIEW_ASYNC = 'MOVIE_UPDATE_VIEW_ASYNC'
 
 export const SHOWTIME_ADD = 'SHOWTIME_ADD'
 export const SHOWTIME_LIST = 'SHOWTIME_LIST'

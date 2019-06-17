@@ -97,3 +97,17 @@ export function* actionMovieSearchKeyword(data) {
 
     yield put(actions.MovieSearchKeyword(reponse));
 }
+
+// Update view movie by id
+function asyncMovieUpdateView(id) {
+    return axios.put(END_POINT + 'movie/view?id=' + id)
+        .then(response => response.data)
+        .catch(err => console.log(err))
+}
+
+export function* actionMovieUpdateView(data) {
+    const { payload } = data;
+    const reponse = yield call(asyncMovieUpdateView, payload);
+
+    yield put(actions.MovieUpdateView(reponse));
+}

@@ -113,8 +113,8 @@ const BodyTable = (props) => {
             tabIndex={-1}
             key={row.id}
           >
-            <TableCell align="left">{row.name}</TableCell>
-            <TableCell align="left">{row.address.slice(0, 15) + "..."}</TableCell>
+            <TableCell align="left">{row.name.trim()}</TableCell>
+            <TableCell align="left">{row.address.trim().slice(0, 15) + "..."}</TableCell>
             <TableCell align="right">
               <Tooltip
                 title="Edit"

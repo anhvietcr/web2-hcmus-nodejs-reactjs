@@ -174,6 +174,11 @@ function MovieCpanel(state = initialState, action) {
                 ...state,
                 search: action.payload
             }
+        case TYPE.MOVIE_UPDATE_VIEW_ASYNC:
+            return {
+                ...state,
+                search: action.payload
+            }
         default:
             return state;
     }

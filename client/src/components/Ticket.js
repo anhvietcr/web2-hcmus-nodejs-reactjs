@@ -379,7 +379,9 @@ const Ticket = (props) => {
   useEffect(() => {
     const { ticket } = actions.ShowtimeCpanel
     if (ticket) {
-      console.log(ticket)
+      console.log(ticket);
+
+      actions.MovieUpdateView(localState.movie_id)
     }
   }, [actions.ShowtimeCpanel])
 

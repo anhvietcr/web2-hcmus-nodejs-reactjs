@@ -37,6 +37,7 @@ function* CustomSaga() {
   yield takeLatest(TYPE.MOVIE_LIST_NEW, MovieCpanel.actionMovieListNew)
   yield takeLatest(TYPE.MOVIE_LIST_TREND, MovieCpanel.actionMovieListTrend)
   yield takeLatest(TYPE.MOVIE_SEARCH_KEYWORD, MovieCpanel.actionMovieSearchKeyword)
+  yield takeLatest(TYPE.MOVIE_UPDATE_VIEW, MovieCpanel.actionMovieUpdateView)
 
   yield takeLatest(TYPE.SHOWTIME_LIST, ShowtimeCpanel.actionShowtimeList)
   yield takeLatest(TYPE.SHOWTIME_ADD, ShowtimeCpanel.actionShowtimeAdd)

@@ -161,6 +161,7 @@ const Theater = (props) => {
     const price = e.currentTarget.getAttribute('price')
 
     const movie_name = e.currentTarget.getAttribute('movie_name')
+    const movie_id = e.currentTarget.getAttribute('movie_id')
     const movie_opening_day = e.currentTarget.getAttribute('movie_opening_day')
 
     // save to localstorage
@@ -171,6 +172,7 @@ const Theater = (props) => {
         number_column: values.number_column,
         number_row: values.number_row,
         movie_name: movie_name,
+        movie_id: movie_id,
         movie_opening_day: movie_opening_day,
         showtime_price: price,
         showtime_id: e.currentTarget.id
@@ -184,6 +186,7 @@ const Theater = (props) => {
       return (
         <SmallButton
           movie_name={movie.name}
+          movie_id={movie.id}
           movie_opening_day={movie.opening_day}
           price={showtime.price}
           handleSubmit={handleShowtimeClicked}
