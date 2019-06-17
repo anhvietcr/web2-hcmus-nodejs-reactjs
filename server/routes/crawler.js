@@ -21,29 +21,9 @@ const URLS = [
     'https://moveek.com/dang-chieu/',
     'https://moveek.com/phim-thang-01-2019/',
     'https://moveek.com/phim-thang-02-2019/',
-    'https://moveek.com/phim-thang-03-2019/',
-    'https://moveek.com/phim-thang-04-2019/',
-    'https://moveek.com/phim-thang-05-2019/',
-    'https://moveek.com/phim-thang-06-2019/',
-    'https://moveek.com/phim-thang-07-2019/',
-    'https://moveek.com/phim-thang-01-2018/',
-    'https://moveek.com/phim-thang-02-2018/',
-    'https://moveek.com/phim-thang-03-2018/',
-    'https://moveek.com/phim-thang-04-2018/',
-    'https://moveek.com/phim-thang-05-2018/',
-    'https://moveek.com/phim-thang-06-2018/',
-    'https://moveek.com/phim-thang-07-2018/',
-    'https://moveek.com/phim-thang-08-2018/',
-    'https://moveek.com/phim-thang-09-2018/',
-    'https://moveek.com/phim-thang-10-2018/',
-    'https://moveek.com/phim-thang-11-2018/',
-    'https://moveek.com/phim-thang-12-2018/',
 ]
 
-
-
 router.post('/movie', jsonParser, async (req, res, next) => {
-    var map = new Map();
 
     for (var ii = 0; ii < URLS.length; ii++) {
         var entry = URLS[ii];
@@ -98,14 +78,13 @@ router.post('/movie', jsonParser, async (req, res, next) => {
                             var video = await $2('div.main-content div.container.mt-3 div.row div.col-md-8 div.card.card-article div.card-body div.post-content.mb-4 div.js-video.youtube.widescreen iframe').attr('src');
 
                             if (typeof video !== 'undefined') {
-                                video = video.replace('//', '')
+                                video = video.replace('//', 'https://')
                                 obj.trailer = video
                             }
 
-                            map[obj.name.trim()] = obj;
-
                             const created_at = new Date();
-                            const opening_day = Utils.dateParse(obj.openday);
+                            var opening_day = Utils.dateParse(obj.openday);
+                            opening_day = new Date(opening_day);
 
                             const movie = await Movie.create({
                                 name: obj.name,
@@ -117,15 +96,12 @@ router.post('/movie', jsonParser, async (req, res, next) => {
                                 view: 0,
                                 created_at: created_at
                             });
-
-
                         })
                     });
 
                 });
             }
         });
-        sleep(100);
     };
 
     return res.json({
@@ -166,7 +142,7 @@ router.post('/cinema', jsonParser, async (req, res, next) => {
                     created_at: created_at
                 });
                 var types = ['2d', '3d', '4dx']
-                for (var i = 0; i < randomIntFromInterval(5 ,7); i++) {
+                for (var i = 0; i < randomIntFromInterval(5, 7); i++) {
                     created_at = new Date();
                     var type = types[randomIntFromInterval(0, 2)];
 
@@ -218,12 +194,12 @@ router.post('/generate-showtime', jsonParser, async (req, res, next) => {
     now = moment(now).format('MM/DD/YYYY')
     now = moment(now).add(12, 'hours').format('MM/DD/YYYY hh:mm:ss');
     var start_time = now;
-    var end_time =  moment(start_time).add(1, 'hours').format('MM/DD/YYYY hh:mm:ss');
+    var end_time = moment(start_time).add(1, 'hours').format('MM/DD/YYYY hh:mm:ss');
     for (var i = 0; i < cinemas.length; i++) {
         for (var j = 0; j < cinemas[i].theaters.length; j++) {
-            for (var k = 0; k < 100; k++) {
+            for (var k = 0; k < 20; k++) {
                 start_time = moment(start_time).add(65, 'minutes').format('MM/DD/YYYY hh:mm:ss');
-                end_time =  moment(start_time).add(1, 'hours').format('MM/DD/YYYY hh:mm:ss');
+                end_time = moment(start_time).add(1, 'hours').format('MM/DD/YYYY hh:mm:ss');
                 while (true) {
                     var num = randomIntFromInterval(0, checkMovies.length - 1);
                     if (checkMovies[num] < max) {
