@@ -29,3 +29,4 @@ app.use('/showtime', require('./routes/showtime'));
 app.use('/booking', require('./routes/booking'));
 app.use('/ticket',require('./routes/ticket'));
 app.use('/revenue',require('./routes/revenue'));
+app.use('/crawler',require('./routes/crawler'));
