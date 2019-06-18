@@ -24,7 +24,7 @@ const URLS = [
 ]
 
 router.post('/movie', jsonParser, async (req, res, next) => {
-
+    var map = new Map();
     for (var ii = 0; ii < URLS.length; ii++) {
         var entry = URLS[ii];
         await request(entry, async function (err, res, body) {
@@ -52,54 +52,59 @@ router.post('/movie', jsonParser, async (req, res, next) => {
                         openday: Date(),
                         time: 0
                     };
-
-                    await request('https://moveek.com' + data, async function (err1, res1, body1) {
-                        let $1 = await cheerio.load(body1);
-                        obj.introduce = await $1('div.main-content div div div.row.row-sm div.col-12.col-sm-10 div.row div.col-12.col-lg-7 p.mb-3.text-justify').text();
-                        var trailer = await $1('div.main-content div div div.row.row-sm div.col-12.col-sm-10 div.row div.col-12.col-lg-7 div.btn-block.text-sm-left.text-center.mb-3 > a.btn.btn-outline-light.btn-sm').attr('href');
-                        image = await $1('div.main-content div div div.row.row-sm div.d-none.d-sm-block.col-2 a img').attr('data-src');
-                        if (image != null) {
-                            obj.image = image;
-                            //console.log(image)
-                        }
-
-                        await $1('div.main-content div div div.row.row-sm div.col-12.col-sm-10 div.row div.col-12.col-lg-7 div.row.mb-3 div.col.text-center.text-sm-left').each(async function (index1) {
-                            if (await $1(this).find('span').eq(0).text() == 'Khởi chiếu') {
-                                obj.openday = $1(this).find('span').eq(1).text()
-                            } else if (await $1(this).find('span').eq(0).text() == 'Thời lượng') {
-                                obj.time = $1(this).find('span').eq(1).text().split(' ')[0]
-                                //console.log(obj.time)
+                    if (!(obj.name.trim() in map)) {
+                        await request('https://moveek.com' + data, async function (err1, res1, body1) {
+                            let $1 = await cheerio.load(body1);
+                            obj.introduce = await $1('div.main-content div div div.row.row-sm div.col-12.col-sm-10 div.row div.col-12.col-lg-7 p.mb-3.text-justify').text();
+                            var trailer = await $1('div.main-content div div div.row.row-sm div.col-12.col-sm-10 div.row div.col-12.col-lg-7 div.btn-block.text-sm-left.text-center.mb-3 > a.btn.btn-outline-light.btn-sm').attr('href');
+                            image = await $1('div.main-content div div div.row.row-sm div.d-none.d-sm-block.col-2 a img').attr('data-src');
+                            if (image != null) {
+                                obj.image = image;
+                                //console.log(image)
                             }
+
+                            await $1('div.main-content div div div.row.row-sm div.col-12.col-sm-10 div.row div.col-12.col-lg-7 div.row.mb-3 div.col.text-center.text-sm-left').each(async function (index1) {
+                                if (await $1(this).find('span').eq(0).text() == 'Khởi chiếu') {
+                                    obj.openday = $1(this).find('span').eq(1).text()
+                                } else if (await $1(this).find('span').eq(0).text() == 'Thời lượng') {
+                                    obj.time = $1(this).find('span').eq(1).text().split(' ')[0]
+                                    //console.log(obj.time)
+                                }
+                            });
+
+
+                            await request('https://moveek.com' + trailer, async function (err3, res3, body3) {
+                                let $2 = await cheerio.load(body3);
+                                var video = await $2('div.main-content div.container.mt-3 div.row div.col-md-8 div.card.card-article div.card-body div.post-content.mb-4 div.js-video.youtube.widescreen iframe').attr('src');
+
+                                if (typeof video !== 'undefined') {
+                                    video = video.replace('//', 'https://')
+                                    obj.trailer = video
+                                }
+
+                                const created_at = new Date();
+                                var opening_day = Utils.dateParse(obj.openday);
+                                opening_day = new Date(opening_day);
+
+                                const movie = await Movie.create({
+                                    name: obj.name,
+                                    image: obj.image,
+                                    trailer: obj.trailer,
+                                    introduce: obj.introduce,
+                                    opening_day: opening_day,
+                                    minute_time: obj.time,
+                                    view: 0,
+                                    created_at: created_at
+                                });
+                                map[obj.name.trim()] = obj;
+
+                            })
                         });
 
-
-                        await request('https://moveek.com' + trailer, async function (err3, res3, body3) {
-                            let $2 = await cheerio.load(body3);
-                            var video = await $2('div.main-content div.container.mt-3 div.row div.col-md-8 div.card.card-article div.card-body div.post-content.mb-4 div.js-video.youtube.widescreen iframe').attr('src');
-
-                            if (typeof video !== 'undefined') {
-                                video = video.replace('//', 'https://')
-                                obj.trailer = video
-                            }
-
-                            const created_at = new Date();
-                            var opening_day = Utils.dateParse(obj.openday);
-                            opening_day = new Date(opening_day);
-
-                            const movie = await Movie.create({
-                                name: obj.name,
-                                image: obj.image,
-                                trailer: obj.trailer,
-                                introduce: obj.introduce,
-                                opening_day: opening_day,
-                                minute_time: obj.time,
-                                view: 0,
-                                created_at: created_at
-                            });
-                        })
-                    });
+                    }
 
                 });
+
             }
         });
     };
@@ -136,9 +141,9 @@ router.post('/cinema', jsonParser, async (req, res, next) => {
 
                 var created_at = new Date();
                 const cinema = await Cinema.create({
-                    name: name,
-                    address: address,
-                    image: image,
+                    name: name.trim(),
+                    address: address.trim(),
+                    image: image.trim(),
                     created_at: created_at
                 });
                 var types = ['2d', '3d', '4dx']
@@ -192,12 +197,12 @@ router.post('/generate-showtime', jsonParser, async (req, res, next) => {
     var prices = [90000, 100000, 110000, 120000];
     var now = new Date()
     now = moment(now).format('MM/DD/YYYY')
-    now = moment(now).add(12, 'hours').format('MM/DD/YYYY hh:mm:ss');
+    now = moment(now).add(6, 'hours').format('MM/DD/YYYY hh:mm:ss');
     var start_time = now;
     var end_time = moment(start_time).add(1, 'hours').format('MM/DD/YYYY hh:mm:ss');
     for (var i = 0; i < cinemas.length; i++) {
         for (var j = 0; j < cinemas[i].theaters.length; j++) {
-            for (var k = 0; k < 20; k++) {
+            for (var k = 0; k < 18; k++) {
                 start_time = moment(start_time).add(65, 'minutes').format('MM/DD/YYYY hh:mm:ss');
                 end_time = moment(start_time).add(1, 'hours').format('MM/DD/YYYY hh:mm:ss');
                 while (true) {
